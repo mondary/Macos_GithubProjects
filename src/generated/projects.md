@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-04-25 09:30**
+> Généré: **2026-04-25 09:36**
 
 ## 🧭 Sommaire
 
-CHROME (20) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) | PKNOTES (1) | PKPROC (1) | RC (1) | VS (5) | WEB (57) | WP (12) | OTHER (14)
+CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) | PKNOTES (1) | PKPROC (1) | RC (1) | VS (5) | WEB (57) | WP (12) | OTHER (14)
 
-> Total: **139** projets détectés.
+> Total: **138** projets détectés.
 
 ## CHROME
 
@@ -18,7 +18,6 @@ CHROME (20) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 - **Chrome_PKchromeShortcuts** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_PKchromeShortcuts`)
 - **Chrome_pkhighlighter** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_pkhighlighter`)
 - **Chrome_PKscreenshotResizer** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_PKscreenshotResizer`) ✳️ dirty
-- **Chrome_PKscreenshots** — Description non disponible. (`../../../Chrome_PKscreenshots`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Chrome_PKsticky** — Description non disponible. (`../../../Chrome_PKsticky`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
 - **Chrome_PKStickyNotesChrome** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_PKStickyNotesChrome`) ✳️ dirty
 - **Chrome_RSSnoteMAIL** — Description non disponible. (`../../../Chrome_RSSnoteMAIL`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
@@ -56,7 +55,7 @@ CHROME (20) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 - **Macos_browserAgent** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Macos_browserAgent`) ⚠️ no icon.png ✳️ dirty
 - **Macos_Clipboard** — Description non disponible. (`../../../Macos_Clipboard`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_FinderGithubLogo** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Macos_FinderGithubLogo`)
-- **Macos_GithubProjects** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../..`) ✳️ dirty
+- **Macos_GithubProjects** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../..`)
 - **Macos_LaunchpadPK** — Description non disponible. (`../../../Macos_LaunchpadPK`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_MacosPermissions** — Description non disponible. (`../../../Macos_MacosPermissions`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_PK_OCRscreen** — [![GitHub license](https://img.shields.io/github/license/amebalabs/PK_OCRscreen.svg)](https://github.com/amebalabs/PK_OCRscreen/blob/master/LICENSE) (`../../../Macos_PK_OCRscreen`) ⚠️ no icon.png ⚠️ no git
