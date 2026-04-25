@@ -9,8 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-PROJECTS_DIR = REPO_ROOT / "PROJECTS"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PROJECTS_DIR = REPO_ROOT.parent
 
 EXCLUDE_NAMES = {".git", "node_modules", ".DS_Store"}
 
@@ -191,7 +191,7 @@ def main() -> None:
             "Then rerun."
         )
 
-    icon_dir = REPO_ROOT / "tools"
+    icon_dir = REPO_ROOT / "src" / "tools"
     icons = _ensure_icons(icon_dir, size=args.size, regen=args.regen)
 
     do_apply = bool(args.apply) and not bool(args.dry_run)

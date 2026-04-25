@@ -6,15 +6,16 @@ import datetime as _dt
 import json
 import os
 import subprocess
+import urllib.parse
 from pathlib import Path
 
 
-# Fix paths based on actual structure
-ROOT_HUB = Path(__file__).resolve().parents[3] # /Users/clm/Documents/GitHub
-PROJECTS_DIR = ROOT_HUB / "PROJECTS" # /Users/clm/Documents/GitHub/PROJECTS
-REPO_ROOT = ROOT_HUB / "PROJECTS" / "Macos_GithubProjects" # /Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects
-PROJECTS_MD = REPO_ROOT / "projects.md"
-DASHBOARD_HTML = REPO_ROOT / "dashboard-projets.html"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PROJECTS_DIR = REPO_ROOT.parent
+ROOT_HUB = PROJECTS_DIR.parent
+GENERATED_DIR = REPO_ROOT / "src" / "generated"
+PROJECTS_MD = GENERATED_DIR / "projects.md"
+DASHBOARD_HTML = GENERATED_DIR / "dashboard-projets.html"
 
 EXCLUDE_NAMES = {".git", "node_modules", ".DS_Store"}
 
@@ -119,7 +120,21 @@ def _git_info(project_path: Path) -> GitInfo:
                 remote_url = parts[1]
                 has_remote = True
 
-    return GitInfo(True, dirty, has_remote, remote_url)
+    return GitInfo(True, dirty, has_remote, _sanitize_remote_url(remote_url))
+
+
+def _sanitize_remote_url(remote_url: str | None) -> str | None:
+    if not remote_url:
+        return None
+    parsed = urllib.parse.urlsplit(remote_url)
+    if parsed.scheme and parsed.hostname and parsed.username:
+        netloc = parsed.hostname
+        if parsed.port:
+            netloc += f":{parsed.port}"
+        return urllib.parse.urlunsplit(
+            (parsed.scheme, netloc, parsed.path, parsed.query, parsed.fragment)
+        )
+    return remote_url
 
 
 @dataclasses.dataclass(frozen=True)
@@ -161,7 +176,12 @@ def _discover_projects() -> list[Project]:
     return projects
 
 
-def _write_projects_md(projects: list[Project]) -> None:
+def _project_path_for_markdown(project: Project, output_dir: Path) -> str:
+    project_path = (REPO_ROOT / project.rel_path).resolve()
+    return os.path.relpath(project_path, output_dir)
+
+
+def _render_projects_md(projects: list[Project], output_dir: Path) -> str:
     by_group: dict[str, list[Project]] = {}
     for p in projects:
         by_group.setdefault(p.group, []).append(p)
@@ -199,11 +219,16 @@ def _write_projects_md(projects: list[Project]) -> None:
                 warn.append("✳️ dirty")
 
             desc = p.description or "Description non disponible."
-            suffix = f"`{p.rel_path}`"
+            suffix = f"`{_project_path_for_markdown(p, output_dir)}`"
             lines.append(f"- **{p.name}** — {desc} ({suffix})" + (f" {' '.join(warn)}" if warn else ""))
         lines.append("")
 
-    PROJECTS_MD.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _write_projects_md(projects: list[Project]) -> None:
+    GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+    PROJECTS_MD.write_text(_render_projects_md(projects, PROJECTS_MD.parent), encoding="utf-8")
 
 
 def _html_template(projects: list[Project]) -> str:
@@ -990,11 +1015,20 @@ def _html_template(projects: list[Project]) -> str:
 
   async function openInVSCode(p) {{
     const abs = absPath(p.path);
-    // Try URL scheme; then copy command fallback.
+    const launcher =
+      "http://127.0.0.1:37645/open-vscode?path=" + encodeURIComponent(abs);
     try {{
-      window.location.href = "vscode://file/" + encodeURIComponent(abs);
+      const res = await fetch(launcher, {{ method: "GET", mode: "cors" }});
+      if (res.ok) return;
     }} catch (_) {{}}
-    await copyText('code "' + abs.replace(/"/g, '\\"') + '"');
+
+    const fileUrl = "file://" + abs.split("/").map(encodeURIComponent).join("/");
+    // Try command URL with newWindow. Copy CLI fallback because vscode://file may reuse a window.
+    try {{
+      window.location.href =
+        "vscode://vscode.open?url=" + encodeURIComponent(fileUrl) + "&newWindow=true";
+    }} catch (_) {{}}
+    await copyText('code --new-window "' + abs.replace(/"/g, '\\"') + '"');
   }}
 
   async function openInCursor(p) {{
@@ -1003,7 +1037,7 @@ def _html_template(projects: list[Project]) -> str:
     try {{
       window.location.href = "cursor://file/" + encodeURIComponent(abs);
     }} catch (_) {{}}
-    await copyText('open -a "/Applications/Cursor.app" "' + abs.replace(/"/g, '\\"') + '"');
+    await copyText('open -a "/Applications/Cursor.app" -n "' + abs.replace(/"/g, '\\"') + '"');
   }}
 
   async function openInAntigravity(p) {{
@@ -1011,7 +1045,7 @@ def _html_template(projects: list[Project]) -> str:
     const cmd = 'open -a "/Applications/Antigravity.app" "' + abs.replace(/"/g, '\\"') + '"';
     await copyText(cmd);
     const scheme = "antigravity://open?path=" + encodeURIComponent(abs);
-    setTimeout(() => {{ window.location.href = scheme; }}, 50);
+
   }}
 
   let activeGitFilter = ""; // "" | CLEAN | DIRTY | NOREMOTE | NOGIT
@@ -1206,14 +1240,10 @@ def _html_template(projects: list[Project]) -> str:
       const bOpenWith = document.createElement("button");
       bOpenWith.type = "button";
       bOpenWith.textContent = "edit";
-      bOpenWith.addEventListener("click", (e) => {{
+             bOpenWith.addEventListener("click", async (e) => {{
         e.stopPropagation();
-        const abs = absPath(p.path).replace(/"/g, '\\"');
-        const cmd = 'open -a "/Applications/Antigravity.app" "' + abs + '"';
-        // Always copy fallback command, then try deep-link scheme.
-        copyText(cmd);
-        const scheme = "antigravity://open?path=" + encodeURIComponent(absPath(p.path));
-        setTimeout(() => {{ window.location.href = scheme; }}, 50);
+        await openInVSCode(p);
+    
       }});
       actions.appendChild(bOpenWith);
 
@@ -1326,6 +1356,7 @@ def _html_template(projects: list[Project]) -> str:
 
 
 def _write_dashboard_html(projects: list[Project]) -> None:
+    GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     DASHBOARD_HTML.write_text(_html_template(projects), encoding="utf-8")
 
 

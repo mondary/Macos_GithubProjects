@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _run(cmd: list[str]) -> int:
@@ -16,7 +16,7 @@ def _run(cmd: list[str]) -> int:
 
 
 def _py(script_name: str) -> list[str]:
-    return [sys.executable, str(REPO_ROOT / "tools" / script_name)]
+    return [sys.executable, str(REPO_ROOT / "src" / "tools" / script_name)]
 
 
 def main() -> int:

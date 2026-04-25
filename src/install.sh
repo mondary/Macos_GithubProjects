@@ -3,6 +3,10 @@
 # Installation script for Macos_GithubProjects Hub
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$REPO_ROOT"
+
 echo "🚀 Installing Project Hub Menu App..."
 
 # 1. Ensure Python 3 is installed
@@ -18,12 +22,11 @@ python3 -m venv .venv
 
 # 3. Make scripts executable
 echo "🛠️ Setting permissions..."
-chmod +x tools/update_projects_dashboard.py
-chmod +x tools/menu_app.py
+chmod +x src/tools/*.py
 
 echo "✅ Installation complete!"
 echo ""
 echo "To launch the menu bar app, run:"
-echo "./.venv/bin/python3 tools/menu_app.py"
+echo "./.venv/bin/python3 src/tools/menu_app.py"
 echo ""
 echo "Tip: To make it start at login, you can create a macOS LaunchAgent or use an app like 'AppCleaner' or 'LaunchControl'."
