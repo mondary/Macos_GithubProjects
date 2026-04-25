@@ -9,8 +9,10 @@ import subprocess
 from pathlib import Path
 
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-PROJECTS_DIR = REPO_ROOT / "PROJECTS"
+# Fix paths based on actual structure
+ROOT_HUB = Path(__file__).resolve().parents[3] # /Users/clm/Documents/GitHub
+PROJECTS_DIR = ROOT_HUB / "PROJECTS" # /Users/clm/Documents/GitHub/PROJECTS
+REPO_ROOT = ROOT_HUB / "PROJECTS" / "Macos_GithubProjects" # /Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects
 PROJECTS_MD = REPO_ROOT / "projects.md"
 DASHBOARD_HTML = REPO_ROOT / "dashboard-projets.html"
 
@@ -1132,7 +1134,7 @@ def _html_template(projects: list[Project]) -> str:
         const img = document.createElement("img");
         img.alt = "";
         img.loading = "lazy";
-        img.src = pathToHref(p.iconPath);
+        img.src = absPath(p.iconPath);
         icon.appendChild(img);
       }} else {{
         const fb = document.createElement("div");
