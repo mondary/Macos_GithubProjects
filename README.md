@@ -1,48 +1,32 @@
-# Macos_GithubProjects
+# Tools
 
-![Project icon](icon.png)
+`src/tools/*.py` are CLI entrypoints. Implementation code lives in
+`src/macos_githubprojects/`; generated outputs live in `src/generated/`.
 
-[🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md)
+## update_projects_dashboard
 
-✨ Hub centralisant des outils d'automatisation et des compétences spécialisées pour agents IA.
+Génère:
 
-## ✅ Fonctionnalités
+- `src/generated/projects.md` (liste des projets dans `PROJECTS/`)
+- `src/generated/dashboard-projets.html` (dashboard HTML avec recherche + filtres + statut git)
 
-- **Compétences pour Agents IA** : Bibliothèque de skills spécialisés dans `.agent/-skills` (Design, Git, Publication, Rédaction).
-- **Outils d'Automatisation** : Tout le projet opérationnel vit dans `src/` : code, wrappers CLI, installation et fichiers générés.
-- **Workflows de Publication** : Procédures automatisées pour VS Code Marketplace, Chrome Web Store, MacOS (Sparkle) et WordPress.
-- **Infrastructure** : Automatisation de la redirection de domaines (OVH).
-
-## 🧠 Utilisation
-
-### Outils
-Le code applicatif vit dans `src/macos_githubprojects/`. Les scripts `src/tools/*.py` sont les points d'entrée CLI :
-- `src/script_hub.py` : Menu interactif pour lancer les scripts.
-- `projects_hub.py` : Gestion du hub de projets.
-- `update_projects_dashboard.py` : Mise à jour du tableau de bord.
+Run:
 
 ```bash
-# Menu interactif principal
-./.venv/bin/python3 src/script_hub.py
-
-# Générer le dashboard HTML et le Markdown
-./.venv/bin/python3 src/tools/projects_hub.py dashboard
-
-# Lancer l'app menu bar macOS
-./.venv/bin/python3 src/tools/menu_app.py
+python3 src/tools/update_projects_dashboard.py
 ```
 
-Fichiers générés :
-- `src/generated/dashboard-projets.html`
-- `src/generated/projects.md`
+## projects_hub
 
-### Skills (`.agent/-skills/`)
-Ces fichiers Markdown sont conçus pour être injectés dans le contexte d'un agent IA pour lui fournir des instructions précises sur des tâches complexes.
+Hub (dashboard / tags Finder / icônes Finder):
 
-## 🧾 Changelog
-
-- 1.0.0 : Initial release.
-
-## 🔗 Liens
-
-- EN README : [README_en.md](README_en.md)
+```bash
+python3 src/script_hub.py
+python3 src/tools/projects_hub.py dashboard
+python3 src/tools/projects_hub.py tags --dry-run
+python3 src/tools/projects_hub.py tags
+python3 src/tools/projects_hub.py icons --dry-run
+python3 src/tools/projects_hub.py icons      # writes (passes --apply)
+python3 src/tools/projects_hub.py all
+python3 src/tools/projects_hub.py all --icons
+```

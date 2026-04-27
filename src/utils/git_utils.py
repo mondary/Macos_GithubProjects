@@ -2,7 +2,8 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+# Add the src directory to Python path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from macos_githubprojects.auto_tag_projects import main
 

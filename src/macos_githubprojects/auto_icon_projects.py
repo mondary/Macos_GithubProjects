@@ -1,18 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-import argparse
-import os
-import shutil
-import subprocess
-from dataclasses import dataclass
-from pathlib import Path
-
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-PROJECTS_DIR = REPO_ROOT.parent
-
-EXCLUDE_NAMES = {".git", "node_modules", ".DS_Store"}
+# Ce fichier est gardé pour compatibilité, utilisez plutôt utils/icon_utils.py
 
 
 def _run(cmd: list[str]) -> subprocess.CompletedProcess[str]:

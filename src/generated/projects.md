@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-04-25 09:36**
+> Généré: **2026-04-25 18:54**
 
 ## 🧭 Sommaire
 
-CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) | PKNOTES (1) | PKPROC (1) | RC (1) | VS (5) | WEB (57) | WP (12) | OTHER (14)
+CHROME (21) | CLI (12) | MACOS (13) | RC (1) | VS (5) | WEB (65) | WP (12) | OTHER (2)
 
-> Total: **138** projets détectés.
+> Total: **131** projets détectés.
 
 ## CHROME
 
@@ -17,12 +17,14 @@ CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 - **Chrome_MondaryNewTab** — [🇫🇷 FR](README.md) (`../../../Chrome_MondaryNewTab`)
 - **Chrome_PKchromeShortcuts** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_PKchromeShortcuts`)
 - **Chrome_pkhighlighter** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_pkhighlighter`)
-- **Chrome_PKscreenshotResizer** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_PKscreenshotResizer`) ✳️ dirty
-- **Chrome_PKsticky** — Description non disponible. (`../../../Chrome_PKsticky`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
-- **Chrome_PKStickyNotesChrome** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_PKStickyNotesChrome`) ✳️ dirty
+- **Chrome_PKscreenshotResizer** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_PKscreenshotResizer`)
+- **Chrome_pksniffer** — Description non disponible. (`../../../Chrome_pksniffer`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **Chrome_PKStickyNotesChrome** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Chrome_PKStickyNotesChrome`)
 - **Chrome_RSSnoteMAIL** — Description non disponible. (`../../../Chrome_RSSnoteMAIL`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
 - **Chrome_SimpleGMAIL** — Une extension toute simple (`../../../Chrome_SimpleGMAIL`) ⚠️ no icon.png
 - **Chrome_SimpleGMAIL_lbkp** — Description non disponible. (`../../../Chrome_SimpleGMAIL_lbkp`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **Chrome_SimpleGMAILb** — Une extension toute simple (`../../../Chrome_SimpleGMAILb`) ⚠️ no icon.png
+- **Chrome_Simplify** — Description non disponible. (`../../../Chrome_Simplify`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Chrome_SteamEPIC** — Show your Epic Games on Steam website (`../../../Chrome_SteamEPIC`) ⚠️ no icon.png
 - **Chrome_sumarizerGPT2Wordpress** — Description non disponible. (`../../../Chrome_sumarizerGPT2Wordpress`) ⚠️ no desc ✳️ dirty
 - **Chrome_TranslateHighlighter** — This Chrome extension provides instant text translation with two convenient modes: popup display and direct text substitution. It supports multiple target languages and offers full page translation capabilities. (`../../../Chrome_TranslateHighlighter`) ⚠️ no icon.png
@@ -34,56 +36,33 @@ CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 ## CLI
 
 - **CLI_agentschooser** — Un menu simple et rapide pour lancer l'agent CLI de votre choix. (`../../../CLI_agentschooser`)
+- **CLI_GOG** — Description non disponible. (`../../../CLI_GOG`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **CLI_PKAgentsOrchestrator** — A powerful command-line interface for orchestrating multiple AI agents (Claude, GLM, OpenAI/Codex) with bash command execution and tmux multi-panel support. (`../../../CLI_PKAgentsOrchestrator`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **CLI_PKcarreerMails** — But: ouvrir Gmail en browser (login manuel), lire `category:promotions`, ouvrir 1er mail, extraire offres (titre + lien + provenance), stocker en SQLite/CSV, puis UI Streamlit pour dedoublonnage + suivi "repondu". (`../../../CLI_PKcarreerMails`) ⚠️ no icon.png ⚠️ no git
 - **CLI_PKclaw** — Projet: VM Debian headless sur Freebox Ultra pour exécuter des agents CLI (OpenClaw/Clawdbot, Codex, Claude Code, Gemini, Qwen, Qoder, OpenCode, GLM) avec accès SSH et possibilité d'UI tiling à la demande. (`../../../CLI_PKclaw`) ⚠️ no icon.png ⚠️ no git
 - **CLI_PKclawAgent** — Description non disponible. (`../../../CLI_PKclawAgent`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **CLI_PKgitftp** — Un outil CLI simple pour gérer les versions avec Git et le déploiement via FTP. (`../../../CLI_PKgitftp`) ⚠️ no icon.png ⚠️ no git
 - **CLI_PKneovim** — Description non disponible. (`../../../CLI_PKneovim`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **CLI_PKproc-ai** — Description non disponible. (`../../../CLI_PKproc-ai`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **CLI_PKwpagent** — Petit service FastAPI qui reçoit un lien partagé, génère un contenu structuré (avec une IA optionnelle) puis crée un brouillon sur le WordPress `https://mondary.design` via l'API REST. (`../../../CLI_PKwpagent`) ⚠️ no icon.png ✳️ dirty
+- **CLI_SteamEPIC** — Description non disponible. (`../../../CLI_SteamEPIC`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **CLI_WPpostdraft** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../CLI_WPpostdraft`) ⚠️ no icon.png
-
-## CURSOR
-
-- **Cursor-tutor** — Description non disponible. (`../../../Cursor-tutor`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-
-## JS
-
-- **JS_horloge** — Description non disponible. (`../../../JS_horloge`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 
 ## MACOS
 
 - **Macos_browserAgent** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Macos_browserAgent`) ⚠️ no icon.png ✳️ dirty
 - **Macos_Clipboard** — Description non disponible. (`../../../Macos_Clipboard`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_FinderGithubLogo** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Macos_FinderGithubLogo`)
-- **Macos_GithubProjects** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../..`)
+- **Macos_GithubProjects** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../..`) ✳️ dirty
 - **Macos_LaunchpadPK** — Description non disponible. (`../../../Macos_LaunchpadPK`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_MacosPermissions** — Description non disponible. (`../../../Macos_MacosPermissions`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Macos_PK_OCRscreen** — [![GitHub license](https://img.shields.io/github/license/amebalabs/PK_OCRscreen.svg)](https://github.com/amebalabs/PK_OCRscreen/blob/master/LICENSE) (`../../../Macos_PK_OCRscreen`) ⚠️ no icon.png ⚠️ no git
 - **Macos_PKbrain** — Description non disponible. (`../../../Macos_PKbrain`) ⚠️ no desc ⚠️ no icon.png ⚠️ no remote ✳️ dirty
+- **Macos_PKcarreerAgent** — Petit outil local (Python stdlib only) pour : (`../../../Macos_PKcarreerAgent`) ⚠️ no icon.png ⚠️ no git
 - **Macos_PKdictation** — Description non disponible. (`../../../Macos_PKdictation`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **Macos_PKDrive** — Description non disponible. (`../../../Macos_PKDrive`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
 - **Macos_PKpowerlines** — Application macOS ultra-légère affichant l'utilisation de la RAM en temps réel. (`../../../Macos_PKpowerlines`) ✳️ dirty
 - **Macos_PKvibeyard** — Canonical hub: `./.agent/` - Single source of truth for multi-agent instructions shared across Codex, Claude, Gemini, GLM, and OpenCode. (`../../../Macos_PKvibeyard`) ⚠️ no git
 - **Macos_ProjectTracker** — A native macOS menu bar application built with SwiftUI and Swift 6 that monitors your Git repositories for changes and unpushed commits. (`../../../Macos_ProjectTracker`) ✳️ dirty
-
-## PK
-
-- **PK_petal--fork** — <p align="center"> (`../../../PK_petal--fork`) ⚠️ no icon.png
-- **PK_petal--fork-artifacts** — Description non disponible. (`../../../PK_petal--fork-artifacts`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **PK_roro** — Description non disponible. (`../../../PK_roro`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **PK_TravelGames** — Description non disponible. (`../../../PK_TravelGames`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **PK_ZombiGame** — Description non disponible. (`../../../PK_ZombiGame`) ⚠️ no desc ⚠️ no icon.png ⚠️ no remote ✳️ dirty
-
-## PKDRIVE
-
-- **PKDrive-UI** — Minimal shadcn-style dashboard for PKDrive. (`../../../PKDrive-UI`) ⚠️ no icon.png ⚠️ no git
-
-## PKNOTES
-
-- **pknotes-server** — Description non disponible. (`../../../pknotes-server`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-
-## PKPROC
-
-- **PKproc-ai** — Description non disponible. (`../../../PKproc-ai`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 
 ## RC
 
@@ -103,16 +82,20 @@ CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 - **Web_allaitement** — Simple breastfeeding timer with session tracking and charts. (`../../../Web_allaitement`) ⚠️ no icon.png ✳️ dirty
 - **Web_BGAcss** — The BGA site is pretty old school and sometimes just unclear! This is an attempt to improve it a little using only CSS. (`../../../Web_BGAcss`) ⚠️ no icon.png
 - **Web_cards** — Description non disponible. (`../../../Web_cards`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **Web_Cours_JS_horloge** — Description non disponible. (`../../../Web_Cours_JS_horloge`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **Web_CoursJS** — Ceci est mon hub, (`../../../Web_CoursJS`) ⚠️ no icon.png
 - **Web_Cryptos** — Small set of standalone HTML pages for crypto tracking and calculations. (`../../../Web_Cryptos`) ⚠️ no icon.png ✳️ dirty
 - **Web_cuistobot** — Cuistobot est une application web permettant de gérer vos recettes de cuisine en un seul endroit. Inspirée par Bergamot, cette application vous permet d'importer automatiquement des recettes depuis des vidéos YouTube, TikTok, Instagram ou n (`../../../Web_cuistobot`) ⚠️ no icon.png ⚠️ no git
 - **Web_cv** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Web_cv`)
 - **Web_DesignThinking** — Description non disponible. (`../../../Web_DesignThinking`) ⚠️ no desc ⚠️ no icon.png
+- **Web_dice-roller** — Ceci est un simple jet de dés écrit en HTML/CSS/JS pur. (`../../../Web_dice-roller`) ⚠️ no icon.png
 - **Web_F1** — Description non disponible. (`../../../Web_F1`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_FileBrowser** — Description non disponible. (`../../../Web_FileBrowser`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_FrameworkTest** — Description non disponible. (`../../../Web_FrameworkTest`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_GGdeals_collection** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Web_GGdeals_collection`)
 - **Web_ggpk** — Application web permettant de rechercher les prix des jeux vidéo en utilisant l'API gg.deals. (`../../../Web_ggpk`) ⚠️ no icon.png ⚠️ no git
 - **Web_hub** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Web_hub`) ✳️ dirty
+- **Web_HUBprojets** — Description non disponible. (`../../../Web_HUBprojets`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_Jarocki** — Description non disponible. (`../../../Web_Jarocki`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_LinkSaver** — Description non disponible. (`../../../Web_LinkSaver`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_MetaStreaming** — Description non disponible. (`../../../Web_MetaStreaming`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
@@ -123,6 +106,8 @@ CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 - **Web_onetoc** — Description non disponible. (`../../../Web_onetoc`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_PHPjson_test** — Description non disponible. (`../../../Web_PHPjson_test`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_pinel** — Description non disponible. (`../../../Web_pinel`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
+- **Web_PK_TravelGames** — Description non disponible. (`../../../Web_PK_TravelGames`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **Web_PK_ZombiGame** — Description non disponible. (`../../../Web_PK_ZombiGame`) ⚠️ no desc ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **Web_pkchangedetection** — Application PHP simple pour surveiller les changements de pages web. (`../../../Web_pkchangedetection`) ✳️ dirty
 - **Web_pkcuisto** — Pkcuisto is a lightweight recipe locker with authentication, an admin console, and Gemini-powered extraction from any URL or free-text note. The stack stays 100 % PHP + vanilla Web Components so it can run on shared hosting without an exter (`../../../Web_pkcuisto`) ⚠️ no icon.png ✳️ dirty
 - **Web_pkcuisto_WA** — Pkcuisto is a lightweight recipe locker with authentication, an admin console, and Gemini-powered extraction from any URL or free-text note. The stack stays 100 % PHP + vanilla Web Components so it can run on shared hosting without an exter (`../../../Web_pkcuisto_WA`) ⚠️ no icon.png ✳️ dirty
@@ -145,6 +130,7 @@ CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 - **Web_ServeurPK** — Description non disponible. (`../../../Web_ServeurPK`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_ShadcnPK** — Description non disponible. (`../../../Web_ShadcnPK`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_SKILLS.shwebsite** — Description non disponible. (`../../../Web_SKILLS.shwebsite`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **Web_Snippets_bga-css** — The BGA site is pretty old school and sometimes just unclear! This is an attempt to improve it a little using only CSS. (`../../../Web_Snippets_bga-css`) ⚠️ no icon.png
 - **Web_steamYearinreview** — Minimal hub for personal Steam Year in Review recaps with dynamic stats. (`../../../Web_steamYearinreview`) ✳️ dirty
 - **Web_Stylus_ChatGPT** — Description non disponible. (`../../../Web_Stylus_ChatGPT`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_Stylus_ggdeals** — Le site gg.deals est vraiment un super site pour tracker les bonnes affaires pour les jeux pc. (`../../../Web_Stylus_ggdeals`) ⚠️ no icon.png
@@ -156,6 +142,7 @@ CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 - **Web_UsageAI** — Description non disponible. (`../../../Web_UsageAI`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_youtubedl** — Description non disponible. (`../../../Web_youtubedl`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_Zombi** — Description non disponible. (`../../../Web_Zombi`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **Web_ZombiGame** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../Web_ZombiGame`) ✳️ dirty
 
 ## WP
 
@@ -174,17 +161,5 @@ CHROME (19) | CLI (8) | CURSOR (1) | JS (1) | MACOS (12) | PK (5) | PKDRIVE (1) 
 
 ## OTHER
 
-- **#pksniffer** — Description non disponible. (`../../../#pksniffer`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Github** — Description non disponible. (`../../../Github`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **GOG** — Description non disponible. (`../../../GOG`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **HUB** — Description non disponible. (`../../../HUB`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **PKcarreerAgent** — Petit outil local (Python stdlib only) pour : (`../../../PKcarreerAgent`) ⚠️ no icon.png ⚠️ no git
-- **PKcv2026** — Description non disponible. (`../../../PKcv2026`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **PKDrive** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../PKDrive`)
 - **PKnotes** — Description non disponible. (`../../../PKnotes`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **PKwpagent** — Description non disponible. (`../../../PKwpagent`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **projects.md** — Description non disponible. (`../../../projects.md`) ⚠️ no desc ⚠️ no git
-- **Simplify** — Description non disponible. (`../../../Simplify`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Snippets** — Description non disponible. (`../../../Snippets`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **SteamEPIC** — Description non disponible. (`../../../SteamEPIC`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **ZombiGame** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../../ZombiGame`) ✳️ dirty

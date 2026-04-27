@@ -1,30 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-import argparse
-import os
-import plistlib
-import subprocess
-from dataclasses import dataclass
-from pathlib import Path
-
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-PROJECTS_DIR = REPO_ROOT.parent
-
-EXCLUDE_NAMES = {".git", "node_modules", ".DS_Store"}
-
-# Finder tag colors: 0..7 (Apple internal). Works on modern macOS.
-COLOR_GRAY = 0
-COLOR_GREEN = 1
-COLOR_PURPLE = 2
-COLOR_BLUE = 3
-COLOR_YELLOW = 4
-COLOR_RED = 5
-COLOR_ORANGE = 6
-
-
-XATTR_TAGS_KEY = "com.apple.metadata:_kMDItemUserTags"
+# Ce fichier est gardé pour compatibilité, utilisez plutôt utils/git_utils.py
 
 
 def _run(cmd: list[str]) -> subprocess.CompletedProcess[str]:

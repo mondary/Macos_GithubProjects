@@ -1,18 +1,5 @@
 #!/usr/bin/env python3
-import rumps
-import subprocess
-import webbrowser
-import json
-import re
-import sys
-import threading
-import urllib.parse
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DASHBOARD_PATH = REPO_ROOT / "src" / "generated" / "dashboard-projets.html"
-UPDATE_SCRIPT = REPO_ROOT / "src" / "tools" / "update_projects_dashboard.py"
+# Ce fichier est gardé pour compatibilité, utilisez plutôt app/menu_app.py
 PROJECTS_DIR = REPO_ROOT.parent
 LAUNCHER_HOST = "127.0.0.1"
 LAUNCHER_PORT = 37645

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Ce fichier est gardé pour compatibilité, utilisez plutôt app/scanner.py
 from __future__ import annotations
 
 import dataclasses
@@ -13,7 +14,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PROJECTS_DIR = REPO_ROOT.parent
 ROOT_HUB = PROJECTS_DIR.parent
-GENERATED_DIR = REPO_ROOT / "src" / "generated"
+GENERATED_DIR = REPO_ROOT / "generated"
 PROJECTS_MD = GENERATED_DIR / "projects.md"
 DASHBOARD_HTML = GENERATED_DIR / "dashboard-projets.html"
 

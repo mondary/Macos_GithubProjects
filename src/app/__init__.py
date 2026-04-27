@@ -1,0 +1,1 @@
+"""Application module for Macos_GithubProjects."""

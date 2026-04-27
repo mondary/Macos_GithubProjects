@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-import argparse
-import subprocess
-import sys
-from pathlib import Path
-
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
+# Ce fichier est gardé pour compatibilité, utilisez plutôt app/cli.py
 
 
 def _run(cmd: list[str]) -> int:
@@ -16,7 +8,7 @@ def _run(cmd: list[str]) -> int:
 
 
 def _py(script_name: str) -> list[str]:
-    return [sys.executable, str(REPO_ROOT / "src" / "tools" / script_name)]
+    return [sys.executable, str(REPO_ROOT / "src" / "app" / script_name)]
 
 
 def main() -> int:
