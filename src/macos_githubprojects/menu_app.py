@@ -1,34 +1,63 @@
 #!/usr/bin/env python3
 # Ce fichier est gardé pour compatibilité, utilisez plutôt app/menu_app.py
+import sys
+import platform
+import subprocess
+import threading
+import json
+import re
+import webbrowser
+from pathlib import Path
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
+import urllib.parse
+
+try:
+    import rumps
+except ImportError:
+    print("Installing rumps...")
+    subprocess.run([sys.executable, "-m", "pip", "install", "rumps"])
+    import rumps
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
 PROJECTS_DIR = REPO_ROOT.parent
 LAUNCHER_HOST = "127.0.0.1"
 LAUNCHER_PORT = 37645
+DASHBOARD_PATH = REPO_ROOT / "src" / "generated" / "dashboard-projets.html"
+UPDATE_SCRIPT = REPO_ROOT / "src" / "macos_githubprojects" / "update_projects_dashboard.py"
 
 
 def project_count() -> int:
-    if DASHBOARD_PATH.exists():
-        try:
-            content = DASHBOARD_PATH.read_text(encoding="utf-8", errors="replace")
-            match = re.search(
-                r'<script id="data" type="application/json">(.*?)</script>',
-                content,
-                re.S,
+    try:
+        REPO_ROOT = Path(__file__).resolve().parents[2]
+        PROJECTS_DIR = REPO_ROOT.parent
+        DASHBOARD_PATH = REPO_ROOT / "src" / "generated" / "dashboard-projets.html"
+        
+        if DASHBOARD_PATH.exists():
+            try:
+                content = DASHBOARD_PATH.read_text(encoding="utf-8", errors="replace")
+                match = re.search(
+                    r'<script id="data" type="application/json">(.*?)</script>',
+                    content,
+                    re.S,
+                )
+                if match:
+                    data = json.loads(match.group(1))
+                    return len(data.get("projects", []))
+            except (OSError, json.JSONDecodeError, TypeError):
+                pass
+
+        if PROJECTS_DIR.exists():
+            count = sum(
+                1
+                for child in PROJECTS_DIR.iterdir()
+                if child.name
+                and child.name not in {".git", "node_modules", ".DS_Store"}
+                and not child.name.startswith((".", "-"))
             )
-            if match:
-                data = json.loads(match.group(1))
-                return len(data.get("projects", []))
-        except (OSError, json.JSONDecodeError, TypeError):
-            pass
-
-    if PROJECTS_DIR.exists():
-        return sum(
-            1
-            for child in PROJECTS_DIR.iterdir()
-            if child.name
-            and child.name not in {".git", "node_modules", ".DS_Store"}
-            and not child.name.startswith((".", "-"))
-        )
-
+            return count
+    except Exception:
+        pass
+    
     return 0
 
 
@@ -104,11 +133,87 @@ def start_launcher_server() -> None:
 class ProjectHubApp(rumps.App):
     def __init__(self):
         super(ProjectHubApp, self).__init__(f"📁 {project_count()}")
-        self.menu = [
-            rumps.MenuItem("Update Dashboard", callback=self.update_dashboard),
-            None, # Separator
-            rumps.MenuItem("Open Dashboard", callback=self.open_dashboard)
+        self.quick_actions_menu = rumps.MenuItem("Quick Actions")
+        self.quick_actions_menu.menu = [
+            rumps.MenuItem("🏠 Local", callback=self.open_local),
+            rumps.MenuItem("🌐 GitHub", callback=self.open_github),
+            rumps.MenuItem("🗂️ Finder", callback=self.open_finder),
         ]
+
+        # Load projects from dashboard data
+        projects = self._load_projects()
+
+        # Build menu with projects
+        menu_items = [
+            rumps.MenuItem("Update Dashboard", callback=self.update_dashboard),
+            None,  # Separator
+            rumps.MenuItem("Open Dashboard", callback=self.open_dashboard),
+            None,  # Separator
+            self.quick_actions_menu,
+            None,  # Separator
+        ]
+
+        # Add projects to menu
+        for project in projects:
+            name = project.get("name", "Unknown")
+            path = project.get("path", "")
+            menu_items.append(rumps.MenuItem(name, callback=lambda _, p=path: self.open_project(p)))
+
+        # rumps adds "Quit" automatically, no need to add it manually
+        self.menu = menu_items
+
+    def _load_projects(self) -> list[dict]:
+        """Load projects from dashboard JSON data."""
+        try:
+            if DASHBOARD_PATH.exists():
+                content = DASHBOARD_PATH.read_text(encoding="utf-8", errors="replace")
+                match = re.search(
+                    r'<script id="data" type="application/json">(.*?)</script>',
+                    content,
+                    re.S,
+                )
+                if match:
+                    data = json.loads(match.group(1))
+                    return data.get("projects", [])
+        except (OSError, json.JSONDecodeError, TypeError):
+            pass
+        return []
+
+    def open_local(self, _):
+        # Open in default file explorer
+        projects_path = PROJECTS_DIR.resolve()
+        if projects_path.exists():
+            if platform.system() == "Darwin":
+                subprocess.run(["open", str(projects_path)])
+            else:
+                subprocess.run(["xdg-open", str(projects_path)])
+
+    def open_github(self, _):
+        # Open GitHub (might need more specific implementation)
+        webbrowser.open("https://github.com")
+
+    def open_finder(self, _):
+        # Open Finder in current projects directory
+        projects_path = PROJECTS_DIR.resolve()
+        if projects_path.exists():
+            subprocess.run(["open", "-R", str(projects_path)])
+
+    def open_project(self, path: str):
+        """Open a project in VSCode."""
+        # Path in dashboard JSON is relative to src/generated/ directory
+        # We need to resolve it relative to REPO_ROOT
+        if path.startswith(".."):
+            # Path is relative to src/generated/, resolve it
+            dashboard_dir = DASHBOARD_PATH.parent
+            project_path = (dashboard_dir / path).resolve()
+        else:
+            # Path is relative to REPO_ROOT
+            project_path = (REPO_ROOT / path).resolve()
+
+        if project_path.exists():
+            _open_vscode_new_window(project_path)
+        else:
+            rumps.alert("Error", f"Project path not found:\n{project_path}")
 
     def update_dashboard(self, _):
         rumps.notification("Project Hub", "Updating...", "Running project scan and generating dashboard...")
