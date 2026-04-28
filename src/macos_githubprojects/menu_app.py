@@ -200,15 +200,19 @@ class ProjectHubApp(rumps.App):
 
     def open_project(self, path: str):
         """Open a project in VSCode."""
-        # Path in dashboard JSON is relative to src/generated/ directory
-        # We need to resolve it relative to REPO_ROOT
+        # Path in dashboard JSON:
+        # "../ProjectName" -> project in parent directory (PROJECTS_DIR)
+        # "./" or "ProjectName" -> project in REPO_ROOT
         if path.startswith(".."):
-            # Path is relative to src/generated/, resolve it
-            dashboard_dir = DASHBOARD_PATH.parent
-            project_path = (dashboard_dir / path).resolve()
+            # Project is in parent directory (e.g., ../Chrome_SimpleGMAIL)
+            project_name = path.replace("../", "")
+            project_path = (PROJECTS_DIR / project_name).resolve()
         else:
-            # Path is relative to REPO_ROOT
-            project_path = (REPO_ROOT / path).resolve()
+            # Project is in REPO_ROOT (e.g., "." or relative path)
+            if path == ".":
+                project_path = REPO_ROOT
+            else:
+                project_path = (REPO_ROOT / path).resolve()
 
         if project_path.exists():
             _open_vscode_new_window(project_path)

@@ -10,7 +10,8 @@
       "Bash(killall -9 Python)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(chmod +x launch_app.command)"
     ]
   }
 }
