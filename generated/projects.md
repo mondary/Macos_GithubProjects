@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-04-27 09:57**
+> Généré: **2026-04-27 19:49**
 
 ## 🧭 Sommaire
 
-CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (65) | WP (12) | OTHER (2)
+CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) | WP (12) | OTHER (2)
 
-> Total: **132** projets détectés.
+> Total: **133** projets détectés.
 
 ## CHROME
 
@@ -118,6 +118,7 @@ CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (65) | WP (12) | OTH
 - **Web_pkgg** — Description non disponible. (`../../Web_pkgg`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_pkimagetools** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_pkimagetools`) ✳️ dirty
 - **Web_pkmenus** — A simple, beautiful web-based dashboard designed to be displayed on a TV screen (or tablet) to show the weekly family menu and a photo slideshow. (`../../Web_pkmenus`) ✳️ dirty
+- **Web_PKmusicplayer** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_PKmusicplayer`) ✳️ dirty
 - **Web_pkrubik** — A single-file, vanilla HTML/CSS/JS Rubik's Cube simulator with a 3D view and move controls. The project is intentionally minimal and runs in a browser with no build step. (`../../Web_pkrubik`) ⚠️ no icon.png ✳️ dirty
 - **Web_pkthemes** — PKMail is a modern web application for secure email and message management with user authentication, individual data storage, and administrative controls. The platform is built entirely with Vanilla web technologies (no frameworks) and uses (`../../Web_pkthemes`) ⚠️ no icon.png ⚠️ no git
 - **Web_pktravelgames** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_pktravelgames`) ✳️ dirty

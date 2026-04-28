@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 src/macos_githubprojects/menu_app.py)",
+      "Bash(python3 -c \"from pathlib import Path; REPO_ROOT = Path\\('/Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects'\\); UPDATE_SCRIPT = REPO_ROOT / 'src' / 'macos_githubprojects' / 'update_projects_dashboard.py'; print\\(f'Update script exists: {UPDATE_SCRIPT.exists\\(\\)}'\\); print\\(f'Path: {UPDATE_SCRIPT}'\\)\")",
+      "Bash(pkill -f \"menu_app.py\")",
+      "Bash(pkill -9 -f \"menu_app.py\")",
+      "Bash(python3 src/macos_githubprojects/update_projects_dashboard.py)",
+      "Bash(python3 -c ' *)",
+      "Bash(killall -9 Python)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
+    ]
+  }
+}
