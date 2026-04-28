@@ -25,6 +25,17 @@ LAUNCHER_PORT = 37645
 DASHBOARD_PATH = REPO_ROOT / "src" / "generated" / "dashboard-projets.html"
 UPDATE_SCRIPT = REPO_ROOT / "src" / "macos_githubprojects" / "update_projects_dashboard.py"
 
+# Default icons based on project type
+DEFAULT_ICONS = {
+    "Chrome_": "🌐",
+    "CLI_": "💻",
+    "Macos_": "🍎",
+    "Web_": "🌍",
+    "WP_": "📝",
+    "VS_": "📦",
+    "RC_": "⚙️",
+}
+
 
 def project_count() -> int:
     try:
@@ -157,7 +168,27 @@ class ProjectHubApp(rumps.App):
         for project in projects:
             name = project.get("name", "Unknown")
             path = project.get("path", "")
-            menu_items.append(rumps.MenuItem(name, callback=lambda _, p=path: self.open_project(p)))
+            icon_path = project.get("iconPath", "")
+            group = project.get("group", "")
+
+            # Try to get custom icon from icon.png
+            icon = None
+            # First try to find icon.png in the project directory
+            if path.startswith(".."):
+                # Project in parent directory
+                project_name = path.replace("../", "").strip("/")
+                icon_full_path = (PROJECTS_DIR / project_name / "icon.png").resolve()
+            elif path == ".":
+                # Current repo
+                icon_full_path = (REPO_ROOT / "icon.png").resolve()
+            else:
+                # Relative path in repo
+                icon_full_path = (REPO_ROOT / path / "icon.png").resolve()
+
+            if icon_full_path.exists():
+                icon = str(icon_full_path)
+
+            menu_items.append(rumps.MenuItem(name, callback=lambda _, p=path: self.open_project(p), icon=icon))
 
         # rumps adds "Quit" automatically, no need to add it manually
         self.menu = menu_items

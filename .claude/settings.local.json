@@ -11,7 +11,8 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(chmod +x launch_app.command)"
+      "Bash(chmod +x launch_app.command)",
+      "Bash([ -d \"../$proj\" ])"
     ]
   }
 }
