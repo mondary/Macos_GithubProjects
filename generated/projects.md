@@ -1,45 +1,31 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-05-05 16:00**
+> Généré: **2026-05-05 17:36**
 
 ## 🧭 Sommaire
 
-ANDROID (1) | CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) | WP (12) | OTHER (5)
+CHROME (11) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (12) | OTHER (5)
 
-> Total: **137** projets détectés.
-
-## ANDROID
-
-- **Android_AndroidAuto_ChatGPT** — Description non disponible. (`../../Android_AndroidAuto_ChatGPT`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+> Total: **121** projets détectés.
 
 ## CHROME
 
-- **Chrome_GmailPK-client** — Description non disponible. (`../../Chrome_GmailPK-client`) ⚠️ no desc ✳️ dirty
-- **Chrome_GmailTabs** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Chrome_GmailTabs`) ⚠️ no icon.png ✳️ dirty
-- **Chrome_Linkedin-highlighter-job-tracker** — *   **Marquage Facile** : Un bouton "Flag" apparaît à côté de chaque offre d'emploi sur les pages de recherche LinkedIn, vous permettant de marquer une annonce comme "postulée" en un seul clic. (`../../Chrome_Linkedin-highlighter-job-tracker`) ⚠️ no icon.png ⚠️ no git
 - **Chrome_MondaryNewTab** — [🇫🇷 FR](README.md) (`../../Chrome_MondaryNewTab`)
 - **Chrome_PKchromeShortcuts** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Chrome_PKchromeShortcuts`)
 - **Chrome_pkhighlighter** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Chrome_pkhighlighter`)
 - **Chrome_PKscreenshotResizer** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Chrome_PKscreenshotResizer`)
-- **Chrome_pksniffer** — Description non disponible. (`../../Chrome_pksniffer`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Chrome_PKStickyNotesChrome** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Chrome_PKStickyNotesChrome`)
 - **Chrome_RSSnoteMAIL** — Description non disponible. (`../../Chrome_RSSnoteMAIL`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
-- **Chrome_SimpleGMAIL** — Une extension toute simple (`../../Chrome_SimpleGMAIL`) ⚠️ no icon.png ✳️ dirty
-- **Chrome_SimpleGMAIL_lbkp** — Description non disponible. (`../../Chrome_SimpleGMAIL_lbkp`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Chrome_SimpleGMAILb** — Une extension toute simple (`../../Chrome_SimpleGMAILb`) ⚠️ no icon.png
-- **Chrome_Simplify** — Description non disponible. (`../../Chrome_Simplify`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Chrome_SteamEPIC** — Show your Epic Games on Steam website (`../../Chrome_SteamEPIC`) ⚠️ no icon.png
+- **Chrome_SimpleGMAIL** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Chrome_SimpleGMAIL`) ✳️ dirty
+- **Chrome_SteamEPIC** — Show your Epic Games on Steam website (`../../Chrome_SteamEPIC`) ⚠️ no icon.png ✳️ dirty
 - **Chrome_sumarizerGPT2Wordpress** — Description non disponible. (`../../Chrome_sumarizerGPT2Wordpress`) ⚠️ no desc ✳️ dirty
 - **Chrome_TranslateHighlighter** — This Chrome extension provides instant text translation with two convenient modes: popup display and direct text substitution. It supports multiple target languages and offers full page translation capabilities. (`../../Chrome_TranslateHighlighter`) ⚠️ no icon.png
-- **Chrome_WPautomation** — Description non disponible. (`../../Chrome_WPautomation`) ⚠️ no desc ✳️ dirty
-- **Chrome_WPautomationGPT** — - Créer rapidement des articles WordPress directement depuis Chrome (`../../Chrome_WPautomationGPT`) ⚠️ no icon.png ⚠️ no git
-- **Chrome_WPchatsum** — Description non disponible. (`../../Chrome_WPchatsum`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Chrome_WPgptPost** — Chrome extension that grabs the current page title and meta description, then (`../../Chrome_WPgptPost`) ✳️ dirty
+- **Chrome_WPgpt** — Description non disponible. (`../../Chrome_WPgpt`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 
 ## CLI
 
-- **CLI_agentschooser** — Un menu simple et rapide pour lancer l'agent CLI de votre choix. (`../../CLI_agentschooser`)
+- **CLI_agentschooser** — Un menu simple et rapide pour lancer l'agent CLI de votre choix. (`../../CLI_agentschooser`) ✳️ dirty
 - **CLI_GOG** — Description non disponible. (`../../CLI_GOG`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **CLI_PKAgentsOrchestrator** — A powerful command-line interface for orchestrating multiple AI agents (Claude, GLM, OpenAI/Codex) with bash command execution and tmux multi-panel support. (`../../CLI_PKAgentsOrchestrator`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **CLI_PKcarreerMails** — But: ouvrir Gmail en browser (login manuel), lire `category:promotions`, ouvrir 1er mail, extraire offres (titre + lien + provenance), stocker en SQLite/CSV, puis UI Streamlit pour dedoublonnage + suivi "repondu". (`../../CLI_PKcarreerMails`) ⚠️ no icon.png ⚠️ no git
@@ -76,7 +62,7 @@ ANDROID (1) | CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) |
 ## VS
 
 - **VS_IAorchestrator** — An AI orchestrator extension for Visual Studio Code that provides multiple AI panels for different purposes. (`../../VS_IAorchestrator`) ⚠️ no icon.png ⚠️ no git
-- **VS_pkscriptcatws** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../VS_pkscriptcatws`)
+- **VS_pkscriptcat_snippets** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../VS_pkscriptcat_snippets`)
 - **VS_pkspecs** — README.md (`../../VS_pkspecs`) ✳️ dirty
 - **VS_pkterminal** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../VS_pkterminal`) ✳️ dirty
 - **VS_pkvsconf** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../VS_pkvsconf`)
@@ -138,11 +124,6 @@ ANDROID (1) | CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) |
 - **Web_SKILLS.shwebsite** — Description non disponible. (`../../Web_SKILLS.shwebsite`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_Snippets_bga-css** — The BGA site is pretty old school and sometimes just unclear! This is an attempt to improve it a little using only CSS. (`../../Web_Snippets_bga-css`) ⚠️ no icon.png
 - **Web_steamYearinreview** — Minimal hub for personal Steam Year in Review recaps with dynamic stats. (`../../Web_steamYearinreview`) ✳️ dirty
-- **Web_Stylus_ChatGPT** — Description non disponible. (`../../Web_Stylus_ChatGPT`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_Stylus_ggdeals** — Le site gg.deals est vraiment un super site pour tracker les bonnes affaires pour les jeux pc. (`../../Web_Stylus_ggdeals`) ⚠️ no icon.png
-- **Web_Stylus_github** — Custom Stylus userstyles to improve the GitHub repositories list layout. (`../../Web_Stylus_github`) ⚠️ no icon.png ✳️ dirty
-- **Web_Stylus_Gmail** — Description non disponible. (`../../Web_Stylus_Gmail`) ⚠️ no desc
-- **Web_Stylus_linkedin** — Le site Linkedin est vraiment un super site mais la colonne de droite à tendence à m'énerver je la trouve inutile. (`../../Web_Stylus_linkedin`) ⚠️ no icon.png
 - **Web_Tailwind+baseUI** — Description non disponible. (`../../Web_Tailwind+baseUI`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_TimeZone** — Description non disponible. (`../../Web_TimeZone`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_UsageAI** — Description non disponible. (`../../Web_UsageAI`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git

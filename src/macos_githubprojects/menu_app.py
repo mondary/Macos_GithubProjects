@@ -22,7 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 PROJECTS_DIR = REPO_ROOT.parent
 LAUNCHER_HOST = "127.0.0.1"
 LAUNCHER_PORT = 37645
-DASHBOARD_PATH = REPO_ROOT / "src" / "generated" / "dashboard-projets.html"
+DASHBOARD_PATH = REPO_ROOT / "generated" / "dashboard-projets.html"
 UPDATE_SCRIPT = REPO_ROOT / "src" / "macos_githubprojects" / "update_projects_dashboard.py"
 
 # Default icons based on project type
@@ -41,22 +41,31 @@ def project_count() -> int:
     try:
         REPO_ROOT = Path(__file__).resolve().parents[2]
         PROJECTS_DIR = REPO_ROOT.parent
-        DASHBOARD_PATH = REPO_ROOT / "src" / "generated" / "dashboard-projets.html"
+        DASHBOARD_PATH = REPO_ROOT / "generated" / "dashboard-projets.html"
         
-        if DASHBOARD_PATH.exists():
-            try:
-                content = DASHBOARD_PATH.read_text(encoding="utf-8", errors="replace")
-                match = re.search(
-                    r'<script id="data" type="application/json">(.*?)</script>',
-                    content,
-                    re.S,
-                )
-                if match:
-                    data = json.loads(match.group(1))
-                    return len(data.get("projects", []))
-            except (OSError, json.JSONDecodeError, TypeError):
-                pass
+        # Use more reliable path
+        dashboard_paths = [
+            REPO_ROOT / "dashboard-projets.html",
+            DASHBOARD_PATH,
+            Path("/Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects/src/generated/dashboard-projets.html")
+        ]
+        
+        for dashboard_path in dashboard_paths:
+            if dashboard_path.exists():
+                try:
+                    content = dashboard_path.read_text(encoding="utf-8", errors="replace")
+                    match = re.search(
+                        r'<script id="data" type="application/json">(.*?)</script>',
+                        content,
+                        re.S,
+                    )
+                    if match:
+                        data = json.loads(match.group(1))
+                        return len(data.get("projects", []))
+                except (OSError, json.JSONDecodeError, TypeError):
+                    continue
 
+        # Fallback: count directories directly
         if PROJECTS_DIR.exists():
             count = sum(
                 1
@@ -143,13 +152,17 @@ def start_launcher_server() -> None:
 
 class ProjectHubApp(rumps.App):
     def __init__(self):
-        super(ProjectHubApp, self).__init__(f"📁 {project_count()}")
+        super(ProjectHubApp, self).__init__(f"📁 {project_count()}", quit_button=None)
         self.quick_actions_menu = rumps.MenuItem("Quick Actions")
         self.quick_actions_menu.menu = [
             rumps.MenuItem("🏠 Local", callback=self.open_local),
             rumps.MenuItem("🌐 GitHub", callback=self.open_github),
             rumps.MenuItem("🗂️ Finder", callback=self.open_finder),
         ]
+        
+        # Print current project count for debugging
+        actual_count = project_count()
+        print(f"DEBUG: Project count: {actual_count}")
 
         # Load projects from dashboard data
         projects = self._load_projects()
@@ -160,9 +173,9 @@ class ProjectHubApp(rumps.App):
             None,  # Separator
             rumps.MenuItem("Open Dashboard", callback=self.open_dashboard),
             rumps.MenuItem("Open Finder", callback=self.open_finder),
+            rumps.MenuItem("Quit", callback=self.quit_app),
             None,  # Separator
             self.quick_actions_menu,
-            None,  # Separator
         ]
 
         # Add projects to menu
@@ -191,7 +204,6 @@ class ProjectHubApp(rumps.App):
 
             menu_items.append(rumps.MenuItem(name, callback=lambda _, p=path: self.open_project(p), icon=icon))
 
-        # rumps adds "Quit" automatically, no need to add it manually
         self.menu = menu_items
 
     def _load_projects(self) -> list[dict]:
@@ -229,6 +241,11 @@ class ProjectHubApp(rumps.App):
         projects_path = PROJECTS_DIR.resolve()
         if projects_path.exists():
             subprocess.run(["open", "-R", str(projects_path)])
+
+    def quit_app(self, _):
+        """Quit the application."""
+        import os
+        os._exit(0)
 
     def open_project(self, path: str):
         """Open a project in VSCode."""
@@ -277,5 +294,10 @@ class ProjectHubApp(rumps.App):
             rumps.alert("Error", "Dashboard file not found. Please run update first.")
 
 if __name__ == "__main__":
+    import logging
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logger = logging.getLogger(__name__)
+    logger.info("Starting menu app...")
     start_launcher_server()
+    logger.info("Starting ProjectHubApp...")
     ProjectHubApp().run()
