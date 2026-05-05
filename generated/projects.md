@@ -1,13 +1,17 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-04-27 19:49**
+> Généré: **2026-05-05 16:00**
 
 ## 🧭 Sommaire
 
-CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) | WP (12) | OTHER (2)
+ANDROID (1) | CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) | WP (12) | OTHER (5)
 
-> Total: **133** projets détectés.
+> Total: **137** projets détectés.
+
+## ANDROID
+
+- **Android_AndroidAuto_ChatGPT** — Description non disponible. (`../../Android_AndroidAuto_ChatGPT`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 
 ## CHROME
 
@@ -21,7 +25,7 @@ CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) | WP (12) | OTH
 - **Chrome_pksniffer** — Description non disponible. (`../../Chrome_pksniffer`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Chrome_PKStickyNotesChrome** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Chrome_PKStickyNotesChrome`)
 - **Chrome_RSSnoteMAIL** — Description non disponible. (`../../Chrome_RSSnoteMAIL`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
-- **Chrome_SimpleGMAIL** — Une extension toute simple (`../../Chrome_SimpleGMAIL`) ⚠️ no icon.png
+- **Chrome_SimpleGMAIL** — Une extension toute simple (`../../Chrome_SimpleGMAIL`) ⚠️ no icon.png ✳️ dirty
 - **Chrome_SimpleGMAIL_lbkp** — Description non disponible. (`../../Chrome_SimpleGMAIL_lbkp`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Chrome_SimpleGMAILb** — Une extension toute simple (`../../Chrome_SimpleGMAILb`) ⚠️ no icon.png
 - **Chrome_Simplify** — Description non disponible. (`../../Chrome_Simplify`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
@@ -72,7 +76,7 @@ CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) | WP (12) | OTH
 ## VS
 
 - **VS_IAorchestrator** — An AI orchestrator extension for Visual Studio Code that provides multiple AI panels for different purposes. (`../../VS_IAorchestrator`) ⚠️ no icon.png ⚠️ no git
-- **VS_pkscriptcatws** — Extension VS Code pour synchroniser vos userscripts (`.user.js`) directement avec l'extension de navigateur [ScriptCat](https://scriptcat.org/). (`../../VS_pkscriptcatws`) ✳️ dirty
+- **VS_pkscriptcatws** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../VS_pkscriptcatws`)
 - **VS_pkspecs** — README.md (`../../VS_pkspecs`) ✳️ dirty
 - **VS_pkterminal** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../VS_pkterminal`) ✳️ dirty
 - **VS_pkvsconf** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../VS_pkvsconf`)
@@ -156,12 +160,15 @@ CHROME (21) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (66) | WP (12) | OTH
 - **WP_ProjectsPage** — Description non disponible. (`../../WP_ProjectsPage`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_RSocial** — Collection of HTML assets and exports used for social/CV experiments. (`../../WP_RSocial`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **WP_ShortURL** — Description non disponible. (`../../WP_ShortURL`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **WP_Snippets** — - `snippets/` (`../../WP_Snippets`) ✳️ dirty
+- **WP_Snippets** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../WP_Snippets`) ✳️ dirty
 - **WP_websocket** — Description non disponible. (`../../WP_websocket`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_wpagent** — Plugin to capture quick "topics" from mobile (inbox) and turn them into drafts (`../../WP_wpagent`) ✳️ dirty
 - **WP_YearInPixel** — Description non disponible. (`../../WP_YearInPixel`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
 
 ## OTHER
 
+- **Codexbar** — Description non disponible. (`../../Codexbar`) ⚠️ no desc ⚠️ no git
+- **OpenIsland** — Description non disponible. (`../../OpenIsland`) ⚠️ no desc ⚠️ no git
 - **PKnotes** — Description non disponible. (`../../PKnotes`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **projects.md** — Description non disponible. (`../../projects.md`) ⚠️ no desc ⚠️ no git
+- **Stats** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Stats`) ⚠️ no git

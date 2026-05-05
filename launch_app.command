@@ -7,4 +7,4 @@ cd "$(dirname "$0")"
 pkill -f "menu_app.py" 2>/dev/null
 
 # Launch the menu app
-python3 src/macos_githubprojects/menu_app.py &
+./.venv/bin/python3 src/app/menu_app.py &

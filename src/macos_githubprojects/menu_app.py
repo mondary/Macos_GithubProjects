@@ -159,6 +159,7 @@ class ProjectHubApp(rumps.App):
             rumps.MenuItem("Update Dashboard", callback=self.update_dashboard),
             None,  # Separator
             rumps.MenuItem("Open Dashboard", callback=self.open_dashboard),
+            rumps.MenuItem("Open Finder", callback=self.open_finder),
             None,  # Separator
             self.quick_actions_menu,
             None,  # Separator
