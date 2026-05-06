@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-05-06 14:11**
+> Généré: **2026-05-06 14:20**
 
 ## 🧭 Sommaire
 
-CHROME (10) | CLI (5) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (13) | OTHER (5)
+CHROME (10) | CLI (5) | MACOS (13) | RC (1) | VS (5) | WEB (61) | WP (13) | OTHER (5)
 
-> Total: **114** projets détectés.
+> Total: **113** projets détectés.
 
 ## CHROME
 
@@ -33,7 +33,6 @@ CHROME (10) | CLI (5) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (13) | OTHE
 ## MACOS
 
 - **Macos_browserAgent** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Macos_browserAgent`) ✳️ dirty
-- **Macos_Clipboard** — Description non disponible. (`../../Macos_Clipboard`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_FinderGithubLogo** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Macos_FinderGithubLogo`)
 - **Macos_GithubProjects** — Outil de gestion de projets pour macOS avec menu bar app et dashboard HTML. (`..`) ✳️ dirty
 - **Macos_LaunchpadPK** — Description non disponible. (`../../Macos_LaunchpadPK`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
