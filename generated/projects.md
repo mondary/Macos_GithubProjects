@@ -1,7 +1,7 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-05-06 14:08**
+> Généré: **2026-05-06 14:11**
 
 ## 🧭 Sommaire
 

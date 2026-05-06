@@ -1902,6 +1902,14 @@ def _generate_hub_html(projects: list[Project]) -> None:
 
         updateFilterCounts();
 
+        // Keep fan anchored to bottom of viewport
+        function updateFanBase() {{
+            const firstCard = cards[0];
+            if (!firstCard) return;
+            const fanBase = window.innerHeight - firstCard.offsetHeight - 400;
+            document.documentElement.style.setProperty('--fan-base', `${{Math.max(fanBase, 120)}}px`);
+        }}
+
         // Scroll state
         window.addEventListener('scroll', () => {{
             if (window.scrollY > 40) {{
@@ -1921,7 +1929,13 @@ def _generate_hub_html(projects: list[Project]) -> None:
         window.addEventListener('resize', () => {{
             if (document.body.classList.contains('scrolled')) {{
                 layoutCards();
+            }} else {{
+                updateFanBase();
             }}
+        }});
+
+        window.addEventListener('load', () => {{
+            updateFanBase();
         }});
 
         function clearCardStyles() {{
