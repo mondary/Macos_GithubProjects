@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; frame-ancestors 'none'; upgrade-insecure-requests;">
+    <title>Mes Projets - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            background-color: #ffffff;
+            color: #111;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 150vh;
+        }
+
+        .bg-photo {
+            position: fixed;
+            right: -12vw;
+            bottom: 0;
+            transform: none;
+            height: 100vh;
+            width: auto;
+            max-width: 120vw;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+            -webkit-mask-image: linear-gradient(to left, transparent 0%, black 30%, black 60%, transparent 100%);
+            mask-image: linear-gradient(to left, transparent 0%, black 30%, black 60%, transparent 100%);
+            filter: grayscale(100%);
+        }
+
+        .header-section {
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .socials-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .social-bubble {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-bubble.github {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .social-bubble.github:hover {
+            background: #333;
+            color: #fff;
+            transform: translateY(-4px) scale(1.1);
+        }
+
+        .social-bubble i {
+            font-size: 18px;
+            color: currentColor;
+        }
+
+        .filters-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            width: 100%;
+            box-sizing: border-box;
+            background: transparent;
+            padding: 12px 16px;
+            border-radius: 0;
+        }
+
+        .filters-container.is-stuck {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .filter-pill {
+            background: #f3f4f6;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+
+        .filter-pill.active {
+            background: #111;
+            color: #fff;
+        }
+
+        .main-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+            min-height: 2000px;
+        }
+
+        .card {
+            position: absolute;
+            width: calc(25% - 15px);
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #efefef;
+            transition:
+                transform 1s cubic-bezier(0.25, 1, 0.5, 1),
+                left 1s cubic-bezier(0.25, 1, 0.5, 1),
+                top 1s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 1s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: center bottom;
+            cursor: pointer;
+            will-change: transform, left, top;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card-inner {
+            border-radius: 16px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 180px;
+            background-color: #f9fafb;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .card:nth-child(2n) .card-img {
+            height: 240px;
+        }
+
+        .card:nth-child(3n) .card-img {
+            height: 210px;
+        }
+
+        .category-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(6px);
+        }
+
+        .category-icon i {
+            font-size: 14px;
+        }
+
+        .category-icon.website { background: rgba(99, 102, 241, 0.85); }
+        .category-icon.chrome { background: rgba(234, 67, 53, 0.85); }
+        .category-icon.cli { background: rgba(34, 197, 94, 0.85); }
+        .category-icon.macos { background: rgba(102, 51, 153, 0.85); }
+        .category-icon.web { background: rgba(16, 185, 129, 0.85); }
+
+        .card.hidden {
+            opacity: 0;
+            transform: scale(0.8) !important;
+            pointer-events: none;
+        }
+
+        .card-content {
+            padding: 16px;
+            background: white;
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #111;
+        }
+
+        /* STATE: FAN (Default) */
+        body:not(.scrolled) .card {
+            left: 50%;
+            top: var(--fan-base, 60vh);
+            width: clamp(200px, 45vw, 260px);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        body:not(.scrolled) .card {
+            transform: translate(calc(var(--fan-x, -50%) + var(--fan-dx, 0px)), calc(var(--fan-y, 0px) + var(--fan-dy, 0px))) rotate(var(--fan-rot, 0deg)) scale(var(--fan-scale, 1));
+        }
+
+        body:not(.scrolled) .card:nth-child(n+8) {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body:not(.scrolled) .card:nth-child(1) {
+            --fan-x: -350%;
+            --fan-y: 80px;
+            --fan-rot: -26deg;
+            --fan-dx: 65px;
+            --fan-dy: 100px;
+            z-index: 1;
+        }
+
+        body:not(.scrolled) .card:nth-child(2) {
+            --fan-x: -250%;
+            --fan-y: 40px;
+            --fan-rot: -20deg;
+            --fan-dx: 55px;
+            --fan-dy: 25px;
+            z-index: 2;
+        }
+
+        body:not(.scrolled) .card:nth-child(3) {
+            --fan-x: -150%;
+            --fan-y: 15px;
+            --fan-rot: -10deg;
+            --fan-dx: 10px;
+            --fan-dy: -10px;
+            z-index: 3;
+        }
+
+        body:not(.scrolled) .card:nth-child(4) {
+            --fan-x: -50%;
+            --fan-y: 0px;
+            --fan-rot: 0deg;
+            --fan-dx: 0px;
+            --fan-dy: 0px;
+            --fan-scale: 1.1;
+            z-index: 4;
+        }
+
+        body:not(.scrolled) .card:nth-child(5) {
+            --fan-x: 50%;
+            --fan-y: 15px;
+            --fan-rot: 10deg;
+            --fan-dx: -5px;
+            --fan-dy: -5px;
+            z-index: 3;
+        }
+
+        body:not(.scrolled) .card:nth-child(6) {
+            --fan-x: 150%;
+            --fan-y: 40px;
+            --fan-rot: 20deg;
+            --fan-dx: -35px;
+            --fan-dy: 35px;
+            z-index: 2;
+        }
+
+        body:not(.scrolled) .card:nth-child(7) {
+            --fan-x: 250%;
+            --fan-y: 80px;
+            --fan-rot: 30deg;
+            --fan-dx: -65px;
+            --fan-dy: 110px;
+            z-index: 1;
+        }
+
+        /* STATE: GRID (Scrolled) */
+        body.scrolled .card {
+            transform: rotate(0deg) translate(0, 0) scale(1) !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        body.scrolled .card.hidden {
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+
+        body.scrolled .card:hover {
+            transform: translateY(-4px) scale(1.02) !important;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .scroll-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #9ca3af;
+            font-size: 13px;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 50;
+        }
+
+        body.scrolled .scroll-hint {
+            opacity: 0;
+        }
+
+        @media (max-width: 600px) {
+            .header-section {
+                padding-top: 56px;
+            }
+
+            .header-title {
+                font-size: 56px;
+            }
+
+            .filters-container {
+                gap: 6px;
+                margin-bottom: 28px;
+            }
+
+            body:not(.scrolled) .card {
+                width: clamp(170px, 70vw, 240px);
+            }
+
+            .bg-photo {
+                height: 60vh;
+                max-width: 140vw;
+                right: -20vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<img src="assets/images/cm_trans.png" alt="" class="bg-photo">
+
+<div class="header-section">
+    <h1 class="header-title">Mes Projets</h1>
+    <div class="socials-container">
+        <a href="https://github.com/mondary" target="_blank" rel="noopener noreferrer" class="social-bubble github" title="GitHub"><i class="fab fa-github"></i></a>
+    </div>
+</div>
+
+<div class="filters-container">
+    <button type="button" class="filter-pill active" data-filter="all">Tous</button>
+    <button type="button" class="filter-pill" data-filter="chrome">Chrome</button>
+    <button type="button" class="filter-pill" data-filter="cli">CLI</button>
+    <button type="button" class="filter-pill" data-filter="macos">macOS</button>
+    <button type="button" class="filter-pill" data-filter="web">Web</button>
+</div>
+
+<div class="main-wrapper" id="cards-container">
+        <a class="card" data-category="chrome" href="../../Chrome_MondaryNewTab/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Chrome_MondaryNewTab/icon.png'); background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_MondaryNewTab</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_PKchromeShortcuts/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Chrome_PKchromeShortcuts/icon.png'); background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_PKchromeShortcuts</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_pkhighlighter/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Chrome_pkhighlighter/icon.png'); background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_pkhighlighter</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_PKscreenshotResizer/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Chrome_PKscreenshotResizer/icon.png'); background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_PKscreenshotResizer</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_PKStickyNotesChrome/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Chrome_PKStickyNotesChrome/icon.png'); background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_PKStickyNotesChrome</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_RSSnoteMAIL/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_RSSnoteMAIL</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_SimpleGMAIL/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Chrome_SimpleGMAIL/icon.png'); background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_SimpleGMAIL</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_SteamEPIC/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_SteamEPIC</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_TranslateHighlighter/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Chrome_TranslateHighlighter/icon.png'); background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_TranslateHighlighter</div>
+            </div>
+        </a>
+        <a class="card" data-category="chrome" href="../../Chrome_WPgpt/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon chrome"><i class="fas fa-chrome"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Chrome_WPgpt</div>
+            </div>
+        </a>
+        <a class="card" data-category="cli" href="../../CLI_agentschooser/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../CLI_agentschooser/icon.png'); background-size: cover;">
+                <div class="category-icon cli"><i class="fas fa-terminal"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">CLI_agentschooser</div>
+            </div>
+        </a>
+        <a class="card" data-category="cli" href="../../CLI_GOG/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon cli"><i class="fas fa-terminal"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">CLI_GOG</div>
+            </div>
+        </a>
+        <a class="card" data-category="cli" href="../../CLI_PKcarreerMails/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon cli"><i class="fas fa-terminal"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">CLI_PKcarreerMails</div>
+            </div>
+        </a>
+        <a class="card" data-category="cli" href="../../CLI_PKproc-ai/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon cli"><i class="fas fa-terminal"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">CLI_PKproc-ai</div>
+            </div>
+        </a>
+        <a class="card" data-category="cli" href="../../CLI_SteamEPIC/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon cli"><i class="fas fa-terminal"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">CLI_SteamEPIC</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../Codexbar/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Codexbar/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Codexbar</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_browserAgent/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_browserAgent</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_Clipboard/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_Clipboard</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_FinderGithubLogo/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Macos_FinderGithubLogo/icon.png'); background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_FinderGithubLogo</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href=".././" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('.././icon.png'); background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_GithubProjects</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_LaunchpadPK/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_LaunchpadPK</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_MacosPermissions/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_MacosPermissions</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_PKbrain/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_PKbrain</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_PKcarreerAgent/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_PKcarreerAgent</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_PKdictation/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_PKdictation</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_PKDrive/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_PKDrive</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_PKkaku/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_PKkaku</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_PKpowerlines/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Macos_PKpowerlines/icon.png'); background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_PKpowerlines</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_PKvibeyard/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Macos_PKvibeyard/icon.png'); background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_PKvibeyard</div>
+            </div>
+        </a>
+        <a class="card" data-category="macos" href="../../Macos_ProjectTracker/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Macos_ProjectTracker/icon.png'); background-size: cover;">
+                <div class="category-icon macos"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Macos_ProjectTracker</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../OpenIsland/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../OpenIsland/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">OpenIsland</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../PKnotes/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">PKnotes</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../projects.md/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">projects.md</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../RC_pkscripts/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../RC_pkscripts/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">RC_pkscripts</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../Stats/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Stats/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Stats</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../VS_IAorchestrator/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">VS_IAorchestrator</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../VS_pkscriptcat_snippets/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../VS_pkscriptcat_snippets/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">VS_pkscriptcat_snippets</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../VS_pkspecs/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../VS_pkspecs/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">VS_pkspecs</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../VS_pkterminal/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../VS_pkterminal/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">VS_pkterminal</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../VS_pkvsconf/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../VS_pkvsconf/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">VS_pkvsconf</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_about/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_about</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_allaitement/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_allaitement</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_BGAcss/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_BGAcss</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_cards/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_cards</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Cours_JS_horloge/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Cours_JS_horloge</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_CoursJS/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_CoursJS</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Cryptos/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Cryptos</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_cuistobot/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_cuistobot</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_cv/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_cv/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_cv</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_DesignThinking/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_DesignThinking</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_dice-roller/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_dice-roller</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_F1/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_F1</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_FileBrowser/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_FileBrowser</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_FrameworkTest/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_FrameworkTest</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_GGdeals_collection/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_GGdeals_collection/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_GGdeals_collection</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_ggpk/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_ggpk</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_hub/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_hub/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_hub</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_HUBprojets/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_HUBprojets</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Jarocki/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Jarocki</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_LinkSaver/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_LinkSaver</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_MetaStreaming/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_MetaStreaming</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_mondaryTOOLS/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_mondaryTOOLS</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_multi-cli-hub/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_multi-cli-hub</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_NavMap/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_NavMap</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Ndf/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Ndf</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_onetoc/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_onetoc</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_PHPjson_test/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_PHPjson_test</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pinel/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pinel</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_PK_TravelGames/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_PK_TravelGames</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_PK_ZombiGame/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_PK_ZombiGame</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkchangedetection/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_pkchangedetection/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkchangedetection</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkcuisto/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkcuisto</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkcuisto_WA/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkcuisto_WA</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkdiffchecker/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkdiffchecker</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_PKdomains/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_PKdomains/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_PKdomains</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_PKdotanimation/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_PKdotanimation</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkgg/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkgg</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkimagetools/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_pkimagetools/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkimagetools</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkmenus/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_pkmenus/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkmenus</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_PKmusicplayer/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_PKmusicplayer/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_PKmusicplayer</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkrubik/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkrubik</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pkthemes/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pkthemes</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pktravelgames/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_pktravelgames/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pktravelgames</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_pktravelgamesBENCH/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_pktravelgamesBENCH</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_PKwhiteboard/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_PKwhiteboard</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_PlaningArtiste/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_PlaningArtiste</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Raptor/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Raptor</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Reactbits/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Reactbits</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_SciFi/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_SciFi</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Scrappers/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Scrappers</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_ServeurPK/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_ServeurPK</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_ShadcnPK/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_ShadcnPK</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_SKILLS.shwebsite/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_SKILLS.shwebsite</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Snippets_bga-css/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Snippets_bga-css</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_steamYearinreview/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_steamYearinreview/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_steamYearinreview</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Tailwind+baseUI/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Tailwind+baseUI</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_TimeZone/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_TimeZone</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_UsageAI/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_UsageAI</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_youtubedl/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_youtubedl</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_Zombi/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_Zombi</div>
+            </div>
+        </a>
+        <a class="card" data-category="web" href="../../Web_ZombiGame/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../Web_ZombiGame/icon.png'); background-size: cover;">
+                <div class="category-icon web"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">Web_ZombiGame</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_BlackHole/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_BlackHole</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_MoneyRadar_NL/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_MoneyRadar_NL</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_pknewsletter/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../WP_pknewsletter/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_pknewsletter</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_pkpremium/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../WP_pkpremium/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_pkpremium</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_pkSocialSharing/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../WP_pkSocialSharing/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_pkSocialSharing</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_ProjectsPage/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_ProjectsPage</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_RSocial/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_RSocial</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_ShortURL/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_ShortURL</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_Snippets/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../WP_Snippets/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_Snippets</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_websocket/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_websocket</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_WordpressPOSTS/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_WordpressPOSTS</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_wpagent/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: url('../../WP_wpagent/icon.png'); background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_wpagent</div>
+            </div>
+        </a>
+        <a class="card" data-category="website" href="../../WP_YearInPixel/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: #f9fafb; background-size: cover;">
+                <div class="category-icon website"><i class="fas fa-globe"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">WP_YearInPixel</div>
+            </div>
+        </a>
+</div>
+
+<div class="scroll-hint">Scrollez pour animer</div>
+
+<script>
+    (function() {
+        const cards = document.querySelectorAll('.card');
+        const pills = document.querySelectorAll('.filter-pill');
+        const container = document.getElementById('cards-container');
+        const filters = document.querySelector('.filters-container');
+        let currentFilter = 'all';
+
+        // Filter counts
+        function updateFilterCounts() {
+            const counts = {};
+            cards.forEach(card => {
+                const category = card.dataset.category;
+                counts[category] = (counts[category] || 0) + 1;
+            });
+            const total = cards.length;
+            pills.forEach(pill => {
+                if (!pill.dataset.label) {
+                    pill.dataset.label = pill.textContent.trim();
+                }
+                const label = pill.dataset.label;
+                const key = pill.dataset.filter;
+                const count = key === 'all' ? total : (counts[key] || 0);
+                pill.textContent = `${label} (${count})`;
+            });
+        }
+
+        // Masonry layout
+        function layoutCards() {
+            if (!document.body.classList.contains('scrolled')) return;
+
+            const visibleCards = [...cards].filter(c => !c.classList.contains('hidden'));
+            let cols = 4;
+            const gap = 20;
+            const containerWidth = container.offsetWidth;
+            if (containerWidth < 520) cols = 1;
+            else if (containerWidth < 820) cols = 2;
+            else if (containerWidth < 1100) cols = 3;
+            const cardWidth = (containerWidth - gap * (cols - 1)) / cols;
+            const colHeights = Array(cols).fill(0);
+
+            visibleCards.forEach((card) => {
+                const shortestCol = colHeights.indexOf(Math.min(...colHeights));
+                const left = shortestCol * (cardWidth + gap);
+                const top = colHeights[shortestCol];
+
+                card.style.left = left + 'px';
+                card.style.top = top + 'px';
+                card.style.width = cardWidth + 'px';
+
+                colHeights[shortestCol] += card.offsetHeight + gap;
+            });
+
+            container.style.height = Math.max(...colHeights) + 'px';
+        }
+
+        // Filter
+        window.filterCards = function(filter) {
+            currentFilter = filter;
+            cards.forEach(card => {
+                const category = card.dataset.category;
+                if (filter === 'all' || category === filter || card.dataset.category.includes(filter)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            if (!document.body.classList.contains('scrolled')) {
+                document.body.classList.add('scrolled');
+            }
+            setTimeout(layoutCards, 50);
+        };
+
+        pills.forEach(pill => {
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                pills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                window.filterCards(pill.dataset.filter);
+            });
+        });
+
+        updateFilterCounts();
+
+        // Scroll state
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                if (!document.body.classList.contains('scrolled')) {
+                    document.body.classList.add('scrolled');
+                    void document.body.offsetWidth;
+                    layoutCards();
+                }
+            } else {
+                if (document.body.classList.contains('scrolled')) {
+                    document.body.classList.remove('scrolled');
+                    clearCardStyles();
+                }
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (document.body.classList.contains('scrolled')) {
+                layoutCards();
+            }
+        });
+
+        function clearCardStyles() {
+            cards.forEach(card => {
+                card.style.left = '';
+                card.style.top = '';
+                card.style.width = '';
+            });
+            container.style.height = '';
+        }
+    })();
+</script>
+
+</body>
+
+</html>

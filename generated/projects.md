@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-05-05 17:36**
+> Généré: **2026-05-06 13:38**
 
 ## 🧭 Sommaire
 
-CHROME (11) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (12) | OTHER (5)
+CHROME (10) | CLI (5) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (13) | OTHER (5)
 
-> Total: **121** projets détectés.
+> Total: **114** projets détectés.
 
 ## CHROME
 
@@ -19,31 +19,23 @@ CHROME (11) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (12) | OTH
 - **Chrome_RSSnoteMAIL** — Description non disponible. (`../../Chrome_RSSnoteMAIL`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
 - **Chrome_SimpleGMAIL** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Chrome_SimpleGMAIL`) ✳️ dirty
 - **Chrome_SteamEPIC** — Show your Epic Games on Steam website (`../../Chrome_SteamEPIC`) ⚠️ no icon.png ✳️ dirty
-- **Chrome_sumarizerGPT2Wordpress** — Description non disponible. (`../../Chrome_sumarizerGPT2Wordpress`) ⚠️ no desc ✳️ dirty
-- **Chrome_TranslateHighlighter** — This Chrome extension provides instant text translation with two convenient modes: popup display and direct text substitution. It supports multiple target languages and offers full page translation capabilities. (`../../Chrome_TranslateHighlighter`) ⚠️ no icon.png
+- **Chrome_TranslateHighlighter** — This Chrome extension provides instant text translation with two convenient modes: popup display and direct text substitution. It supports multiple target languages and offers full page translation capabilities. (`../../Chrome_TranslateHighlighter`) ✳️ dirty
 - **Chrome_WPgpt** — Description non disponible. (`../../Chrome_WPgpt`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 
 ## CLI
 
 - **CLI_agentschooser** — Un menu simple et rapide pour lancer l'agent CLI de votre choix. (`../../CLI_agentschooser`) ✳️ dirty
 - **CLI_GOG** — Description non disponible. (`../../CLI_GOG`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **CLI_PKAgentsOrchestrator** — A powerful command-line interface for orchestrating multiple AI agents (Claude, GLM, OpenAI/Codex) with bash command execution and tmux multi-panel support. (`../../CLI_PKAgentsOrchestrator`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **CLI_PKcarreerMails** — But: ouvrir Gmail en browser (login manuel), lire `category:promotions`, ouvrir 1er mail, extraire offres (titre + lien + provenance), stocker en SQLite/CSV, puis UI Streamlit pour dedoublonnage + suivi "repondu". (`../../CLI_PKcarreerMails`) ⚠️ no icon.png ⚠️ no git
-- **CLI_PKclaw** — Projet: VM Debian headless sur Freebox Ultra pour exécuter des agents CLI (OpenClaw/Clawdbot, Codex, Claude Code, Gemini, Qwen, Qoder, OpenCode, GLM) avec accès SSH et possibilité d'UI tiling à la demande. (`../../CLI_PKclaw`) ⚠️ no icon.png ⚠️ no git
-- **CLI_PKclawAgent** — Description non disponible. (`../../CLI_PKclawAgent`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **CLI_PKgitftp** — Un outil CLI simple pour gérer les versions avec Git et le déploiement via FTP. (`../../CLI_PKgitftp`) ⚠️ no icon.png ⚠️ no git
-- **CLI_PKneovim** — Description non disponible. (`../../CLI_PKneovim`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **CLI_PKproc-ai** — Description non disponible. (`../../CLI_PKproc-ai`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **CLI_PKwpagent** — Petit service FastAPI qui reçoit un lien partagé, génère un contenu structuré (avec une IA optionnelle) puis crée un brouillon sur le WordPress `https://mondary.design` via l'API REST. (`../../CLI_PKwpagent`) ⚠️ no icon.png ✳️ dirty
 - **CLI_SteamEPIC** — Description non disponible. (`../../CLI_SteamEPIC`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **CLI_WPpostdraft** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../CLI_WPpostdraft`) ⚠️ no icon.png
 
 ## MACOS
 
 - **Macos_browserAgent** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Macos_browserAgent`) ⚠️ no icon.png ✳️ dirty
 - **Macos_Clipboard** — Description non disponible. (`../../Macos_Clipboard`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_FinderGithubLogo** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Macos_FinderGithubLogo`)
-- **Macos_GithubProjects** — `src/tools/*.py` are CLI entrypoints. Implementation code lives in (`..`) ✳️ dirty
+- **Macos_GithubProjects** — Outil de gestion de projets pour macOS avec menu bar app et dashboard HTML. (`..`) ✳️ dirty
 - **Macos_LaunchpadPK** — Description non disponible. (`../../Macos_LaunchpadPK`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_MacosPermissions** — Description non disponible. (`../../Macos_MacosPermissions`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_PKbrain** — Description non disponible. (`../../Macos_PKbrain`) ⚠️ no desc ⚠️ no icon.png ⚠️ no remote ✳️ dirty
@@ -85,7 +77,7 @@ CHROME (11) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (12) | OTH
 - **Web_FrameworkTest** — Description non disponible. (`../../Web_FrameworkTest`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_GGdeals_collection** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_GGdeals_collection`)
 - **Web_ggpk** — Application web permettant de rechercher les prix des jeux vidéo en utilisant l'API gg.deals. (`../../Web_ggpk`) ⚠️ no icon.png ⚠️ no git
-- **Web_hub** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_hub`) ✳️ dirty
+- **Web_hub** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_hub`)
 - **Web_HUBprojets** — Description non disponible. (`../../Web_HUBprojets`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_Jarocki** — Description non disponible. (`../../Web_Jarocki`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_LinkSaver** — Description non disponible. (`../../Web_LinkSaver`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
@@ -143,6 +135,7 @@ CHROME (11) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (12) | OTH
 - **WP_ShortURL** — Description non disponible. (`../../WP_ShortURL`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_Snippets** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../WP_Snippets`) ✳️ dirty
 - **WP_websocket** — Description non disponible. (`../../WP_websocket`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **WP_WordpressPOSTS** — Description non disponible. (`../../WP_WordpressPOSTS`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_wpagent** — Plugin to capture quick "topics" from mobile (inbox) and turn them into drafts (`../../WP_wpagent`) ✳️ dirty
 - **WP_YearInPixel** — Description non disponible. (`../../WP_YearInPixel`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
 
@@ -152,4 +145,4 @@ CHROME (11) | CLI (12) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (12) | OTH
 - **OpenIsland** — Description non disponible. (`../../OpenIsland`) ⚠️ no desc ⚠️ no git
 - **PKnotes** — Description non disponible. (`../../PKnotes`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **projects.md** — Description non disponible. (`../../projects.md`) ⚠️ no desc ⚠️ no git
-- **Stats** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Stats`) ⚠️ no git
+- **Stats** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Stats`) ✳️ dirty

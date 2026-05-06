@@ -1361,10 +1361,595 @@ def _write_dashboard_html(projects: list[Project]) -> None:
     DASHBOARD_HTML.write_text(_html_template(projects), encoding="utf-8")
 
 
+def _generate_hub_html(projects: list[Project]) -> None:
+    """Generate a standalone hub.html with all projects using the Web_hub template structure."""
+    GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+    hub_path = GENERATED_DIR / "hub.html"
+
+    # Ensure assets directory exists
+    assets_dir = GENERATED_DIR / "assets" / "images"
+    assets_dir.mkdir(parents=True, exist_ok=True)
+
+    # Copy background photo if it doesn't exist
+    bg_photo_source = REPO_ROOT / "assets" / "images" / "cm_trans.png"
+    bg_photo_dest = assets_dir / "cm_trans.png"
+    if bg_photo_source.exists() and not bg_photo_dest.exists():
+        import shutil
+        shutil.copy2(bg_photo_source, bg_photo_dest)
+
+    # Build cards for all projects
+    cards_html = []
+    for p in projects:
+        category = "website"
+        category_icon = "globe"
+
+        if p.group.startswith("CHROME"):
+            category = "chrome"
+            category_icon = "chrome"
+        elif p.group.startswith("CLI"):
+            category = "cli"
+            category_icon = "terminal"
+        elif p.group.startswith("MACOS"):
+            category = "macos"
+            category_icon = "desktop"
+        elif p.group.startswith("WEB"):
+            category = "web"
+            category_icon = "globe"
+
+        # Generate thumbnail - use icon if available, otherwise fallback color
+        thumbnail_bg = "#f9fafb"
+        if p.has_icon:
+            # Use relative path from generated/ directory
+            icon_rel = f"../{p.rel_path}/icon.png"
+            thumbnail_bg = f"url('{icon_rel}')"
+
+        # Build card HTML
+        card_html = f'''        <a class="card" data-category="{category}" href="../{p.rel_path}/" target="_blank" rel="noopener noreferrer">
+            <div class="card-img" style="background-image: {thumbnail_bg}; background-size: cover;">
+                <div class="category-icon {category}"><i class="fas fa-{category_icon}"></i></div>
+            </div>
+            <div class="card-content">
+                <div class="card-title">{p.name}</div>
+            </div>
+        </a>'''
+        cards_html.append(card_html)
+
+    cards_container = "\n".join(cards_html)
+
+    # Generate complete HTML using Web_hub template structure
+    html_content = f'''<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; frame-ancestors 'none'; upgrade-insecure-requests;">
+    <title>Mes Projets - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {{
+            background-color: #ffffff;
+            color: #111;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 150vh;
+        }}
+
+        .bg-photo {{
+            position: fixed;
+            right: -12vw;
+            bottom: 0;
+            transform: none;
+            height: 100vh;
+            width: auto;
+            max-width: 120vw;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+            -webkit-mask-image: linear-gradient(to left, transparent 0%, black 30%, black 60%, transparent 100%);
+            mask-image: linear-gradient(to left, transparent 0%, black 30%, black 60%, transparent 100%);
+            filter: grayscale(100%);
+        }}
+
+        .header-section {{
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }}
+
+        .header-title {{
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            letter-spacing: -0.5px;
+        }}
+
+        .socials-container {{
+            display: flex;
+            gap: 12px;
+            margin-bottom: 48px;
+        }}
+
+        .social-bubble {{
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }}
+
+        .social-bubble.github {{
+            background: #f5f5f5;
+            color: #333;
+        }}
+
+        .social-bubble.github:hover {{
+            background: #333;
+            color: #fff;
+            transform: translateY(-4px) scale(1.1);
+        }}
+
+        .social-bubble i {{
+            font-size: 18px;
+            color: currentColor;
+        }}
+
+        .filters-container {{
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            width: 100%;
+            box-sizing: border-box;
+            background: transparent;
+            padding: 12px 16px;
+            border-radius: 0;
+        }}
+
+        .filters-container.is-stuck {{
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }}
+
+        .filter-pill {{
+            background: #f3f4f6;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }}
+
+        .filter-pill.active {{
+            background: #111;
+            color: #fff;
+        }}
+
+        .main-wrapper {{
+            position: relative;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+            min-height: 2000px;
+        }}
+
+        .card {{
+            position: absolute;
+            width: calc(25% - 15px);
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #efefef;
+            transition:
+                transform 1s cubic-bezier(0.25, 1, 0.5, 1),
+                left 1s cubic-bezier(0.25, 1, 0.5, 1),
+                top 1s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 1s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: center bottom;
+            cursor: pointer;
+            will-change: transform, left, top;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }}
+
+        .card-inner {{
+            border-radius: 16px;
+            overflow: hidden;
+            background: white;
+        }}
+
+        .card-img {{
+            width: 100%;
+            height: 180px;
+            background-color: #f9fafb;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            position: relative;
+        }}
+
+        .card:nth-child(2n) .card-img {{
+            height: 240px;
+        }}
+
+        .card:nth-child(3n) .card-img {{
+            height: 210px;
+        }}
+
+        .category-icon {{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(6px);
+        }}
+
+        .category-icon i {{
+            font-size: 14px;
+        }}
+
+        .category-icon.website {{ background: rgba(99, 102, 241, 0.85); }}
+        .category-icon.chrome {{ background: rgba(234, 67, 53, 0.85); }}
+        .category-icon.cli {{ background: rgba(34, 197, 94, 0.85); }}
+        .category-icon.macos {{ background: rgba(102, 51, 153, 0.85); }}
+        .category-icon.web {{ background: rgba(16, 185, 129, 0.85); }}
+
+        .card.hidden {{
+            opacity: 0;
+            transform: scale(0.8) !important;
+            pointer-events: none;
+        }}
+
+        .card-content {{
+            padding: 16px;
+            background: white;
+            opacity: 1;
+        }}
+
+        .card-title {{
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #111;
+        }}
+
+        /* STATE: FAN (Default) */
+        body:not(.scrolled) .card {{
+            left: 50%;
+            top: var(--fan-base, 60vh);
+            width: clamp(200px, 45vw, 260px);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }}
+
+        body:not(.scrolled) .card {{
+            transform: translate(calc(var(--fan-x, -50%) + var(--fan-dx, 0px)), calc(var(--fan-y, 0px) + var(--fan-dy, 0px))) rotate(var(--fan-rot, 0deg)) scale(var(--fan-scale, 1));
+        }}
+
+        body:not(.scrolled) .card:nth-child(n+8) {{
+            opacity: 0;
+            pointer-events: none;
+        }}
+
+        body:not(.scrolled) .card:nth-child(1) {{
+            --fan-x: -350%;
+            --fan-y: 80px;
+            --fan-rot: -26deg;
+            --fan-dx: 65px;
+            --fan-dy: 100px;
+            z-index: 1;
+        }}
+
+        body:not(.scrolled) .card:nth-child(2) {{
+            --fan-x: -250%;
+            --fan-y: 40px;
+            --fan-rot: -20deg;
+            --fan-dx: 55px;
+            --fan-dy: 25px;
+            z-index: 2;
+        }}
+
+        body:not(.scrolled) .card:nth-child(3) {{
+            --fan-x: -150%;
+            --fan-y: 15px;
+            --fan-rot: -10deg;
+            --fan-dx: 10px;
+            --fan-dy: -10px;
+            z-index: 3;
+        }}
+
+        body:not(.scrolled) .card:nth-child(4) {{
+            --fan-x: -50%;
+            --fan-y: 0px;
+            --fan-rot: 0deg;
+            --fan-dx: 0px;
+            --fan-dy: 0px;
+            --fan-scale: 1.1;
+            z-index: 4;
+        }}
+
+        body:not(.scrolled) .card:nth-child(5) {{
+            --fan-x: 50%;
+            --fan-y: 15px;
+            --fan-rot: 10deg;
+            --fan-dx: -5px;
+            --fan-dy: -5px;
+            z-index: 3;
+        }}
+
+        body:not(.scrolled) .card:nth-child(6) {{
+            --fan-x: 150%;
+            --fan-y: 40px;
+            --fan-rot: 20deg;
+            --fan-dx: -35px;
+            --fan-dy: 35px;
+            z-index: 2;
+        }}
+
+        body:not(.scrolled) .card:nth-child(7) {{
+            --fan-x: 250%;
+            --fan-y: 80px;
+            --fan-rot: 30deg;
+            --fan-dx: -65px;
+            --fan-dy: 110px;
+            z-index: 1;
+        }}
+
+        /* STATE: GRID (Scrolled) */
+        body.scrolled .card {{
+            transform: rotate(0deg) translate(0, 0) scale(1) !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            opacity: 1;
+            pointer-events: auto;
+        }}
+
+        body.scrolled .card.hidden {{
+            opacity: 0 !important;
+            pointer-events: none;
+        }}
+
+        body.scrolled .card:hover {{
+            transform: translateY(-4px) scale(1.02) !important;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }}
+
+        .scroll-hint {{
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #9ca3af;
+            font-size: 13px;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 50;
+        }}
+
+        body.scrolled .scroll-hint {{
+            opacity: 0;
+        }}
+
+        @media (max-width: 600px) {{
+            .header-section {{
+                padding-top: 56px;
+            }}
+
+            .header-title {{
+                font-size: 56px;
+            }}
+
+            .filters-container {{
+                gap: 6px;
+                margin-bottom: 28px;
+            }}
+
+            body:not(.scrolled) .card {{
+                width: clamp(170px, 70vw, 240px);
+            }}
+
+            .bg-photo {{
+                height: 60vh;
+                max-width: 140vw;
+                right: -20vw;
+            }}
+        }}
+    </style>
+</head>
+
+<body>
+
+<img src="assets/images/cm_trans.png" alt="" class="bg-photo">
+
+<div class="header-section">
+    <h1 class="header-title">Mes Projets</h1>
+    <div class="socials-container">
+        <a href="https://github.com/mondary" target="_blank" rel="noopener noreferrer" class="social-bubble github" title="GitHub"><i class="fab fa-github"></i></a>
+    </div>
+</div>
+
+<div class="filters-container">
+    <button type="button" class="filter-pill active" data-filter="all">Tous</button>
+    <button type="button" class="filter-pill" data-filter="chrome">Chrome</button>
+    <button type="button" class="filter-pill" data-filter="cli">CLI</button>
+    <button type="button" class="filter-pill" data-filter="macos">macOS</button>
+    <button type="button" class="filter-pill" data-filter="web">Web</button>
+</div>
+
+<div class="main-wrapper" id="cards-container">
+{cards_container}
+</div>
+
+<div class="scroll-hint">Scrollez pour animer</div>
+
+<script>
+    (function() {{
+        const cards = document.querySelectorAll('.card');
+        const pills = document.querySelectorAll('.filter-pill');
+        const container = document.getElementById('cards-container');
+        const filters = document.querySelector('.filters-container');
+        let currentFilter = 'all';
+
+        // Filter counts
+        function updateFilterCounts() {{
+            const counts = {{}};
+            cards.forEach(card => {{
+                const category = card.dataset.category;
+                counts[category] = (counts[category] || 0) + 1;
+            }});
+            const total = cards.length;
+            pills.forEach(pill => {{
+                if (!pill.dataset.label) {{
+                    pill.dataset.label = pill.textContent.trim();
+                }}
+                const label = pill.dataset.label;
+                const key = pill.dataset.filter;
+                const count = key === 'all' ? total : (counts[key] || 0);
+                pill.textContent = `${{label}} (${{count}})`;
+            }});
+        }}
+
+        // Masonry layout
+        function layoutCards() {{
+            if (!document.body.classList.contains('scrolled')) return;
+
+            const visibleCards = [...cards].filter(c => !c.classList.contains('hidden'));
+            let cols = 4;
+            const gap = 20;
+            const containerWidth = container.offsetWidth;
+            if (containerWidth < 520) cols = 1;
+            else if (containerWidth < 820) cols = 2;
+            else if (containerWidth < 1100) cols = 3;
+            const cardWidth = (containerWidth - gap * (cols - 1)) / cols;
+            const colHeights = Array(cols).fill(0);
+
+            visibleCards.forEach((card) => {{
+                const shortestCol = colHeights.indexOf(Math.min(...colHeights));
+                const left = shortestCol * (cardWidth + gap);
+                const top = colHeights[shortestCol];
+
+                card.style.left = left + 'px';
+                card.style.top = top + 'px';
+                card.style.width = cardWidth + 'px';
+
+                colHeights[shortestCol] += card.offsetHeight + gap;
+            }});
+
+            container.style.height = Math.max(...colHeights) + 'px';
+        }}
+
+        // Filter
+        window.filterCards = function(filter) {{
+            currentFilter = filter;
+            cards.forEach(card => {{
+                const category = card.dataset.category;
+                if (filter === 'all' || category === filter || card.dataset.category.includes(filter)) {{
+                    card.classList.remove('hidden');
+                }} else {{
+                    card.classList.add('hidden');
+                }}
+            }});
+            if (!document.body.classList.contains('scrolled')) {{
+                document.body.classList.add('scrolled');
+            }}
+            setTimeout(layoutCards, 50);
+        }};
+
+        pills.forEach(pill => {{
+            pill.addEventListener('click', (e) => {{
+                e.stopPropagation();
+                pills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                window.filterCards(pill.dataset.filter);
+            }});
+        }});
+
+        updateFilterCounts();
+
+        // Scroll state
+        window.addEventListener('scroll', () => {{
+            if (window.scrollY > 40) {{
+                if (!document.body.classList.contains('scrolled')) {{
+                    document.body.classList.add('scrolled');
+                    void document.body.offsetWidth;
+                    layoutCards();
+                }}
+            }} else {{
+                if (document.body.classList.contains('scrolled')) {{
+                    document.body.classList.remove('scrolled');
+                    clearCardStyles();
+                }}
+            }}
+        }});
+
+        window.addEventListener('resize', () => {{
+            if (document.body.classList.contains('scrolled')) {{
+                layoutCards();
+            }}
+        }});
+
+        function clearCardStyles() {{
+            cards.forEach(card => {{
+                card.style.left = '';
+                card.style.top = '';
+                card.style.width = '';
+            }});
+            container.style.height = '';
+        }}
+    }})();
+</script>
+
+</body>
+
+</html>'''
+
+    hub_path.write_text(html_content, encoding="utf-8")
+    print(f"Generated hub.html with {len(projects)} projects")
+
+
 def main() -> None:
     projects = _discover_projects()
     _write_projects_md(projects)
     _write_dashboard_html(projects)
+
+    # Generate hub.html with all projects
+    _generate_hub_html(projects)
 
 
 if __name__ == "__main__":
