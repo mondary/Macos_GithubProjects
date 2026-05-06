@@ -214,44 +214,10 @@ class ProjectHubApp(rumps.App):
         return []
 
     def reload_projects(self):
-        """Reload the project list from dashboard and rebuild menu."""
-        # Clear existing menu items except the fixed ones
-        new_menu = [
-            rumps.MenuItem("Update Dashboard", callback=self.update_dashboard),
-            None,  # Separator
-            rumps.MenuItem("Open Dashboard", callback=self.open_dashboard),
-            rumps.MenuItem("Open Hub", callback=self.open_hub),
-            rumps.MenuItem("Quit", callback=self.quit_app),
-            None,  # Separator
-            self.quick_actions_menu,
-        ]
-
-        # Load projects from dashboard
-        projects = self._load_projects()
-
-        # Add projects to menu
-        for project in projects:
-            name = project.get("name", "Unknown")
-            path = project.get("path", "")
-            group = project.get("group", "")
-
-            # Try to get custom icon from icon.png
-            icon = None
-            if path.startswith(".."):
-                project_name = path.replace("../", "").strip("/")
-                icon_full_path = (PROJECTS_DIR / project_name / "icon.png").resolve()
-            elif path == ".":
-                icon_full_path = (REPO_ROOT / "icon.png").resolve()
-            else:
-                icon_full_path = (REPO_ROOT / path / "icon.png").resolve()
-
-            if icon_full_path.exists():
-                icon = str(icon_full_path)
-
-            new_menu.append(rumps.MenuItem(name, callback=lambda _, p=path: self.open_project(p), icon=icon))
-
-        self.menu = new_menu
-        self.title = f"📁 {len(projects)}"
+        """Reload the project list from dashboard and restart app."""
+        # Use rumps to restart the application
+        import os
+        os.execv(sys.executable, [sys.executable, __file__])
 
     def open_local(self, _):
         # Open in default file explorer
