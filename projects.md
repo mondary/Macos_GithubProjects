@@ -1,1 +1,1 @@
-src/generated/projects.md
+generated/projects.md
