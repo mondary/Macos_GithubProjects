@@ -167,6 +167,7 @@ class ProjectHubApp(rumps.App):
             None,  # Separator
             rumps.MenuItem("Open Dashboard", callback=self.open_dashboard),
             rumps.MenuItem("Open Hub", callback=self.open_hub),
+            rumps.MenuItem("Open Comparaison", callback=self.open_comparison),
             rumps.MenuItem("Quit", callback=self.quit_app),
             None,  # Separator
             self.quick_actions_menu,
