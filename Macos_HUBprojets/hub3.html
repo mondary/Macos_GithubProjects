@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clement Mondary | Projects Catalog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0d0d0d;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            min-height: 100vh;
+            padding: 24px 20px;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            background: #fff;
+            border-radius: 50%;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #0d0d0d;
+            font-size: 14px;
+        }
+
+        .nav-section {
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-bottom: 4px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .nav-count {
+            margin-left: auto;
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .sidebar-footer {
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 24px;
+        }
+
+        .sidebar-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            margin-bottom: 16px;
+        }
+
+        .sidebar-links a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.2s;
+        }
+
+        .sidebar-links a:hover {
+            color: #fff;
+        }
+
+        .sidebar-copy {
+            font-size: 11px;
+            color: rgba(255,255,255,0.3);
+            line-height: 1.5;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            margin-left: 220px;
+            padding: 32px 40px;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+            line-height: 1.1;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.5);
+            font-size: 16px;
+            max-width: 500px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .header-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: #fff;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .header-btn:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-1px);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .filter-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-dropdown:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .filter-dropdown svg {
+            width: 12px;
+            height: 12px;
+            opacity: 0.5;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 300px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .search-box:focus {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateY(-4px);
+        }
+
+        .project-thumb {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-thumb-icon {
+            font-size: 48px;
+            opacity: 0.8;
+        }
+
+        .project-thumb-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.6));
+        }
+
+        .project-thumb.apps { background: linear-gradient(135deg, #4a1942 0%, #2d132c 100%); }
+        .project-thumb.extensions { background: linear-gradient(135deg, #1a1a4e 0%, #0f0f2e 100%); }
+        .project-thumb.web { background: linear-gradient(135deg, #134e4a 0%, #0f2e2c 100%); }
+        .project-thumb.server { background: linear-gradient(135deg, #365314 0%, #1a2e0f 100%); }
+
+        .project-info {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .project-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .project-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-action {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .project-action:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        .project-action svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Category badges on thumbs */
+        .project-category-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 10px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main {
+                margin-left: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main {
+                margin-left: 0;
+                padding: 24px 20px;
+            }
+            .header h1 {
+                font-size: 28px;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">CM</div>
+
+        <nav class="nav-section">
+            <div class="nav-item active" data-filter="all">
+                <span class="nav-icon">📁</span>
+                All
+                <span class="nav-count" id="nav-count-all">0</span>
+            </div>
+            <div class="nav-item" data-filter="apps">
+                <span class="nav-icon">🍎</span>
+                macOS Apps
+                <span class="nav-count" id="nav-count-apps">0</span>
+            </div>
+            <div class="nav-item" data-filter="extensions">
+                <span class="nav-icon">🧩</span>
+                Extensions
+                <span class="nav-count" id="nav-count-extensions">0</span>
+            </div>
+            <div class="nav-item" data-filter="web">
+                <span class="nav-icon">🌐</span>
+                Web Apps
+                <span class="nav-count" id="nav-count-web">0</span>
+            </div>
+            <div class="nav-item" data-filter="server">
+                <span class="nav-icon">🖥️</span>
+                Server
+                <span class="nav-count" id="nav-count-server">0</span>
+            </div>
+
+            <div style="height: 24px;"></div>
+
+            <div class="nav-item" data-filter="chrome">
+                <span class="nav-icon">🔵</span>
+                Chrome
+            </div>
+            <div class="nav-item" data-filter="vscode">
+                <span class="nav-icon">💜</span>
+                VS Code
+            </div>
+            <div class="nav-item" data-filter="wordpress">
+                <span class="nav-icon">📝</span>
+                WordPress
+            </div>
+            <div class="nav-item" data-filter="stylus">
+                <span class="nav-icon">🎨</span>
+                Stylus
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-links">
+                <a href="https://github.com/mondary" target="_blank">GitHub</a>
+                <a href="https://marketplace.visualstudio.com/publishers/Cmondary" target="_blank">VS Code</a>
+                <a href="https://chromewebstore.google.com/search/mondary" target="_blank">Chrome</a>
+                <a href="hub.html">Hub v1</a>
+                <a href="hub_bento.html">Bento</a>
+            </div>
+            <p class="sidebar-copy">© 2025 Clement Mondary<br>mondary.design</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+        <header class="header">
+            <h1>Projects catalog</h1>
+            <p>A collection of macOS apps, browser extensions, VS Code extensions, and web applications I've built.</p>
+            <a href="https://github.com/mondary" target="_blank" class="header-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                View on GitHub
+            </a>
+        </header>
+
+        <div class="filters">
+            <input type="text" class="search-box" id="search" placeholder="Search projects...">
+            <button class="filter-dropdown" id="sort-btn">
+                Sort by name
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+        </div>
+
+        <div class="projects-grid" id="projects-grid">
+            <!-- Projects loaded via JS -->
+        </div>
+    </main>
+
+    <script>
+        let projects = [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // Load projects
+        fetch('hub_projects.json')
+            .then(r => r.json())
+            .then(data => {
+                projects = data.map(p => ({
+                    ...p,
+                    tags: (p.tags || []).filter(t => t && t !== 'null'),
+                    icon: p.icon || '📁'
+                }));
+
+                // Update counts
+                document.getElementById('nav-count-all').textContent = projects.length;
+                document.getElementById('nav-count-apps').textContent = projects.filter(p => p.category === 'apps').length;
+                document.getElementById('nav-count-extensions').textContent = projects.filter(p => p.category === 'extensions').length;
+                document.getElementById('nav-count-web').textContent = projects.filter(p => p.category === 'web').length;
+                document.getElementById('nav-count-server').textContent = projects.filter(p => p.category === 'server').length;
+
+                renderProjects(projects);
+            })
+            .catch(() => {});
+
+        // Render
+        function renderProjects(list) {
+            const grid = document.getElementById('projects-grid');
+
+            if (list.length === 0) {
+                grid.innerHTML = '<div class="empty-state">No projects found.</div>';
+                return;
+            }
+
+            grid.innerHTML = list.map(p => `
+                <div class="project-card">
+                    <div class="project-thumb ${p.category}">
+                        <span class="project-thumb-icon">${p.icon}</span>
+                        <div class="project-thumb-overlay"></div>
+                        <span class="project-category-badge">${p.category}</span>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-title">${p.title}</span>
+                        <div class="project-actions">
+                            <button class="project-action" title="Details">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                            </button>
+                            <button class="project-action" title="Open">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter
+        function filterProjects() {
+            let filtered = projects;
+
+            // Category filter
+            if (currentFilter !== 'all') {
+                if (['apps', 'extensions', 'web', 'server'].includes(currentFilter)) {
+                    filtered = filtered.filter(p => p.category === currentFilter);
+                } else {
+                    // Tag-based filters
+                    filtered = filtered.filter(p => {
+                        const folder = (p.folder || '').toLowerCase();
+                        const tags = (p.tags || []).map(t => t.toLowerCase());
+
+                        if (currentFilter === 'chrome') return folder.includes('chrome') || tags.includes('chrome');
+                        if (currentFilter === 'vscode') return folder.includes('vs_') || tags.includes('vs code');
+                        if (currentFilter === 'wordpress') return folder.includes('wp_') || tags.includes('wordpress');
+                        if (currentFilter === 'stylus') return folder.includes('stylus');
+                        return true;
+                    });
+                }
+            }
+
+            // Search
+            if (searchQuery) {
+                const q = searchQuery.toLowerCase();
+                filtered = filtered.filter(p =>
+                    p.title.toLowerCase().includes(q) ||
+                    p.description.toLowerCase().includes(q) ||
+                    (p.tags && p.tags.some(t => t.toLowerCase().includes(q)))
+                );
+            }
+
+            renderProjects(filtered);
+        }
+
+        // Nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                currentFilter = item.dataset.filter;
+                filterProjects();
+            });
+        });
+
+        // Search
+        document.getElementById('search').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            filterProjects();
+        });
+
+        // Sort toggle
+        let sortAsc = true;
+        document.getElementById('sort-btn').addEventListener('click', () => {
+            sortAsc = !sortAsc;
+            projects.sort((a, b) => sortAsc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title));
+            document.getElementById('sort-btn').innerHTML = `
+                Sort ${sortAsc ? 'A-Z' : 'Z-A'}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            `;
+            filterProjects();
+        });
+    </script>
+</body>
+</html>

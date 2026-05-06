@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clement Mondary | Bento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fafafa;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+        }
+
+        /* Fixed Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 320px;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #fafafa;
+            z-index: 10;
+        }
+
+        /* Scrollable Content */
+        .content {
+            margin-left: 320px;
+            flex: 1;
+            padding: 40px;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .bento-container {
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 200px 200px 1fr;
+            grid-auto-rows: minmax(140px, auto);
+            gap: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.06);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        a.card {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Profile in Sidebar */
+        .profile-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 24px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            font-size: 80px;
+            line-height: 1;
+        }
+
+        .profile-name {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #1a1a1a;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
+        .profile-url {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Link Cards */
+        .link-card {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+        }
+
+        .link-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .link-icon svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .link-icon.twitter { background: #1DA1F2; color: white; }
+        .link-icon.linkedin { background: #0A66C2; color: white; }
+        .link-icon.github { background: #24292e; color: white; }
+        .link-icon.figma { background: #1e1e1e; color: white; }
+        .link-icon.vscode { background: #007ACC; color: white; }
+        .link-icon.chrome { background: #4285F4; color: white; }
+        .link-icon.youtube { background: #FF0000; color: white; }
+        .link-icon.website { background: #6366f1; color: white; }
+
+        .link-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a1a1a;
+            margin-top: 16px;
+        }
+
+        .link-subtitle {
+            font-size: 13px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+            align-self: flex-start;
+        }
+
+        .link-btn.outline {
+            background: transparent;
+            border: 1.5px solid #e0e0e0;
+            color: #1a1a1a;
+        }
+
+        .link-btn.outline:hover {
+            background: #f5f5f5;
+        }
+
+        .link-btn.primary {
+            background: #0A66C2;
+            color: white;
+        }
+
+        .link-btn.primary:hover {
+            background: #004182;
+        }
+
+        .link-btn.figma {
+            background: #1e1e1e;
+            color: white;
+        }
+
+        /* Map Card */
+        .map-card {
+            grid-column: 3;
+            grid-row: 1 / 3;
+            min-height: 340px;
+            padding: 0;
+            position: relative;
+        }
+
+        .map-card iframe {
+            width: 100%;
+            height: calc(100% - 45px);
+            border: none;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .map-location {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 20px;
+            background: white;
+            font-size: 14px;
+            color: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+        }
+
+        /* Preview Card (like the app preview) */
+        .preview-card {
+            grid-column: 1 / 3;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-height: 140px;
+        }
+
+        .preview-info {
+            flex: 1;
+        }
+
+        .preview-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .preview-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .preview-url {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .preview-image {
+            width: 140px;
+            height: 100px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #e8f4ea, #d4edda);
+            overflow: hidden;
+        }
+
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Quote Card */
+        .quote-card {
+            grid-column: 3;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fef3e2 0%, #fde4cf 100%);
+            min-height: 140px;
+        }
+
+        .quote-text {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #1a1a1a;
+            text-align: center;
+        }
+
+        /* YouTube Card */
+        .youtube-card {
+            grid-column: 1 / 3;
+            padding: 20px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            min-height: 160px;
+        }
+
+        .youtube-info {
+            flex: 1;
+        }
+
+        .youtube-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 12px;
+            line-height: 1.3;
+        }
+
+        .youtube-url {
+            font-size: 13px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .youtube-thumb {
+            width: 160px;
+            height: 100px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ff9a56, #ff6b35);
+            overflow: hidden;
+        }
+
+        /* Photo Card */
+        .photo-card {
+            padding: 0;
+            min-height: 200px;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Stats Card */
+        .stats-card {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stats-number {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .stats-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+
+        /* Projects Link Card */
+        .projects-link-card {
+            grid-column: 1 / 3;
+            padding: 24px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 140px;
+        }
+
+        .projects-link-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .projects-link-card p {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .projects-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .projects-tag {
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Search in sidebar */
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.1);
+            font-size: 14px;
+            margin-top: 30px;
+            background: white;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #1a1a1a;
+        }
+
+        /* Projects Section */
+        .projects-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            max-width: 900px;
+        }
+
+        .projects-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .projects-section h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        .projects-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 100px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: white;
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #1a1a1a;
+            color: #1a1a1a;
+        }
+
+        .filter-btn.active {
+            background: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
+        }
+
+        .filter-btn .count {
+            display: inline-block;
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+
+        .filter-btn.active .count {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Masonry layout */
+        .projects-grid {
+            column-count: 4;
+            column-gap: 16px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid rgba(0,0,0,0.06);
+            padding: 20px;
+            margin-bottom: 16px;
+            break-inside: avoid;
+            transition: all 0.2s;
+            cursor: default;
+        }
+
+        .project-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .project-card.size-small .project-desc { display: none; }
+        .project-card.size-medium .project-desc { -webkit-line-clamp: 2; }
+        .project-card.size-large .project-desc { -webkit-line-clamp: 4; }
+
+        .project-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .project-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .project-desc {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .project-category {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .project-category.apps { background: #fee2e2; color: #dc2626; }
+        .project-category.extensions { background: #ede9fe; color: #7c3aed; }
+        .project-category.web { background: #cffafe; color: #0891b2; }
+        .project-category.server { background: #dcfce7; color: #16a34a; }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .project-tag {
+            font-size: 10px;
+            padding: 3px 8px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .sidebar {
+                width: 280px;
+                padding: 40px 30px;
+            }
+            .content {
+                margin-left: 280px;
+                padding: 30px;
+            }
+            .bento-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .map-card {
+                grid-column: 1 / 3;
+                grid-row: auto;
+                min-height: 250px;
+            }
+            .quote-card {
+                grid-column: 1 / 3;
+            }
+            .projects-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .projects-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                padding: 30px;
+                justify-content: flex-start;
+                flex-direction: row;
+                align-items: center;
+                gap: 20px;
+            }
+            .sidebar .profile-avatar {
+                margin-bottom: 0;
+            }
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            body {
+                flex-direction: column;
+            }
+            .bento-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .map-card, .quote-card, .preview-card, .youtube-card, .projects-link-card {
+                grid-column: 1 / 3;
+            }
+            .projects-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .sidebar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .bento-container {
+                grid-template-columns: 1fr;
+            }
+            .map-card, .quote-card, .preview-card, .youtube-card, .projects-link-card {
+                grid-column: 1;
+            }
+            .projects-grid {
+                column-count: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Sidebar -->
+    <aside class="sidebar">
+        <div>
+            <div class="profile-avatar">
+                <span class="avatar-placeholder">👨‍💻</span>
+            </div>
+            <h1 class="profile-name">CLEMENT<br>MONDARY</h1>
+            <p class="profile-url">https://mondary.design</p>
+            <input type="text" class="search-box" id="search" placeholder="Rechercher...">
+        </div>
+    </aside>
+
+    <!-- Scrollable Content -->
+    <main class="content">
+        <div class="bento-container">
+            <!-- Twitter -->
+        <a href="https://twitter.com/Clement_mondary" target="_blank" class="card link-card">
+            <div>
+                <div class="link-icon twitter">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                </div>
+                <div class="link-title">Twitter</div>
+                <div class="link-subtitle">@Clement_mondary</div>
+            </div>
+            <button class="link-btn primary" style="background: #1DA1F2;">Follow</button>
+        </a>
+
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com/in/clementmondary" target="_blank" class="card link-card">
+            <div>
+                <div class="link-icon linkedin">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </div>
+                <div class="link-title">Sign Up | LinkedIn</div>
+                <div class="link-subtitle">linkedin.com</div>
+            </div>
+        </a>
+
+        <!-- Map -->
+        <div class="card map-card">
+            <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=2.32%2C48.845%2C2.365%2C48.875&layer=mapnik&marker=48.8566%2C2.3522" loading="lazy"></iframe>
+            <div class="map-location">Chatelet, Paris, France</div>
+        </div>
+
+        <!-- GitHub -->
+        <a href="https://github.com/mondary" target="_blank" class="card link-card">
+            <div>
+                <div class="link-icon github">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </div>
+                <div class="link-title">Cmondary</div>
+            </div>
+            <button class="link-btn outline">Follow</button>
+        </a>
+
+        <!-- VS Code -->
+        <a href="https://marketplace.visualstudio.com/publishers/Cmondary" target="_blank" class="card link-card">
+            <div>
+                <div class="link-icon vscode">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"/></svg>
+                </div>
+                <div class="link-title">VS Code</div>
+                <div class="link-subtitle">@Cmondary</div>
+            </div>
+            <button class="link-btn outline">Follow</button>
+        </a>
+
+        <!-- Preview Card -->
+        <a href="https://mondary.design" target="_blank" class="card preview-card">
+            <div class="preview-info">
+                <div class="preview-avatar">🌐</div>
+                <div class="preview-name">Clement MONDARY</div>
+                <div class="preview-url">mondary.design</div>
+            </div>
+            <div class="preview-image">
+                <div style="width:100%;height:100%;background:linear-gradient(135deg,#e0f2fe,#bae6fd);display:flex;align-items:center;justify-content:center;font-size:40px;">📱</div>
+            </div>
+        </a>
+
+        <!-- Quote -->
+        <div class="card quote-card">
+            <p class="quote-text">La vie est un jeu qui se One-cred'<br>Je suis là pour le scoring ! 🎮</p>
+        </div>
+
+        <!-- YouTube -->
+        <a href="https://youtube.com" target="_blank" class="card youtube-card">
+            <div class="youtube-info">
+                <div class="link-icon youtube">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </div>
+                <div class="youtube-title">Musics ElectroCOOL 80's 🤘🎸💪🚗</div>
+                <div class="youtube-url">youtube.com</div>
+            </div>
+            <div class="youtube-thumb"></div>
+        </a>
+
+        <!-- Stats -->
+        <div class="card stats-card">
+            <div class="stats-number" id="project-count">83</div>
+            <div class="stats-label">Projets</div>
+        </div>
+
+        <!-- Projects Link -->
+        <a href="hub.html" class="card projects-link-card">
+            <div>
+                <h3>Explorer mes projets</h3>
+                <p>Apps macOS, Extensions Chrome & VS Code, Sites Web</p>
+            </div>
+            <div class="projects-tags">
+                <span class="projects-tag">macOS</span>
+                <span class="projects-tag">Chrome</span>
+                <span class="projects-tag">VS Code</span>
+                <span class="projects-tag">PHP</span>
+                <span class="projects-tag">Go</span>
+            </div>
+        </a>
+
+        <!-- Chrome Store -->
+        <a href="https://chromewebstore.google.com/search/mondary" target="_blank" class="card link-card">
+            <div>
+                <div class="link-icon chrome">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29zm13.342 2.166a5.446 5.446 0 0 1 1.45 7.09l.002.001h-.002l-5.344 9.257c.206.01.413.016.621.016 6.627 0 12-5.373 12-12 0-1.54-.29-3.011-.818-4.364zM12 16.364a4.364 4.364 0 1 1 0-8.728 4.364 4.364 0 0 1 0 8.728z"/></svg>
+                </div>
+                <div class="link-title">Chrome Store</div>
+                <div class="link-subtitle">Extensions</div>
+            </div>
+            <button class="link-btn outline">View</button>
+        </a>
+        </div>
+
+        <!-- All Projects Section -->
+        <section class="projects-section">
+            <div class="projects-header">
+                <h2>Tous mes projets</h2>
+                <div class="projects-filters">
+                    <button class="filter-btn active" data-filter="all">Tous <span class="count" id="count-all">0</span></button>
+                    <button class="filter-btn" data-filter="apps">Apps <span class="count" id="count-apps">0</span></button>
+                    <button class="filter-btn" data-filter="extensions">Extensions <span class="count" id="count-extensions">0</span></button>
+                    <button class="filter-btn" data-filter="web">Web <span class="count" id="count-web">0</span></button>
+                    <button class="filter-btn" data-filter="server">Server <span class="count" id="count-server">0</span></button>
+                </div>
+            </div>
+
+            <div class="projects-grid" id="projects-grid"></div>
+        </section>
+    </main>
+
+    <script>
+        let projects = [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // Charger les projets
+        fetch('hub_projects.json')
+            .then(r => r.json())
+            .then(data => {
+                projects = data.map(p => ({
+                    ...p,
+                    tags: (p.tags || []).filter(t => t && t !== 'null'),
+                    icon: p.icon || '📁'
+                }));
+
+                // Update counts
+                document.getElementById('project-count').textContent = projects.length;
+                document.getElementById('count-all').textContent = projects.length;
+                document.getElementById('count-apps').textContent = projects.filter(p => p.category === 'apps').length;
+                document.getElementById('count-extensions').textContent = projects.filter(p => p.category === 'extensions').length;
+                document.getElementById('count-web').textContent = projects.filter(p => p.category === 'web').length;
+                document.getElementById('count-server').textContent = projects.filter(p => p.category === 'server').length;
+
+                renderProjects(projects);
+            })
+            .catch(() => {});
+
+        // Render projects with masonry-like varied sizes
+        function renderProjects(list) {
+            const grid = document.getElementById('projects-grid');
+
+            if (list.length === 0) {
+                grid.innerHTML = '<p style="color:#888;">Aucun projet trouvé.</p>';
+                return;
+            }
+
+            // Assign varied sizes based on description length and randomness
+            const sizes = ['size-small', 'size-medium', 'size-large'];
+
+            grid.innerHTML = list.map((p, i) => {
+                // Determine size based on description length + some variety
+                let size;
+                const descLen = (p.description || '').length;
+                if (descLen < 50) size = 'size-small';
+                else if (descLen < 120) size = 'size-medium';
+                else size = 'size-large';
+
+                // Add some randomness
+                if (i % 5 === 0) size = 'size-large';
+                if (i % 7 === 0) size = 'size-small';
+
+                const tags = (p.tags || []).slice(0, 3);
+
+                return `
+                <div class="project-card ${size}">
+                    <div class="project-icon">${p.icon}</div>
+                    <div class="project-title">${p.title}</div>
+                    <div class="project-desc">${p.description}</div>
+                    ${tags.length > 0 ? `
+                    <div class="project-tags">
+                        ${tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
+                    </div>` : ''}
+                    <span class="project-category ${p.category}">${p.category}</span>
+                </div>
+            `}).join('');
+        }
+
+        // Filter
+        function filterProjects() {
+            let filtered = projects;
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(p => p.category === currentFilter);
+            }
+
+            if (searchQuery) {
+                const q = searchQuery.toLowerCase();
+                filtered = filtered.filter(p =>
+                    p.title.toLowerCase().includes(q) ||
+                    p.description.toLowerCase().includes(q) ||
+                    (p.tags && p.tags.some(t => t.toLowerCase().includes(q)))
+                );
+            }
+
+            renderProjects(filtered);
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                filterProjects();
+            });
+        });
+
+        // Search
+        document.getElementById('search').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            filterProjects();
+        });
+    </script>
+</body>
+</html>

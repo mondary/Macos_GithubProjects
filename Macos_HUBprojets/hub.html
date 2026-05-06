@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Projets | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --apps: #f43f5e;
+            --extensions: #8b5cf6;
+            --web: #06b6d4;
+            --server: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(244, 63, 94, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 4rem 0 3rem;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #6366f1 50%, #f43f5e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border-radius: 100px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--accent) 0%, #f43f5e 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .filter-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .filter-btn.active::before {
+            opacity: 1;
+        }
+
+        .filter-btn .count {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 0.15rem 0.5rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Search */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Project Card */
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.75rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--card-color, var(--accent)), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow:
+                0 20px 40px rgba(0,0,0,0.4),
+                0 0 60px var(--accent-glow);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card[data-category="apps"] { --card-color: var(--apps); }
+        .project-card[data-category="extensions"] { --card-color: var(--extensions); }
+        .project-card[data-category="web"] { --card-color: var(--web); }
+        .project-card[data-category="server"] { --card-color: var(--server); }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--card-color, var(--accent)) 0%, rgba(99, 102, 241, 0.3) 100%);
+        }
+
+        .card-category {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+            background: rgba(255,255,255,0.05);
+            color: var(--card-color, var(--text-secondary));
+        }
+
+        .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.65rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            color: var(--text-secondary);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            background: var(--bg-secondary);
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        .no-results.show {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 0 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-card {
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+        }
+
+        .project-card:nth-child(1) { animation-delay: 0.05s; }
+        .project-card:nth-child(2) { animation-delay: 0.1s; }
+        .project-card:nth-child(3) { animation-delay: 0.15s; }
+        .project-card:nth-child(4) { animation-delay: 0.2s; }
+        .project-card:nth-child(5) { animation-delay: 0.25s; }
+        .project-card:nth-child(6) { animation-delay: 0.3s; }
+        .project-card:nth-child(7) { animation-delay: 0.35s; }
+        .project-card:nth-child(8) { animation-delay: 0.4s; }
+        .project-card:nth-child(9) { animation-delay: 0.45s; }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .stats {
+                gap: 1.5rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* External links */
+        .external-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .external-link {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.7rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .external-link:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .external-link svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .external-link.github:hover { border-color: #fff; }
+        .external-link.vscode:hover { border-color: #007ACC; }
+        .external-link.chrome:hover { border-color: #4285F4; }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <div class="container">
+        <header>
+            <h1>Mes Projets</h1>
+            <p class="subtitle">Collection d'applications, extensions et outils web</p>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="total-count">90+</div>
+                    <div class="stat-label">Projets</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Catégories</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">8+</div>
+                    <div class="stat-label">Technologies</div>
+                </div>
+            </div>
+
+            <div class="external-links">
+                <a href="https://github.com/mondary" target="_blank" class="external-link github">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <a href="https://marketplace.visualstudio.com/publishers/Cmondary" target="_blank" class="external-link vscode">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"/></svg>
+                    VS Code
+                </a>
+                <a href="https://chromewebstore.google.com/search/mondary" target="_blank" class="external-link chrome">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29zm13.342 2.166a5.446 5.446 0 0 1 1.45 7.09l.002.001h-.002l-5.344 9.257c.206.01.413.016.621.016 6.627 0 12-5.373 12-12 0-1.54-.29-3.011-.818-4.364zM12 16.364a4.364 4.364 0 1 1 0-8.728 4.364 4.364 0 0 1 0 8.728z"/></svg>
+                    Chrome Store
+                </a>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" class="search-input" placeholder="Rechercher un projet..." id="search">
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">
+                <span>Tous <span class="count" id="count-all">90</span></span>
+            </button>
+            <button class="filter-btn" data-filter="apps">
+                <span>Apps <span class="count" id="count-apps">17</span></span>
+            </button>
+            <button class="filter-btn" data-filter="extensions">
+                <span>Extensions <span class="count" id="count-extensions">47</span></span>
+            </button>
+            <button class="filter-btn" data-filter="web">
+                <span>Web <span class="count" id="count-web">20</span></span>
+            </button>
+            <button class="filter-btn" data-filter="server">
+                <span>Server <span class="count" id="count-server">3</span></span>
+            </button>
+        </div>
+
+        <div class="projects-grid" id="projects-grid">
+            <!-- Projects will be injected here -->
+        </div>
+
+        <div class="no-results" id="no-results">
+            <p>Aucun projet trouvé pour cette recherche.</p>
+        </div>
+
+        <footer>
+            <p>Portfolio de projets personnels</p>
+        </footer>
+    </div>
+
+    <script>
+        let projects = [];
+
+        // Chargement des projets depuis le JSON
+        async function loadProjects() {
+            try {
+                const response = await fetch('hub_projects.json');
+                if (!response.ok) throw new Error('JSON not found');
+                projects = await response.json();
+                // Nettoie les tags null
+                projects = projects.map(p => ({
+                    ...p,
+                    tags: (p.tags || []).filter(t => t && t !== 'null'),
+                    image: p.image || null,
+                    icon: p.icon || '📁'
+                }));
+            } catch (e) {
+                console.warn('projects.json not found, using fallback data');
+                // Fallback si pas de JSON
+                projects = [
+            {
+                title: "Archive Desktop Content",
+                description: "Script Bash qui archive les fichiers du bureau dans des dossiers mensuels automatiquement.",
+                category: "apps",
+                tags: ["Bash", "macOS", "Automation"],
+                icon: "📦",
+                image: null
+            },
+            {
+                title: "Change Wallpaper",
+                description: "Script qui change automatiquement le fond d'écran macOS toutes les 60 secondes.",
+                category: "apps",
+                tags: ["Bash", "macOS"],
+                icon: "🖼️",
+                image: null
+            },
+            {
+                title: "PKDict",
+                description: "Application dictionnaire avec plusieurs implémentations (Go, Ruby). Inclut des icônes d'application.",
+                category: "apps",
+                tags: ["Go", "Ruby", "macOS"],
+                icon: "📖",
+                image: "APPS/Macos_PKDict/PKdict_go/PKdict.jpg"
+            },
+            {
+                title: "PKDictation",
+                description: "App menu-bar de dictée push-to-talk. Enregistre la voix, envoie à l'API Gemini pour transcription avec visualisation du spectre audio.",
+                category: "apps",
+                tags: ["Swift", "Gemini API", "macOS"],
+                icon: "🎙️",
+                image: "APPS/Macos_PKdictation/PKmic.png"
+            },
+            {
+                title: "PKGitFTP",
+                description: "Outil CLI pour gérer les versions Git et le déploiement FTP. Simplifie le versioning et le déploiement.",
+                category: "apps",
+                tags: ["Shell", "Git", "FTP"],
+                icon: "🚀",
+                image: null
+            },
+            {
+                title: "PKSwitchTranscript",
+                description: "App switcher macOS (Go/Fyne UI) qui affiche les apps d'un dossier et permet de les lancer ou fermer.",
+                category: "apps",
+                tags: ["Go", "Fyne", "macOS"],
+                icon: "🔄",
+                image: "APPS/Macos_PKswitchtranscript/cmd/Icon.png"
+            },
+            {
+                title: "PKTranscript",
+                description: "App macOS avec hotkey push-to-talk, enregistre la voix, transcrit via Apple Speech et colle automatiquement le texte.",
+                category: "apps",
+                tags: ["Go", "Objective-C", "macOS"],
+                icon: "✍️",
+                image: "APPS/Macos_PKtranscript/assets/pkdict.png"
+            },
+            {
+                title: "Download Wallpapers",
+                description: "Script Bash qui scrape des wallpapers depuis WallpaperFlare (images de villes futuristes).",
+                category: "apps",
+                tags: ["Bash", "Scraping"],
+                icon: "⬇️",
+                image: null
+            },
+            {
+                title: "Monitor Wallpaper",
+                description: "Gestion des fonds d'écran pour plusieurs moniteurs macOS.",
+                category: "apps",
+                tags: ["macOS", "Multi-écran"],
+                icon: "🖥️",
+                image: null
+            },
+            {
+                title: "Launchpad PK",
+                description: "Utilitaire Launchpad personnalisé pour macOS.",
+                category: "apps",
+                tags: ["macOS", "Launchpad"],
+                icon: "🚀",
+                image: null
+            },
+            {
+                title: "macOS Permissions",
+                description: "Utilitaire de gestion des permissions macOS.",
+                category: "apps",
+                tags: ["macOS", "Security"],
+                icon: "🔐",
+                image: null
+            },
+            {
+                title: "macOS Cleanup",
+                description: "Utilitaire de nettoyage pour macOS.",
+                category: "apps",
+                tags: ["macOS", "Cleanup"],
+                icon: "🧹",
+                image: null
+            },
+            {
+                title: "macOS Clipboard",
+                description: "Gestionnaire de presse-papiers pour macOS.",
+                category: "apps",
+                tags: ["macOS", "Clipboard"],
+                icon: "📋",
+                image: null
+            },
+            {
+                title: "ChatGPT Raycast",
+                description: "Intégration ChatGPT dans la barre de menus macOS via Raycast.",
+                category: "apps",
+                tags: ["macOS", "ChatGPT", "Raycast"],
+                icon: "💬",
+                image: null
+            },
+            {
+                title: "SDeck Test",
+                description: "Application de test pour Stream Deck.",
+                category: "apps",
+                tags: ["Stream Deck", "Test"],
+                icon: "🎮",
+                image: null
+            },
+            {
+                title: "SWIFT Projects",
+                description: "Collection de projets Swift pour macOS/iOS.",
+                category: "apps",
+                tags: ["Swift", "iOS", "macOS"],
+                icon: "🍎",
+                image: null
+            },
+
+            // CHROME EXTENSIONS
+            {
+                title: "Gmail PK",
+                description: "Extension d'amélioration de l'interface Gmail.",
+                category: "extensions",
+                tags: ["Chrome", "Gmail", "Productivity"],
+                icon: "📧",
+                image: null
+            },
+            {
+                title: "GPT to WordPress",
+                description: "Automatisation du transfert de contenu GPT vers WordPress.",
+                category: "extensions",
+                tags: ["Chrome", "GPT", "WordPress"],
+                icon: "📝",
+                image: null
+            },
+            {
+                title: "LinkedIn Highlighter",
+                description: "Tracker de candidatures LinkedIn avec marquage visuel et sync Supabase. Marquage en un clic, surlignage vert.",
+                category: "extensions",
+                tags: ["Chrome", "LinkedIn", "Supabase"],
+                icon: "💼",
+                image: null
+            },
+            {
+                title: "Marked",
+                description: "Extension de marquage de texte pour Chrome.",
+                category: "extensions",
+                tags: ["Chrome", "Marking"],
+                icon: "🖍️",
+                image: null
+            },
+            {
+                title: "Meta IA",
+                description: "Intégration Meta AI dans Chrome.",
+                category: "extensions",
+                tags: ["Chrome", "Meta", "IA"],
+                icon: "🤖",
+                image: null
+            },
+            {
+                title: "Mondary New Tab",
+                description: "Page nouvel onglet personnalisée.",
+                category: "extensions",
+                tags: ["Chrome", "New Tab"],
+                icon: "🏠",
+                image: null
+            },
+            {
+                title: "PK Highlighter",
+                description: "Surligneur de texte pour sélections.",
+                category: "extensions",
+                tags: ["Chrome", "Highlighter"],
+                icon: "🌟",
+                image: null
+            },
+            {
+                title: "PK Sticky",
+                description: "Notes adhésives pour Chrome.",
+                category: "extensions",
+                tags: ["Chrome", "Notes"],
+                icon: "📌",
+                image: null
+            },
+            {
+                title: "RSS Note Mail",
+                description: "Intégration RSS vers email.",
+                category: "extensions",
+                tags: ["Chrome", "RSS", "Email"],
+                icon: "📰",
+                image: null
+            },
+            {
+                title: "Simple Gmail",
+                description: "Interface Gmail simplifiée.",
+                category: "extensions",
+                tags: ["Chrome", "Gmail", "Minimal"],
+                icon: "✉️",
+                image: null
+            },
+            {
+                title: "Steam EPIC",
+                description: "Intégration Steam et Epic Games.",
+                category: "extensions",
+                tags: ["Chrome", "Steam", "Epic"],
+                icon: "🎮",
+                image: null
+            },
+            {
+                title: "Translate Highlighter",
+                description: "Traduction du texte surligné avec popup et traduction pleine page (v2025.04).",
+                category: "extensions",
+                tags: ["Chrome", "Translation"],
+                icon: "🌍",
+                image: null
+            },
+            {
+                title: "WP Automation",
+                description: "Automatisation WordPress.",
+                category: "extensions",
+                tags: ["Chrome", "WordPress"],
+                icon: "⚙️",
+                image: null
+            },
+            {
+                title: "WP Automation GPT",
+                description: "Automatisation WordPress avec GPT.",
+                category: "extensions",
+                tags: ["Chrome", "WordPress", "GPT"],
+                icon: "🤖",
+                image: null
+            },
+            {
+                title: "WP Chat Sum",
+                description: "Résumé de conversations pour WordPress.",
+                category: "extensions",
+                tags: ["Chrome", "WordPress", "Chat"],
+                icon: "💬",
+                image: null
+            },
+            {
+                title: "Detach Tab New Window",
+                description: "Détache les onglets vers de nouvelles fenêtres.",
+                category: "extensions",
+                tags: ["Chrome", "Tabs"],
+                icon: "🪟",
+                image: null
+            },
+
+            // VS CODE EXTENSIONS
+            {
+                title: "VS PKScriptCat WS",
+                description: "Extension catalogue de scripts pour VS Code.",
+                category: "extensions",
+                tags: ["VS Code", "Scripts"],
+                icon: "📜",
+                image: null
+            },
+            {
+                title: "VS PKSpecs",
+                description: "Extension VS Code pour initialiser des projets avec templates OpenSpec (v0.1.5).",
+                category: "extensions",
+                tags: ["VS Code", "Templates", "OpenSpec"],
+                icon: "📋",
+                image: null
+            },
+            {
+                title: "VS PKTerminal",
+                description: "Boutons dans la barre de titre pour lancer des terminaux avec intégration LLM (Codex, Gemini, OpenCode).",
+                category: "extensions",
+                tags: ["VS Code", "Terminal", "LLM"],
+                icon: "💻",
+                image: null
+            },
+            {
+                title: "VS PKVSConf",
+                description: "Extension de configuration VS Code.",
+                category: "extensions",
+                tags: ["VS Code", "Config"],
+                icon: "⚙️",
+                image: null
+            },
+
+            // STYLUS EXTENSIONS
+            {
+                title: "Stylus ChatGPT",
+                description: "Styles personnalisés pour l'interface ChatGPT.",
+                category: "extensions",
+                tags: ["Stylus", "ChatGPT", "CSS"],
+                icon: "🎨",
+                image: null
+            },
+            {
+                title: "Stylus GGDeals",
+                description: "Styles personnalisés pour GGDeals.",
+                category: "extensions",
+                tags: ["Stylus", "Gaming", "CSS"],
+                icon: "🎮",
+                image: null
+            },
+            {
+                title: "Stylus GitHub",
+                description: "Styles personnalisés pour GitHub.",
+                category: "extensions",
+                tags: ["Stylus", "GitHub", "CSS"],
+                icon: "🐙",
+                image: null
+            },
+            {
+                title: "Stylus Gmail",
+                description: "Styles personnalisés pour Gmail.",
+                category: "extensions",
+                tags: ["Stylus", "Gmail", "CSS"],
+                icon: "📧",
+                image: null
+            },
+            {
+                title: "Stylus LinkedIn",
+                description: "Styles personnalisés pour LinkedIn.",
+                category: "extensions",
+                tags: ["Stylus", "LinkedIn", "CSS"],
+                icon: "💼",
+                image: null
+            },
+            {
+                title: "BGA CSS",
+                description: "Styles CSS personnalisés pour Board Game Arena.",
+                category: "extensions",
+                tags: ["Stylus", "BGA", "CSS"],
+                icon: "🎲",
+                image: null
+            },
+
+            // WORDPRESS PLUGINS
+            {
+                title: "WP Agent XML",
+                description: "Agent XML pour WordPress.",
+                category: "extensions",
+                tags: ["WordPress", "XML", "Plugin"],
+                icon: "📄",
+                image: null
+            },
+            {
+                title: "WP CV Dashboard",
+                description: "Dashboard CV pour WordPress.",
+                category: "extensions",
+                tags: ["WordPress", "CV", "Plugin"],
+                icon: "📊",
+                image: null
+            },
+            {
+                title: "WP MoneyRadar NL",
+                description: "Plugin Money Radar (Néerlandais).",
+                category: "extensions",
+                tags: ["WordPress", "Finance", "Plugin"],
+                icon: "💰",
+                image: null
+            },
+            {
+                title: "WP Projects Page",
+                description: "Plugin page de projets.",
+                category: "extensions",
+                tags: ["WordPress", "Portfolio", "Plugin"],
+                icon: "📁",
+                image: null
+            },
+            {
+                title: "WP RSocial",
+                description: "Intégration réseaux sociaux.",
+                category: "extensions",
+                tags: ["WordPress", "Social", "Plugin"],
+                icon: "📱",
+                image: null
+            },
+            {
+                title: "WP Simple Post",
+                description: "Plugin de posts simplifiés.",
+                category: "extensions",
+                tags: ["WordPress", "Posts", "Plugin"],
+                icon: "📝",
+                image: null
+            },
+            {
+                title: "WP Snippets",
+                description: "Plugin de snippets de code.",
+                category: "extensions",
+                tags: ["WordPress", "Code", "Plugin"],
+                icon: "✂️",
+                image: null
+            },
+            {
+                title: "WP Agent",
+                description: "Agent IA pour WordPress.",
+                category: "extensions",
+                tags: ["WordPress", "IA", "Plugin"],
+                icon: "🤖",
+                image: null
+            },
+
+            // WEB PROJECTS
+            {
+                title: "PK CV 2026",
+                description: "CV/Portfolio web pour 2026.",
+                category: "web",
+                tags: ["HTML", "CSS", "Portfolio"],
+                icon: "📄",
+                image: null
+            },
+            {
+                title: "PK Notes",
+                description: "Application de prise de notes web.",
+                category: "web",
+                tags: ["Web App", "Notes"],
+                icon: "📝",
+                image: null
+            },
+            {
+                title: "Web Allaitement",
+                description: "Timer d'allaitement avec suivi des sessions et graphiques. Stockage local en JSON.",
+                category: "web",
+                tags: ["Vanilla JS", "Timer", "Charts"],
+                icon: "👶",
+                image: null
+            },
+            {
+                title: "Web Cryptos",
+                description: "Collection d'outils crypto : widgets TradingView, calculateur BTC stacking, calculateur moyenne d'achat.",
+                category: "web",
+                tags: ["Crypto", "BTC", "Tools"],
+                icon: "₿",
+                image: null
+            },
+            {
+                title: "Web CV",
+                description: "Collection d'expérimentations de layouts CV/portfolio avec pages statiques et exports PDF.",
+                category: "web",
+                tags: ["HTML", "CSS", "Portfolio"],
+                icon: "📋",
+                image: null
+            },
+            {
+                title: "Web Mondary Tools",
+                description: "Collection d'outils Mondary.",
+                category: "web",
+                tags: ["Tools", "Utilities"],
+                icon: "🔧",
+                image: null
+            },
+            {
+                title: "Web One TOC",
+                description: "Générateur de table des matières.",
+                category: "web",
+                tags: ["TOC", "Generator"],
+                icon: "📑",
+                image: null
+            },
+            {
+                title: "PK Cuisto",
+                description: "Application de recettes (PHP + Web Components). Extraction Gemini depuis URLs, suggestions images Wikimedia/Unsplash, filtres avancés, PWA-ready.",
+                category: "web",
+                tags: ["PHP", "Web Components", "Gemini"],
+                icon: "👨‍🍳",
+                image: null
+            },
+            {
+                title: "PK Cuisto WA",
+                description: "Version Web App de PK Cuisto.",
+                category: "web",
+                tags: ["PHP", "Web Components", "PWA"],
+                icon: "🍽️",
+                image: null
+            },
+            {
+                title: "PK Diff Checker",
+                description: "Utilitaire de comparaison de différences.",
+                category: "web",
+                tags: ["Diff", "Comparison", "Tools"],
+                icon: "🔍",
+                image: null
+            },
+            {
+                title: "PK Menus",
+                description: "Dashboard TV pour menu familial avec slideshow photos. Drag-and-drop, images 750g.com, typographie Bebas Neue, app Android TV.",
+                category: "web",
+                tags: ["Dashboard", "TV", "Android"],
+                icon: "📺",
+                image: "WEB/Web_pkmenus/icon.png"
+            },
+            {
+                title: "PK Rubik",
+                description: "Simulateur Rubik's Cube avec vue 3D CSS. Mouvements R/L/U/D/F/B, raccourcis algorithmes, contrôle vitesse.",
+                category: "web",
+                tags: ["3D CSS", "Rubik", "Game"],
+                icon: "🧊",
+                image: null
+            },
+            {
+                title: "PK Themes",
+                description: "Collection et gestionnaire de thèmes.",
+                category: "web",
+                tags: ["Themes", "CSS", "Manager"],
+                icon: "🎨",
+                image: null
+            },
+            {
+                title: "Steam Year in Review",
+                description: "Hub pour les récaps Steam Year in Review avec stats dynamiques.",
+                category: "web",
+                tags: ["Steam", "Gaming", "Stats"],
+                icon: "🎮",
+                image: "WEB/Web_steamYearinreview/icon.png"
+            },
+            {
+                title: "Cuisto Bot",
+                description: "App web de recettes inspirée de Bergamot. Import auto depuis YouTube, TikTok, Instagram. UI responsive, stockage local.",
+                category: "web",
+                tags: ["Recipes", "Bot", "LocalStorage"],
+                icon: "🤖",
+                image: null
+            },
+            {
+                title: "PK WP Agent",
+                description: "Agent WordPress intelligent.",
+                category: "web",
+                tags: ["WordPress", "Agent", "PHP"],
+                icon: "🤖",
+                image: null
+            },
+            {
+                title: "Web About",
+                description: "Page À propos personnelle.",
+                category: "web",
+                tags: ["HTML", "CSS", "About"],
+                icon: "ℹ️",
+                image: null
+            },
+            {
+                title: "PK GG",
+                description: "Galerie de jeux ou utilitaire gaming.",
+                category: "web",
+                tags: ["Gaming", "Gallery"],
+                icon: "🎮",
+                image: null
+            },
+
+            // SERVER
+            {
+                title: "Serv API",
+                description: "API de service backend.",
+                category: "server",
+                tags: ["API", "Backend"],
+                icon: "🔌",
+                image: null
+            },
+            {
+                title: "TEMP Serveur",
+                description: "Playground serveur temporaire avec plusieurs versions de prototypes (v1, v2, etc.).",
+                category: "server",
+                tags: ["Server", "Prototype"],
+                icon: "🧪",
+                image: null
+            },
+            {
+                title: "API Spreadsheet",
+                description: "Intégration API pour tableurs/spreadsheets.",
+                category: "server",
+                tags: ["API", "Spreadsheet"],
+                icon: "📊",
+                image: null
+            }
+                ];
+            }
+            initApp();
+        }
+
+        function initApp() {
+            // Update counts
+            document.getElementById('count-all').textContent = projects.length;
+            document.getElementById('count-apps').textContent = projects.filter(p => p.category === 'apps').length;
+            document.getElementById('count-extensions').textContent = projects.filter(p => p.category === 'extensions').length;
+            document.getElementById('count-web').textContent = projects.filter(p => p.category === 'web').length;
+            document.getElementById('count-server').textContent = projects.filter(p => p.category === 'server').length;
+            document.getElementById('total-count').textContent = projects.length;
+
+            // Initial render
+            renderProjects(projects);
+        }
+
+        // Render projects
+        function renderProjects(projectsToRender) {
+            const grid = document.getElementById('projects-grid');
+            const noResults = document.getElementById('no-results');
+
+            if (projectsToRender.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.add('show');
+                return;
+            }
+
+            noResults.classList.remove('show');
+
+            grid.innerHTML = projectsToRender.map((project, index) => `
+                <div class="project-card" data-category="${project.category}" style="animation-delay: ${index * 0.05}s">
+                    ${project.image ? `<img src="${project.image}" alt="${project.title}" class="card-image" onerror="this.style.display='none'">` : ''}
+                    <div class="card-header">
+                        <div class="card-icon">${project.icon}</div>
+                        <span class="card-category">${project.category}</span>
+                    </div>
+                    <h3 class="card-title">${project.title}</h3>
+                    <p class="card-description">${project.description}</p>
+                    <div class="card-tags">
+                        ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter logic
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        function filterProjects() {
+            let filtered = projects;
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(p => p.category === currentFilter);
+            }
+
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                filtered = filtered.filter(p =>
+                    p.title.toLowerCase().includes(query) ||
+                    p.description.toLowerCase().includes(query) ||
+                    p.tags.some(t => t.toLowerCase().includes(query))
+                );
+            }
+
+            renderProjects(filtered);
+        }
+
+        // Event listeners
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                filterProjects();
+            });
+        });
+
+        document.getElementById('search').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            filterProjects();
+        });
+
+        // Charger les projets au démarrage
+        loadProjects();
+    </script>
+</body>
+</html>

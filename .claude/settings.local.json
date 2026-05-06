@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(python3 src/macos_githubprojects/update_projects_dashboard.py)",
-      "Bash(python3)"
+      "Bash(python3)",
+      "Bash(/Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects/.venv/bin/python3 src/macos_githubprojects/update_projects_dashboard.py)"
     ]
   }
 }

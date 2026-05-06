@@ -159,44 +159,34 @@ class ProjectHubApp(rumps.App):
             rumps.MenuItem("🌐 GitHub", callback=self.open_github),
             rumps.MenuItem("🗂️ Finder", callback=self.open_finder),
         ]
-        
-        # Print current project count for debugging
-        actual_count = project_count()
-        print(f"DEBUG: Project count: {actual_count}")
-
-        # Load projects from dashboard data
-        projects = self._load_projects()
 
         # Build menu with projects
         menu_items = [
             rumps.MenuItem("Update Dashboard", callback=self.update_dashboard),
             None,  # Separator
             rumps.MenuItem("Open Dashboard", callback=self.open_dashboard),
-            rumps.MenuItem("Open Finder", callback=self.open_finder),
+            rumps.MenuItem("Open Hub", callback=self.open_hub),
             rumps.MenuItem("Quit", callback=self.quit_app),
             None,  # Separator
             self.quick_actions_menu,
         ]
 
+        # Load projects from dashboard data
+        projects = self._load_projects()
+
         # Add projects to menu
         for project in projects:
             name = project.get("name", "Unknown")
             path = project.get("path", "")
-            icon_path = project.get("iconPath", "")
-            group = project.get("group", "")
 
             # Try to get custom icon from icon.png
             icon = None
-            # First try to find icon.png in the project directory
             if path.startswith(".."):
-                # Project in parent directory
                 project_name = path.replace("../", "").strip("/")
                 icon_full_path = (PROJECTS_DIR / project_name / "icon.png").resolve()
             elif path == ".":
-                # Current repo
                 icon_full_path = (REPO_ROOT / "icon.png").resolve()
             else:
-                # Relative path in repo
                 icon_full_path = (REPO_ROOT / path / "icon.png").resolve()
 
             if icon_full_path.exists():
@@ -222,6 +212,46 @@ class ProjectHubApp(rumps.App):
         except (OSError, json.JSONDecodeError, TypeError):
             pass
         return []
+
+    def reload_projects(self):
+        """Reload the project list from dashboard and rebuild menu."""
+        # Clear existing menu items except the fixed ones
+        new_menu = [
+            rumps.MenuItem("Update Dashboard", callback=self.update_dashboard),
+            None,  # Separator
+            rumps.MenuItem("Open Dashboard", callback=self.open_dashboard),
+            rumps.MenuItem("Open Hub", callback=self.open_hub),
+            rumps.MenuItem("Quit", callback=self.quit_app),
+            None,  # Separator
+            self.quick_actions_menu,
+        ]
+
+        # Load projects from dashboard
+        projects = self._load_projects()
+
+        # Add projects to menu
+        for project in projects:
+            name = project.get("name", "Unknown")
+            path = project.get("path", "")
+            group = project.get("group", "")
+
+            # Try to get custom icon from icon.png
+            icon = None
+            if path.startswith(".."):
+                project_name = path.replace("../", "").strip("/")
+                icon_full_path = (PROJECTS_DIR / project_name / "icon.png").resolve()
+            elif path == ".":
+                icon_full_path = (REPO_ROOT / "icon.png").resolve()
+            else:
+                icon_full_path = (REPO_ROOT / path / "icon.png").resolve()
+
+            if icon_full_path.exists():
+                icon = str(icon_full_path)
+
+            new_menu.append(rumps.MenuItem(name, callback=lambda _, p=path: self.open_project(p), icon=icon))
+
+        self.menu = new_menu
+        self.title = f"📁 {len(projects)}"
 
     def open_local(self, _):
         # Open in default file explorer
@@ -280,7 +310,9 @@ class ProjectHubApp(rumps.App):
                 check=True
             )
             rumps.notification("Project Hub", "Success", "Dashboard updated successfully!")
-            self.title = f"📁 {project_count()}"
+
+            # Reload projects from updated dashboard
+            self.reload_projects()
 
             # Open both HTML files
             self.open_dashboard(None)

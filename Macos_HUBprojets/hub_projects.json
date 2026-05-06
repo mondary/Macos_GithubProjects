@@ -1,0 +1,832 @@
+[
+  {
+    "title": "CLI agentschooser",
+    "description": "Un menu simple et rapide pour lancer l'agent CLI de votre choix.",
+    "category": "apps",
+    "tags": ["Bash"],
+    "icon": "💻",
+    "image": null,
+    "folder": "CLI_agentschooser"
+  }
+,
+  {
+    "title": "Archive desktop content",
+    "description": "Ceci est un script bash pour MacOS",
+    "category": "apps",
+    "tags": ["Bash"],
+    "icon": "🍎",
+    "image": null,
+    "folder": "Macos_Archive_desktop_content"
+  }
+,
+  {
+    "title": "Change wallpaper",
+    "description": "Ceci est un script bash pour MacOS",
+    "category": "apps",
+    "tags": ["Bash"],
+    "icon": "🖼️",
+    "image": null,
+    "folder": "Macos_Change_wallpaper"
+  }
+,
+  {
+    "title": "ChatGPTraycast",
+    "description": "Projet Macos_ChatGPTraycast",
+    "category": "apps",
+    "tags": ["Bash"],
+    "icon": "🤖",
+    "image": null,
+    "folder": "Macos_ChatGPTraycast"
+  }
+,
+  {
+    "title": "Cleanup",
+    "description": "Projet Macos_Cleanup",
+    "category": "apps",
+    "tags": ["Bash"],
+    "icon": "🧹",
+    "image": null,
+    "folder": "Macos_Cleanup"
+  }
+,
+  {
+    "title": "Clipboard",
+    "description": "Projet Macos_Clipboard",
+    "category": "apps",
+    "tags": ["Swift"],
+    "icon": "🍎",
+    "image": null,
+    "folder": "Macos_Clipboard"
+  }
+,
+  {
+    "title": "Download wallpapers",
+    "description": "Ceci est un script bash pour MacOS",
+    "category": "apps",
+    "tags": ["Bash"],
+    "icon": "🖼️",
+    "image": null,
+    "folder": "Macos_Download_wallpapers"
+  }
+,
+  {
+    "title": "LaunchpadPK",
+    "description": "Projet Macos_LaunchpadPK",
+    "category": "apps",
+    "tags": [],
+    "icon": "🍎",
+    "image": null,
+    "folder": "Macos_LaunchpadPK"
+  }
+,
+  {
+    "title": "MacosPermissions",
+    "description": "Projet Macos_MacosPermissions",
+    "category": "apps",
+    "tags": ["Bash"],
+    "icon": "🍎",
+    "image": null,
+    "folder": "Macos_MacosPermissions"
+  }
+,
+  {
+    "title": "MonitorWallpaper",
+    "description": "Projet Macos_MonitorWallpaper",
+    "category": "apps",
+    "tags": ["Swift"],
+    "icon": "🖼️",
+    "image": null,
+    "folder": "Macos_MonitorWallpaper"
+  }
+,
+  {
+    "title": "PKDict",
+    "description": "Projet Macos_PKDict",
+    "category": "apps",
+    "tags": [],
+    "icon": "📖",
+    "image": "APPS/Macos_PKDict/PKdict_go/PKdict.jpg",
+    "folder": "Macos_PKDict"
+  }
+,
+  {
+    "title": "PKdictation",
+    "description": "Menu-bar dictation app (push-to-talk) that records your voice, sends it to the Gemini API for transcription, and shows the result in a small overlay bubble (with an audio “spectrum”).",
+    "category": "apps",
+    "tags": ["Swift"],
+    "icon": "📖",
+    "image": "APPS/Macos_PKdictation/PKmic.png",
+    "folder": "Macos_PKdictation"
+  }
+,
+  {
+    "title": "PKgitftp",
+    "description": "Un outil CLI simple pour gérer les versions avec Git et le déploiement via FTP.",
+    "category": "apps",
+    "tags": ["Bash"],
+    "icon": "🚀",
+    "image": null,
+    "folder": "Macos_PKgitftp"
+  }
+,
+  {
+    "title": "PKswitchtranscript",
+    "description": "Petit switcher macOS en Go (UI: Fyne) qui affiche les apps dans un dossier (par défaut `/Applications/Transcrib`) et permet d’en ouvrir une puis de fermer les autres.",
+    "category": "apps",
+    "tags": ["Go","Bash"],
+    "icon": "🎙️",
+    "image": null,
+    "folder": "Macos_PKswitchtranscript"
+  }
+,
+  {
+    "title": "PKtranscript",
+    "description": "Une petite app macOS en Go (avec bindings Objective‑C via cgo) qui :",
+    "category": "apps",
+    "tags": ["Go","Bash"],
+    "icon": "🎙️",
+    "image": "APPS/Macos_PKtranscript/assets/pkdict.png",
+    "folder": "Macos_PKtranscript"
+  }
+,
+  {
+    "title": "SDeck-test",
+    "description": "Projet SDeck-test",
+    "category": "apps",
+    "tags": [],
+    "icon": "🍎",
+    "image": null,
+    "folder": "SDeck-test"
+  }
+,
+  {
+    "title": "SWIFT",
+    "description": "Projet SWIFT",
+    "category": "apps",
+    "tags": [],
+    "icon": "🍎",
+    "image": null,
+    "folder": "SWIFT"
+  }
+,
+  {
+    "title": "#pksniffer",
+    "description": "Projet #pksniffer",
+    "category": "extensions",
+    "tags": ["Bash"],
+    "icon": "🧩",
+    "image": null,
+    "folder": "#pksniffer"
+  }
+,
+  {
+    "title": "DetachTabNewWindow",
+    "description": "Projet Chrome_DetachTabNewWindow",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🪟",
+    "image": null,
+    "folder": "Chrome_DetachTabNewWindow"
+  }
+,
+  {
+    "title": "GmailPK",
+    "description": "Projet Chrome_GmailPK",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "📧",
+    "image": "EXTENSIONS/Chrome_GmailPK/icon.png",
+    "folder": "Chrome_GmailPK"
+  }
+,
+  {
+    "title": "GPT2Wordpress",
+    "description": "Projet Chrome_GPT2Wordpress",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "🤖",
+    "image": "EXTENSIONS/Chrome_GPT2Wordpress/icon.png",
+    "folder": "Chrome_GPT2Wordpress"
+  }
+,
+  {
+    "title": "HelloExtension",
+    "description": "A brief introduction to Chrome extensions and walks through the creation of a \"Hello, World!\" extension.",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "🧩",
+    "image": "EXTENSIONS/Chrome_HelloExtension/hello.png",
+    "folder": "Chrome_HelloExtension"
+  }
+,
+  {
+    "title": "LinkedinHighlighter",
+    "description": "*   **Marquage Facile** : Un bouton \"Flag\" apparaît à côté de chaque offre d'emploi sur les pages de recherche LinkedIn, vous permettant de marquer une annonce comme \"postulée\" en un seul clic.",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "🧩",
+    "image": null,
+    "folder": "Chrome_LinkedinHighlighter"
+  }
+,
+  {
+    "title": "Marked",
+    "description": "This directory contains the restructured version of the Marquepage Bookmarklet project with separate folders for the Chrome extension and server API.",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🧩",
+    "image": "EXTENSIONS/Chrome_Marked/extension/icons/icon16.png",
+    "folder": "Chrome_Marked"
+  }
+,
+  {
+    "title": "MetaIA",
+    "description": "Projet Chrome_MetaIA",
+    "category": "extensions",
+    "tags": ["Node.js"],
+    "icon": "🤖",
+    "image": null,
+    "folder": "Chrome_MetaIA"
+  }
+,
+  {
+    "title": "MondaryNewTab",
+    "description": "Projet Chrome_MondaryNewTab",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🪟",
+    "image": "EXTENSIONS/Chrome_MondaryNewTab/NewTabRssMondary_440x280_cropped.png",
+    "folder": "Chrome_MondaryNewTab"
+  }
+,
+  {
+    "title": "pkhighlighter",
+    "description": "Un userscript qui surligne des mots-clés et barre ceux que vous excluez, avec plusieurs styles visuels.",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🌟",
+    "image": "EXTENSIONS/Chrome_pkhighlighter/-pk/VScode_greaticons.png",
+    "folder": "Chrome_pkhighlighter"
+  }
+,
+  {
+    "title": "PKsticky",
+    "description": "Projet Chrome_PKsticky",
+    "category": "extensions",
+    "tags": [],
+    "icon": "📌",
+    "image": "EXTENSIONS/Chrome_PKsticky/Pknoteschrome/icon.png",
+    "folder": "Chrome_PKsticky"
+  }
+,
+  {
+    "title": "RSSnoteMAIL",
+    "description": "Projet Chrome_RSSnoteMAIL",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "📝",
+    "image": "EXTENSIONS/Chrome_RSSnoteMAIL/icons/icon16.png",
+    "folder": "Chrome_RSSnoteMAIL"
+  }
+,
+  {
+    "title": "scripts",
+    "description": "Projet Chrome_scripts",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🧩",
+    "image": null,
+    "folder": "Chrome_scripts"
+  }
+,
+  {
+    "title": "SimpleGMAIL",
+    "description": "Une extension toute simple ",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "🧩",
+    "image": "EXTENSIONS/Chrome_SimpleGMAIL/img/SimpleGMAIL.png",
+    "folder": "Chrome_SimpleGMAIL"
+  }
+,
+  {
+    "title": "SteamEPIC",
+    "description": "Show your Epic Games on Steam website",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🧩",
+    "image": "EXTENSIONS/Chrome_SteamEPIC/1.0d/images/icon16.png",
+    "folder": "Chrome_SteamEPIC"
+  }
+,
+  {
+    "title": "TranslateHighlighter",
+    "description": "This Chrome extension provides instant text translation with two convenient modes: popup display and direct text substitution. It supports multiple target languages and offers full page translation ca",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "🌍",
+    "image": "EXTENSIONS/Chrome_TranslateHighlighter/icons/icon16.png",
+    "folder": "Chrome_TranslateHighlighter"
+  }
+,
+  {
+    "title": "WPautomation",
+    "description": "Projet Chrome_WPautomation",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "⚙️",
+    "image": "EXTENSIONS/Chrome_WPautomation/icon.png",
+    "folder": "Chrome_WPautomation"
+  }
+,
+  {
+    "title": "WPautomationGPT",
+    "description": "- Créer rapidement des articles WordPress directement depuis Chrome",
+    "category": "extensions",
+    "tags": ["Python","Chrome","Bash"],
+    "icon": "🤖",
+    "image": "EXTENSIONS/Chrome_WPautomationGPT/images/icon16.png",
+    "folder": "Chrome_WPautomationGPT"
+  }
+,
+  {
+    "title": "WPchatsum",
+    "description": "Projet Chrome_WPchatsum",
+    "category": "extensions",
+    "tags": [],
+    "icon": "⚙️",
+    "image": "EXTENSIONS/Chrome_WPchatsum/SuiteGPT/logo-128.png",
+    "folder": "Chrome_WPchatsum"
+  }
+,
+  {
+    "title": "Chrome-extension-demo-master",
+    "description": "This is example of basic chrome extension.",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "🧩",
+    "image": "EXTENSIONS/Chrome-extension-demo-master/app/images/icon-16.png",
+    "folder": "Chrome-extension-demo-master"
+  }
+,
+  {
+    "title": "CHROME-GmailTabs",
+    "description": "Tampermonkey userscript that adds two custom Gmail tabs for labels you choose.",
+    "category": "extensions",
+    "tags": [],
+    "icon": "📧",
+    "image": null,
+    "folder": "CHROME-GmailTabs"
+  }
+,
+  {
+    "title": "CHROME-WPgptPost",
+    "description": "Chrome extension that grabs the current page title and meta description, then",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "🤖",
+    "image": "EXTENSIONS/CHROME-WPgptPost/icon.png",
+    "folder": "CHROME-WPgptPost"
+  }
+,
+  {
+    "title": "HelloExtension-main 2",
+    "description": "A brief introduction to Chrome extensions and walks through the creation of a \"Hello, World!\" extension.",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "🧩",
+    "image": "EXTENSIONS/HelloExtension-main 2/hello.png",
+    "folder": "HelloExtension-main 2"
+  }
+,
+  {
+    "title": "Pknoteschrome back",
+    "description": "Projet Pknoteschrome back",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "📝",
+    "image": "EXTENSIONS/Pknoteschrome back/icon.png",
+    "folder": "Pknoteschrome back"
+  }
+,
+  {
+    "title": "RC pkscripts",
+    "description": "Projet RC_pkscripts",
+    "category": "extensions",
+    "tags": ["Bash"],
+    "icon": "🧩",
+    "image": null,
+    "folder": "RC_pkscripts"
+  }
+,
+  {
+    "title": "SimpleGMAIL",
+    "description": "Projet SimpleGMAIL",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🧩",
+    "image": "EXTENSIONS/SimpleGMAIL/1-Design_Logo/1_S6CvtpdaDb_hsdW6HfsDpA.png",
+    "folder": "SimpleGMAIL"
+  }
+,
+  {
+    "title": "pkscriptcatws",
+    "description": "Extension VS Code pour synchroniser vos userscripts (`.user.js`) directement avec l'extension de navigateur [ScriptCat](https://scriptcat.org/).",
+    "category": "extensions",
+    "tags": ["Node.js"],
+    "icon": "🧩",
+    "image": "EXTENSIONS/VS_pkscriptcatws/icon.png",
+    "folder": "VS_pkscriptcatws"
+  }
+,
+  {
+    "title": "pkspecs",
+    "description": "README.md",
+    "category": "extensions",
+    "tags": ["Node.js"],
+    "icon": "🧩",
+    "image": "EXTENSIONS/VS_pkspecs/icon.png",
+    "folder": "VS_pkspecs"
+  }
+,
+  {
+    "title": "pkterminal",
+    "description": "![VS_pkterminal icon](https://raw.githubusercontent.com/YOUR_USERNAME/VS_pkterminal/main/icon.png)",
+    "category": "extensions",
+    "tags": [],
+    "icon": "💻",
+    "image": "EXTENSIONS/VS_pkterminal/icon.png",
+    "folder": "VS_pkterminal"
+  }
+,
+  {
+    "title": "pkvsconf",
+    "description": "![Extension icon](extension/icon.png)",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🧩",
+    "image": "EXTENSIONS/VS_pkvsconf/icon.png",
+    "folder": "VS_pkvsconf"
+  }
+,
+  {
+    "title": "BGAcss",
+    "description": "The BGA site is pretty old school and sometimes just unclear! This is an attempt to improve it a little using only CSS.",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🧩",
+    "image": null,
+    "folder": "Web_BGAcss"
+  }
+,
+  {
+    "title": "Stylus ChatGPT",
+    "description": "Projet Web_Stylus_ChatGPT",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🎨",
+    "image": "EXTENSIONS/Web_Stylus_ChatGPT/pinCHAT/icons/icon.48.png",
+    "folder": "Web_Stylus_ChatGPT"
+  }
+,
+  {
+    "title": "Stylus ggdeals",
+    "description": "Le site gg.deals est vraiment un super site pour tracker les bonnes affaires pour les jeux pc.",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🎨",
+    "image": "EXTENSIONS/Web_Stylus_ggdeals/screenshot/pkgg3.png",
+    "folder": "Web_Stylus_ggdeals"
+  }
+,
+  {
+    "title": "Stylus github",
+    "description": "Custom Stylus userstyles to improve the GitHub repositories list layout.",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🎨",
+    "image": null,
+    "folder": "Web_Stylus_github"
+  }
+,
+  {
+    "title": "Stylus Gmail",
+    "description": "L'objectif de ce script est de rendre plus lisibles la messagerie",
+    "category": "extensions",
+    "tags": ["Chrome"],
+    "icon": "📧",
+    "image": "EXTENSIONS/Web_Stylus_Gmail/screenshot/Before.png",
+    "folder": "Web_Stylus_Gmail"
+  }
+,
+  {
+    "title": "Stylus linkedin",
+    "description": "Le site Linkedin est vraiment un super site mais la colonne de droite à tendence à m'énerver je la trouve inutile.",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🎨",
+    "image": "EXTENSIONS/Web_Stylus_linkedin/screenshot/before.png",
+    "folder": "Web_Stylus_linkedin"
+  }
+,
+  {
+    "title": "agentXML",
+    "description": "Complete WordPress automation script with **Jetpack Social integration** and **working featured image functionality** for seamless blog posting and social media sharing.",
+    "category": "extensions",
+    "tags": ["Bash"],
+    "icon": "🤖",
+    "image": null,
+    "folder": "WP_agentXML"
+  }
+,
+  {
+    "title": "CvDashboard",
+    "description": "Projet WP_CvDashboard",
+    "category": "extensions",
+    "tags": ["Node.js"],
+    "icon": "⚙️",
+    "image": null,
+    "folder": "WP_CvDashboard"
+  }
+,
+  {
+    "title": "MoneyRadar NL",
+    "description": "Projet WP_MoneyRadar_NL",
+    "category": "extensions",
+    "tags": [],
+    "icon": "⚙️",
+    "image": "EXTENSIONS/WP_MoneyRadar_NL/CleanShot 2025-06-18 at 17.09.03.png",
+    "folder": "WP_MoneyRadar_NL"
+  }
+,
+  {
+    "title": "ProjectsPage",
+    "description": "Projet WP_ProjectsPage",
+    "category": "extensions",
+    "tags": [],
+    "icon": "⚙️",
+    "image": "EXTENSIONS/WP_ProjectsPage/images/PK_gmail.png",
+    "folder": "WP_ProjectsPage"
+  }
+,
+  {
+    "title": "RSocial",
+    "description": "Collection of HTML assets and exports used for social/CV experiments.",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🤖",
+    "image": "EXTENSIONS/WP_RSocial/CV_social/clem.jpg",
+    "folder": "WP_RSocial"
+  }
+,
+  {
+    "title": "simplePost",
+    "description": "Un script bash simple et efficace pour créer des brouillons WordPress via XML-RPC en ligne de commande.",
+    "category": "extensions",
+    "tags": ["Bash"],
+    "icon": "⚙️",
+    "image": null,
+    "folder": "WP_simplePost"
+  }
+,
+  {
+    "title": "Snippets",
+    "description": "Ce document décrit plusieurs snippets PHP conçus pour améliorer les fonctionnalités de WordPress.  Chaque snippet est indépendant et peut être utilisé séparément.  Ils sont organisés pour une meilleur",
+    "category": "extensions",
+    "tags": [],
+    "icon": "⚙️",
+    "image": null,
+    "folder": "WP_Snippets"
+  }
+,
+  {
+    "title": "wpagent",
+    "description": "Plugin to capture quick \"topics\" from mobile (inbox) and turn them into drafts",
+    "category": "extensions",
+    "tags": [],
+    "icon": "🤖",
+    "image": "EXTENSIONS/WP_wpagent/wpagent/assets/pk_wpagent.png",
+    "folder": "WP_wpagent"
+  }
+,
+  {
+    "title": "PKcv2026",
+    "description": "Projet PKcv2026",
+    "category": "web",
+    "tags": [],
+    "icon": "📄",
+    "image": null,
+    "folder": "PKcv2026"
+  }
+,
+  {
+    "title": "pknotes-server",
+    "description": "Projet pknotes-server",
+    "category": "web",
+    "tags": ["Node.js"],
+    "icon": "📝",
+    "image": null,
+    "folder": "pknotes-server"
+  }
+,
+  {
+    "title": "PKnotes",
+    "description": "Projet PKnotes",
+    "category": "web",
+    "tags": [],
+    "icon": "📝",
+    "image": "WEB/PKnotes/PKnotes/PKnotes-macos/stick.png",
+    "folder": "PKnotes"
+  }
+,
+  {
+    "title": "PKwpagent",
+    "description": "Projet PKwpagent",
+    "category": "web",
+    "tags": [],
+    "icon": "🤖",
+    "image": null,
+    "folder": "PKwpagent"
+  }
+,
+  {
+    "title": "about",
+    "description": "Projet Web_about",
+    "category": "web",
+    "tags": [],
+    "icon": "🌐",
+    "image": "WEB/Web_about/cm.jpg",
+    "folder": "Web_about"
+  }
+,
+  {
+    "title": "allaitement",
+    "description": "Simple breastfeeding timer with session tracking and charts.",
+    "category": "web",
+    "tags": [],
+    "icon": "🌐",
+    "image": "WEB/Web_allaitement/breastfeeding_timer/trash.png",
+    "folder": "Web_allaitement"
+  }
+,
+  {
+    "title": "Cryptos",
+    "description": "Small set of standalone HTML pages for crypto tracking and calculations.",
+    "category": "web",
+    "tags": ["Node.js"],
+    "icon": "🌐",
+    "image": null,
+    "folder": "Web_Cryptos"
+  }
+,
+  {
+    "title": "cv",
+    "description": "Collection of HTML CV/portfolio layout experiments and visual variants.",
+    "category": "web",
+    "tags": [],
+    "icon": "📄",
+    "image": "WEB/Web_cv/img/cm.jpg",
+    "folder": "Web_cv"
+  }
+,
+  {
+    "title": "mondaryTOOLS",
+    "description": "Minimal landing page for mondary.tools with a full-screen background image.",
+    "category": "web",
+    "tags": [],
+    "icon": "🌐",
+    "image": "WEB/Web_mondaryTOOLS/bg.jpg",
+    "folder": "Web_mondaryTOOLS"
+  }
+,
+  {
+    "title": "onetoc",
+    "description": "Projet Web_onetoc",
+    "category": "web",
+    "tags": [],
+    "icon": "🌐",
+    "image": null,
+    "folder": "Web_onetoc"
+  }
+,
+  {
+    "title": "pkcuisto WA",
+    "description": "Pkcuisto is a lightweight recipe locker with authentication, an admin console, and Gemini-powered extraction from any URL or free-text note. The stack stays 100 % PHP + vanilla Web Components so it ca",
+    "category": "web",
+    "tags": ["Chrome","Bash"],
+    "icon": "👨‍🍳",
+    "image": "WEB/Web_pkcuisto_WA/pkcuisto.png",
+    "folder": "Web_pkcuisto_WA"
+  }
+,
+  {
+    "title": "pkcuisto",
+    "description": "Pkcuisto is a lightweight recipe locker with authentication, an admin console, and Gemini-powered extraction from any URL or free-text note. The stack stays 100 % PHP + vanilla Web Components so it ca",
+    "category": "web",
+    "tags": ["Chrome","Bash"],
+    "icon": "👨‍🍳",
+    "image": "WEB/Web_pkcuisto/pkcuisto.png",
+    "folder": "Web_pkcuisto"
+  }
+,
+  {
+    "title": "pkdiffchecker",
+    "description": "Projet Web_pkdiffchecker",
+    "category": "web",
+    "tags": [],
+    "icon": "🌐",
+    "image": null,
+    "folder": "Web_pkdiffchecker"
+  }
+,
+  {
+    "title": "pkgg",
+    "description": "Projet Web_pkgg",
+    "category": "web",
+    "tags": [],
+    "icon": "🌐",
+    "image": null,
+    "folder": "Web_pkgg"
+  }
+,
+  {
+    "title": "pkmenus",
+    "description": "A simple, beautiful web-based dashboard designed to be displayed on a TV screen (or tablet) to show the weekly family menu and a photo slideshow.",
+    "category": "web",
+    "tags": [],
+    "icon": "📺",
+    "image": "WEB/Web_pkmenus/icon.png",
+    "folder": "Web_pkmenus"
+  }
+,
+  {
+    "title": "pkrubik",
+    "description": "A single-file, vanilla HTML/CSS/JS Rubik's Cube simulator with a 3D view and move controls. The project is intentionally minimal and runs in a browser with no build step.",
+    "category": "web",
+    "tags": [],
+    "icon": "🧊",
+    "image": "WEB/Web_pkrubik/twisted.jpg",
+    "folder": "Web_pkrubik"
+  }
+,
+  {
+    "title": "pkthemes",
+    "description": "PKMail is a modern web application for secure email and message management with user authentication, individual data storage, and administrative controls. The platform is built entirely with Vanilla w",
+    "category": "web",
+    "tags": ["Bash"],
+    "icon": "🎨",
+    "image": null,
+    "folder": "Web_pkthemes"
+  }
+,
+  {
+    "title": "steamYearinreview",
+    "description": "![Logo](icon.png)",
+    "category": "web",
+    "tags": ["Node.js"],
+    "icon": "🎮",
+    "image": "WEB/Web_steamYearinreview/icon.png",
+    "folder": "Web_steamYearinreview"
+  }
+,
+  {
+    "title": "Wep cuistobot",
+    "description": "Cuistobot est une application web permettant de gérer vos recettes de cuisine en un seul endroit. Inspirée par Bergamot, cette application vous permet d'importer automatiquement des recettes depuis de",
+    "category": "web",
+    "tags": [],
+    "icon": "👨‍🍳",
+    "image": "WEB/Wep_cuistobot/#inspi/transit.jpg",
+    "folder": "Wep_cuistobot"
+  }
+,
+  {
+    "title": "#servAPI",
+    "description": "Projet #servAPI",
+    "category": "server",
+    "tags": [],
+    "icon": "🔌",
+    "image": null,
+    "folder": "#servAPI"
+  }
+,
+  {
+    "title": "#TEMPserveur",
+    "description": "Scratch area that groups multiple versions of a small server prototype.",
+    "category": "server",
+    "tags": [],
+    "icon": "🖥️",
+    "image": null,
+    "folder": "#TEMPserveur"
+  }
+,
+  {
+    "title": "API Spreadsheet",
+    "description": "Projet API_Spreadsheet",
+    "category": "server",
+    "tags": [],
+    "icon": "🔌",
+    "image": null,
+    "folder": "API_Spreadsheet"
+  }
+
+]
