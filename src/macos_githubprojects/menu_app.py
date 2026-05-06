@@ -214,10 +214,9 @@ class ProjectHubApp(rumps.App):
         return []
 
     def reload_projects(self):
-        """Reload the project list from dashboard and restart app."""
-        # Use rumps to restart the application
-        import os
-        os.execv(sys.executable, [sys.executable, __file__])
+        """Update title with new project count after update."""
+        projects = self._load_projects()
+        self.title = f"📁 {len(projects)}"
 
     def open_local(self, _):
         # Open in default file explorer
@@ -275,10 +274,11 @@ class ProjectHubApp(rumps.App):
                 text=True,
                 check=True
             )
-            rumps.notification("Project Hub", "Success", "Dashboard updated successfully!")
 
-            # Reload projects from updated dashboard
+            # Update title with new project count
             self.reload_projects()
+
+            rumps.notification("Project Hub", "Success", f"Dashboard updated with {self.title.replace('📁 ', '')} projects!\n\nRelaunch the app to see the updated project list.")
 
             # Open both HTML files
             self.open_dashboard(None)
