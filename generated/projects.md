@@ -1,7 +1,7 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-05-06 13:38**
+> Généré: **2026-05-06 14:08**
 
 ## 🧭 Sommaire
 
@@ -32,7 +32,7 @@ CHROME (10) | CLI (5) | MACOS (14) | RC (1) | VS (5) | WEB (61) | WP (13) | OTHE
 
 ## MACOS
 
-- **Macos_browserAgent** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Macos_browserAgent`) ⚠️ no icon.png ✳️ dirty
+- **Macos_browserAgent** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Macos_browserAgent`) ✳️ dirty
 - **Macos_Clipboard** — Description non disponible. (`../../Macos_Clipboard`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Macos_FinderGithubLogo** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Macos_FinderGithubLogo`)
 - **Macos_GithubProjects** — Outil de gestion de projets pour macOS avec menu bar app et dashboard HTML. (`..`) ✳️ dirty

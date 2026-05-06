@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 src/macos_githubprojects/update_projects_dashboard.py)",
+      "Bash(python3)"
+    ]
+  }
+}
