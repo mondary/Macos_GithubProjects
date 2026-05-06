@@ -24,6 +24,7 @@ LAUNCHER_HOST = "127.0.0.1"
 LAUNCHER_PORT = 37645
 DASHBOARD_PATH = REPO_ROOT / "generated" / "dashboard-projets.html"
 UPDATE_SCRIPT = REPO_ROOT / "src" / "macos_githubprojects" / "update_projects_dashboard.py"
+PLACEHOLDER_ICON = REPO_ROOT / "generated" / "assets" / "icon_placeholder.png"
 
 # Default icons based on project type
 DEFAULT_ICONS = {
@@ -179,7 +180,7 @@ class ProjectHubApp(rumps.App):
             name = project.get("name", "Unknown")
             path = project.get("path", "")
 
-            # Try to get custom icon from icon.png
+            # Try to get custom icon from icon.png, otherwise use placeholder
             icon = None
             if path.startswith(".."):
                 project_name = path.replace("../", "").strip("/")
@@ -191,6 +192,9 @@ class ProjectHubApp(rumps.App):
 
             if icon_full_path.exists():
                 icon = str(icon_full_path)
+            else:
+                # Use placeholder for projects without custom icon
+                icon = str(PLACEHOLDER_ICON) if PLACEHOLDER_ICON.exists() else None
 
             menu_items.append(rumps.MenuItem(name, callback=lambda _, p=path: self.open_project(p), icon=icon))
 
