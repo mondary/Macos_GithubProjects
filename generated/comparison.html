@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparaison GitHub vs Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #6e6e73;
+            margin-bottom: 30px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6e6e73;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .main-table {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            overflow-x: auto;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 16px;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #0066cc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6e6e73;
+            border-bottom: 2px solid #e5e5e7;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background: #f5f5f7;
+        }
+
+        th.sort-asc::after {
+            content: " ▲";
+            font-size: 10px;
+        }
+
+        th.sort-desc::after {
+            content: " ▼";
+            font-size: 10px;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e5e7;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .project-name {
+            font-weight: 500;
+            color: #1d1d1f;
+        }
+
+        .project-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 10px;
+            vertical-align: middle;
+            border: 1px solid #e5e5e7;
+        }
+
+        .project-cell {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-local, .status-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-ok {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-ko {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-text {
+            font-weight: 500;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .tag-fork {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .tag-old {
+            background: #e5e5e7;
+            color: #6e6e73;
+        }
+
+        .tag-no-git {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .tag-no-remote {
+            background: #fed7aa;
+            color: #9a3412;
+        }
+
+        .tag-dirty {
+            background: #e9d5ff;
+            color: #6b21a8;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .cat-chrome { background: #fee2e2; color: #991b1b; }
+        .cat-cli { background: #dcfce7; color: #166534; }
+        .cat-macos { background: #f3e8ff; color: #6b21a8; }
+        .cat-vs { background: #dbeafe; color: #1e40af; }
+        .cat-web { background: #d1fae5; color: #065f46; }
+        .cat-wp { background: #fef3c7; color: #92400e; }
+        .cat-other { background: #e5e5e7; color: #6e6e73; }
+
+        .github-link {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .github-link:hover {
+            text-decoration: underline;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #e5e5e7;
+            background: white;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: #f5f5f7;
+        }
+
+        .filter-btn.active {
+            background: #1d1d1f;
+            color: white;
+            border-color: #1d1d1f;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Comparaison GitHub vs Local</h1>
+        <p class="subtitle">Analyse de l'état des projets entre GitHub et le dashboard local</p>
+
+        <div class="stats" id="stats">
+            <!-- Stats will be inserted here -->
+        </div>
+
+        <div class="main-table">
+            <div class="legend" id="legend">
+                <!-- Legend will be inserted here -->
+            </div>
+
+            <div class="search-box">
+                <input type="text" placeholder="🔍 Rechercher un projet..." id="search">
+            </div>
+
+            <div class="filters" id="filters">
+                <!-- Filters will be inserted here -->
+            </div>
+
+            <table id="projects-table">
+                <thead>
+                    <tr>
+                        <th data-sort="name">Projet</th>
+                        <th data-sort="category">Catégorie</th>
+                        <th data-sort="local">Local</th>
+                        <th data-sort="github">GitHub</th>
+                        <th data-sort="status">Statut</th>
+                        <th data-sort="link">Lien</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Projects will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Data from Python
+        const localProjects = [{"name": "Chrome_MondaryNewTab", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Chrome_MondaryNewTab/icon.png"}, {"name": "Chrome_PKchromeShortcuts", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Chrome_PKchromeShortcuts/icon.png"}, {"name": "Chrome_pkhighlighter", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Chrome_pkhighlighter/icon.png"}, {"name": "Chrome_PKscreenshotResizer", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Chrome_PKscreenshotResizer/icon.png"}, {"name": "Chrome_PKStickyNotesChrome", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Chrome_PKStickyNotesChrome/icon.png"}, {"name": "Chrome_RSSnoteMAIL", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Chrome_SimpleGMAIL", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Chrome_SimpleGMAIL/icon.png"}, {"name": "Chrome_SteamEPIC", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Chrome_TranslateHighlighter", "category": "chrome", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Chrome_TranslateHighlighter/icon.png"}, {"name": "Chrome_WPgpt", "category": "chrome", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "CLI_agentschooser", "category": "cli", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../CLI_agentschooser/icon.png"}, {"name": "CLI_PKcarreerMails", "category": "cli", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "CLI_PKproc-ai", "category": "cli", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "CLI_SteamEPIC", "category": "cli", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Codexbar", "category": "other", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": "../../Codexbar/icon.png"}, {"name": "Macos_browserAgent", "category": "macos", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Macos_browserAgent/icon.png"}, {"name": "Macos_GithubProjects", "category": "macos", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../icon.png"}, {"name": "Macos_PKdictation", "category": "macos", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Macos_PKpowerlines", "category": "macos", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Macos_PKpowerlines/icon.png"}, {"name": "Macos_PKvibeyard", "category": "macos", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": "../../Macos_PKvibeyard/icon.png"}, {"name": "OpenIsland", "category": "other", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": "../../OpenIsland/icon.png"}, {"name": "PKnotes", "category": "other", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "RC_pkscripts", "category": "rc", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../RC_pkscripts/icon.png"}, {"name": "Stats", "category": "other", "hasGit": true, "dirty": false, "noRemote": false, "iconPath": "../../Stats/icon.png"}, {"name": "VS_pkscriptcat_snippets", "category": "vs", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../VS_pkscriptcat_snippets/icon.png"}, {"name": "VS_pkterminal", "category": "vs", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../VS_pkterminal/icon.png"}, {"name": "VS_pkvsconf", "category": "vs", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../VS_pkvsconf/icon.png"}, {"name": "Web_about", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_allaitement", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_BGAcss", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_Cryptos", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_cuistobot", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_cv", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_cv/icon.png"}, {"name": "Web_GGdeals_collection", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_GGdeals_collection/icon.png"}, {"name": "Web_hub", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_hub/icon.png"}, {"name": "Web_mondaryTOOLS", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_Ndf", "category": "web", "hasGit": true, "dirty": true, "noRemote": true, "iconPath": null}, {"name": "Web_pinel", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_PK_ZombiGame", "category": "web", "hasGit": true, "dirty": true, "noRemote": true, "iconPath": null}, {"name": "Web_pkchangedetection", "category": "web", "hasGit": true, "dirty": false, "noRemote": false, "iconPath": "../../Web_pkchangedetection/icon.png"}, {"name": "Web_pkcuisto", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_pkcuisto_WA", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_pkdiffchecker", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_PKdomains", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_PKdomains/icon.png"}, {"name": "Web_PKdotanimation", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_pkimagetools", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_pkimagetools/icon.png"}, {"name": "Web_pkmenus", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_pkmenus/icon.png"}, {"name": "Web_PKmusicplayer", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_PKmusicplayer/icon.png"}, {"name": "Web_pkrubik", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_pktravelgames", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_pktravelgames/icon.png"}, {"name": "Web_PKwhiteboard", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_PlaningArtiste", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_Raptor", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_SciFi", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_Scrappers", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_Snippets_bga-css", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}, {"name": "Web_steamYearinreview", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_steamYearinreview/icon.png"}, {"name": "Web_test", "category": "web", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "Web_ZombiGame", "category": "web", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../Web_ZombiGame/icon.png"}, {"name": "WP_pknewsletter", "category": "wp", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../WP_pknewsletter/icon.png"}, {"name": "WP_pkpremium", "category": "wp", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../WP_pkpremium/icon.png"}, {"name": "WP_pkSocialSharing", "category": "wp", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../WP_pkSocialSharing/icon.png"}, {"name": "WP_ProjectsPage", "category": "wp", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "WP_RSocial", "category": "wp", "hasGit": true, "dirty": true, "noRemote": true, "iconPath": null}, {"name": "WP_Snippets", "category": "wp", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../WP_Snippets/icon.png"}, {"name": "WP_websocket", "category": "wp", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "WP_WordpressPOSTS", "category": "wp", "hasGit": false, "dirty": false, "noRemote": false, "iconPath": null}, {"name": "WP_wpagent", "category": "wp", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": "../../WP_wpagent/icon.png"}, {"name": "WP_YearInPixel", "category": "wp", "hasGit": true, "dirty": true, "noRemote": false, "iconPath": null}];
+        const githubRepos = [{"name": "Chrome_PKchromeShortcuts", "category": "chrome", "isFork": false, "isOld": false}, {"name": "Chrome_pkhighlighter", "category": "chrome", "isFork": false, "isOld": false}, {"name": "Chrome_PKscreenshotResizer", "category": "chrome", "isFork": false, "isOld": false}, {"name": "Chrome_Send2Wordpress", "category": "chrome", "isFork": false, "isOld": false}, {"name": "Chrome_SimpleGMAIL", "category": "chrome", "isFork": false, "isOld": false}, {"name": "Chrome_SteamEPIC", "category": "chrome", "isFork": false, "isOld": false}, {"name": "Chrome_TranslateHighlighter", "category": "chrome", "isFork": false, "isOld": false}, {"name": "Chrome_WPautomation", "category": "chrome", "isFork": false, "isOld": false}, {"name": "CLI_agentschooser", "category": "cli", "isFork": false, "isOld": false}, {"name": "CLI_WPpostdraft", "category": "cli", "isFork": false, "isOld": false}, {"name": "CodexBar", "category": "other", "isFork": true, "isOld": false}, {"name": "Macos_Archive_desktop_content", "category": "macos", "isFork": false, "isOld": true}, {"name": "Macos_browserAgent", "category": "macos", "isFork": false, "isOld": false}, {"name": "Macos_Download_wallpapers", "category": "macos", "isFork": false, "isOld": true}, {"name": "Macos_FinderGithubLogo", "category": "macos", "isFork": false, "isOld": false}, {"name": "Macos_GithubProjects", "category": "macos", "isFork": false, "isOld": false}, {"name": "macos_pkdication", "category": "macos", "isFork": false, "isOld": false}, {"name": "Macos_PKdictation", "category": "macos", "isFork": false, "isOld": false}, {"name": "Macos_PKpowrelines", "category": "macos", "isFork": false, "isOld": false}, {"name": "Macos_PKswitchtranscript", "category": "macos", "isFork": false, "isOld": false}, {"name": "Macos_PKvoice", "category": "macos", "isFork": false, "isOld": false}, {"name": "Macos_ProjectTracker", "category": "macos", "isFork": false, "isOld": false}, {"name": "Macos_Steam_scrap", "category": "macos", "isFork": false, "isOld": false}, {"name": "manifest_color", "category": "other", "isFork": true, "isOld": false}, {"name": "mondary", "category": "other", "isFork": false, "isOld": false}, {"name": "open-vibe-island", "category": "other", "isFork": true, "isOld": false}, {"name": "PKDrive", "category": "other", "isFork": false, "isOld": false}, {"name": "pknote_versionflutter", "category": "other", "isFork": false, "isOld": false}, {"name": "PKvibeyard", "category": "other", "isFork": true, "isOld": false}, {"name": "PK_petal_macintel--fork", "category": "other", "isFork": true, "isOld": false}, {"name": "PK_roro--fork", "category": "other", "isFork": false, "isOld": false}, {"name": "PK_sticky", "category": "other", "isFork": false, "isOld": false}, {"name": "RC_pkscripts", "category": "other", "isFork": false, "isOld": false}, {"name": "scriptcat", "category": "other", "isFork": true, "isOld": false}, {"name": "showlyTMDB", "category": "other", "isFork": true, "isOld": false}, {"name": "Site_mondaryTOOLS", "category": "other", "isFork": false, "isOld": false}, {"name": "stats", "category": "other", "isFork": true, "isOld": false}, {"name": "VS_PKscriptcat_snippets", "category": "vs", "isFork": false, "isOld": false}, {"name": "VS_pkterminal", "category": "vs", "isFork": false, "isOld": false}, {"name": "VS_pkvsconf", "category": "vs", "isFork": false, "isOld": false}, {"name": "Web_BGAcss", "category": "web", "isFork": true, "isOld": true}, {"name": "Web_GGdeals_collection", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_hub", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_NetflixSciFi", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_pkchangedetection", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_PKdomains", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_pkimagetools", "category": "web", "isFork": false, "isOld": false}, {"name": "web_pkmail", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_pkmenus", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_PKmusicplayer", "category": "web", "isFork": false, "isOld": false}, {"name": "WEB_PKplaningArtiste", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_pkrubik", "category": "web", "isFork": false, "isOld": false}, {"name": "WEB_PKtravelGames", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_PKZombiGame", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_Raptor", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_steamYearinreview", "category": "web", "isFork": false, "isOld": false}, {"name": "Web_Stylus_ggdeals", "category": "web", "isFork": false, "isOld": true}, {"name": "Web_Stylus_linkedin", "category": "web", "isFork": false, "isOld": true}, {"name": "Web_tete", "category": "web", "isFork": false, "isOld": false}, {"name": "WP_ADMIN-resize-columns", "category": "wp", "isFork": false, "isOld": false}, {"name": "WP_pknewsletter", "category": "wp", "isFork": false, "isOld": false}, {"name": "WP_pkSocialSharing", "category": "wp", "isFork": false, "isOld": false}, {"name": "WP_POST---already-esisting-tags", "category": "wp", "isFork": false, "isOld": false}, {"name": "WP_POST-default-hour-14.00", "category": "wp", "isFork": false, "isOld": false}, {"name": "WP_pythonWriter", "category": "wp", "isFork": false, "isOld": false}, {"name": "WP_RSS.image.feed", "category": "wp", "isFork": false, "isOld": false}, {"name": "WP_Snippets", "category": "wp", "isFork": false, "isOld": false}, {"name": "WP_wpagent", "category": "wp", "isFork": false, "isOld": false}];
+
+        // Merge and process data
+        const allProjectNames = new Set([...localProjects.map(p => p.name), ...githubRepos.map(r => r.name)]);
+        const projects = [];
+
+        allProjectNames.forEach(name => {
+            const local = localProjects.find(p => p.name === name);
+            const github = githubRepos.find(r => r.name === name);
+
+            const category = local?.category || github?.category || 'other';
+
+            let tags = [];
+            let status = [];
+
+            if (github && github.isFork) tags.push({class: 'tag-fork', text: 'fork'});
+            if (github && github.isOld) tags.push({class: 'tag-old', text: 'ancien'});
+
+            if (local) {
+                if (!local.hasGit) {
+                    tags.push({class: 'tag-no-git', text: 'no git'});
+                } else if (local.noRemote) {
+                    tags.push({class: 'tag-no-remote', text: 'no remote'});
+                }
+                if (local.dirty) {
+                    tags.push({class: 'tag-dirty', text: 'dirty'});
+                }
+            }
+
+            projects.push({
+                name,
+                category,
+                hasLocal: !!local,
+                hasGithub: !!github,
+                tags,
+                localData: local,
+                githubData: github,
+                iconPath: local?.iconPath
+            });
+        });
+
+        // Sort: local+github first, then by name
+        projects.sort((a, b) => {
+            const aScore = (a.hasLocal ? 1 : 0) + (a.hasGithub ? 1 : 0);
+            const bScore = (b.hasLocal ? 1 : 0) + (b.hasGithub ? 1 : 0);
+            if (aScore !== bScore) return bScore - aScore;
+            return a.name.localeCompare(b.name);
+        });
+
+        // Update stats
+        function updateStats() {
+            const total = projects.length;
+            const localCount = projects.filter(p => p.hasLocal).length;
+            const githubCount = projects.filter(p => p.hasGithub).length;
+            const bothCount = projects.filter(p => p.hasLocal && p.hasGithub).length;
+            const localOnlyCount = projects.filter(p => p.hasLocal && !p.hasGithub).length;
+            const githubOnlyCount = projects.filter(p => !p.hasLocal && p.hasGithub).length;
+
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Projets Uniques</div></div>
+                <div class="stat-card"><div class="stat-value">${localCount}</div><div class="stat-label">Projets Locaux</div></div>
+                <div class="stat-card"><div class="stat-value">${githubCount}</div><div class="stat-label">Repos GitHub</div></div>
+                <div class="stat-card"><div class="stat-value">${bothCount}</div><div class="stat-label">Projets Communs</div></div>
+                <div class="stat-card"><div class="stat-value" style="color: #166534;">${localOnlyCount}</div><div class="stat-label">Local OK + GitHub KO</div></div>
+                <div class="stat-card"><div class="stat-value" style="color: #991b1b;">${githubOnlyCount}</div><div class="stat-label">Local KO + GitHub OK</div></div>
+            `;
+        }
+
+        updateStats();
+
+        // Legend
+        document.getElementById('legend').innerHTML = `
+            <div class="legend-item"><span class="status-icon status-ok">✓</span><span>Présent</span></div>
+            <div class="legend-item"><span class="status-icon status-ko">✗</span><span>Absent</span></div>
+            <div class="legend-item"><span class="tag tag-fork">fork</span></div>
+            <div class="legend-item"><span class="tag tag-old">ancien</span></div>
+            <div class="legend-item"><span class="tag tag-no-git">no git</span></div>
+            <div class="legend-item"><span class="tag tag-no-remote">no remote</span></div>
+        `;
+
+        // Filters
+        document.getElementById('filters').innerHTML = `
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="local-only">Local uniquement</button>
+            <button class="filter-btn" data-filter="github-only">GitHub uniquement</button>
+            <button class="filter-btn" data-filter="both">Les deux</button>
+            <button class="filter-btn" data-filter="chrome">Chrome</button>
+            <button class="filter-btn" data-filter="cli">CLI</button>
+            <button class="filter-btn" data-filter="macos">macOS</button>
+            <button class="filter-btn" data-filter="web">Web</button>
+        `;
+
+        // Attach filter events
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.dataset.filter;
+                let filtered = projects;
+
+                if (filter === 'local-only') {
+                    filtered = projects.filter(p => p.hasLocal && !p.hasGithub);
+                } else if (filter === 'github-only') {
+                    filtered = projects.filter(p => !p.hasLocal && p.hasGithub);
+                } else if (filter === 'both') {
+                    filtered = projects.filter(p => p.hasLocal && p.hasGithub);
+                } else if (filter !== 'all') {
+                    filtered = projects.filter(p => p.category === filter);
+                }
+
+                currentFilteredProjects = filtered;
+                renderTable(filtered);
+            });
+        });
+
+        // Sort state
+        let currentSort = { column: null, direction: 'asc' };
+        let currentFilteredProjects = projects;
+
+        // Render table
+        function renderTable(projects) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            projects.forEach(project => {
+                const row = document.createElement('tr');
+
+                const categoryClass = {
+                    'chrome': 'cat-chrome',
+                    'cli': 'cat-cli',
+                    'macos': 'cat-macos',
+                    'vs': 'cat-vs',
+                    'web': 'cat-web',
+                    'wp': 'cat-wp',
+                    'other': 'cat-other'
+                }[project.category] || 'cat-other';
+
+                const categoryName = {
+                    'chrome': 'Chrome',
+                    'cli': 'CLI',
+                    'macos': 'macOS',
+                    'vs': 'VS Code',
+                    'web': 'Web',
+                    'wp': 'WordPress',
+                    'other': 'Autre'
+                }[project.category] || 'Autre';
+
+                const tagsHtml = project.tags.map(t => `<span class="tag ${t.class}">${t.text}</span>`).join('');
+
+                // Project icon
+                let iconHtml = '';
+                if (project.iconPath) {
+                    iconHtml = `<img src="${project.iconPath}" class="project-icon" alt="${project.name}" onerror="this.style.display='none'">`;
+                }
+
+                row.innerHTML = `
+                    <td><div class="project-cell">${iconHtml}<span class="project-name">${project.name}</span></div></td>
+                    <td><span class="category-badge ${categoryClass}">${categoryName}</span></td>
+                    <td>
+                        ${project.hasLocal
+                            ? '<span class="status-local"><span class="status-icon status-ok">✓</span> <span class="status-text">OK</span></span>'
+                            : '<span class="status-local"><span class="status-icon status-ko">✗</span> <span class="status-text">KO</span></span>'
+                        }
+                    </td>
+                    <td>
+                        ${project.hasGithub
+                            ? '<span class="status-github"><span class="status-icon status-ok">✓</span> <span class="status-text">OK</span></span>'
+                            : '<span class="status-github"><span class="status-icon status-ko">✗</span> <span class="status-text">KO</span></span>'
+                        }
+                    </td>
+                    <td>${tagsHtml || '-'}</td>
+                    <td>
+                        ${project.hasGithub
+                            ? `<a href="https://github.com/mondary/${project.name}" class="github-link" target="_blank">Voir →</a>`
+                            : '-'
+                        }
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        renderTable(projects);
+
+        // Sorting
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', function() {
+                const column = this.dataset.sort;
+
+                // Toggle direction
+                if (currentSort.column === column) {
+                    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSort.column = column;
+                    currentSort.direction = 'asc';
+                }
+
+                // Update header styles
+                document.querySelectorAll('th[data-sort]').forEach(h => {
+                    h.classList.remove('sort-asc', 'sort-desc');
+                });
+                this.classList.add('sort-' + currentSort.direction);
+
+                // Sort data
+                const sorted = [...currentFilteredProjects].sort((a, b) => {
+                    let valA, valB;
+
+                    switch(column) {
+                        case 'name':
+                            valA = a.name.toLowerCase();
+                            valB = b.name.toLowerCase();
+                            break;
+                        case 'category':
+                            valA = a.category;
+                            valB = b.category;
+                            break;
+                        case 'local':
+                            valA = a.hasLocal ? 1 : 0;
+                            valB = b.hasLocal ? 1 : 0;
+                            break;
+                        case 'github':
+                            valA = a.hasGithub ? 1 : 0;
+                            valB = b.hasGithub ? 1 : 0;
+                            break;
+                        case 'status':
+                            valA = a.tags.length;
+                            valB = b.tags.length;
+                            break;
+                        case 'link':
+                            valA = a.hasGithub ? 1 : 0;
+                            valB = b.hasGithub ? 1 : 0;
+                            break;
+                        default:
+                            return 0;
+                    }
+
+                    if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+                    if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+                    return 0;
+                });
+
+                renderTable(sorted);
+            });
+        });
+
+        // Search
+        document.getElementById('search').addEventListener('input', function(e) {
+            const search = e.target.value.toLowerCase();
+            const filtered = projects.filter(p => p.name.toLowerCase().includes(search));
+            currentFilteredProjects = filtered;
+            renderTable(filtered);
+        });
+    </script>
+</body>
+</html>

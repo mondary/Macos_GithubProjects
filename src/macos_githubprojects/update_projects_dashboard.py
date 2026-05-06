@@ -1957,6 +1957,689 @@ def _generate_hub_html(projects: list[Project]) -> None:
     print(f"Generated hub.html with {len(projects)} projects")
 
 
+def _generate_comparison_html(projects: list[Project]) -> None:
+    """Generate comparison.html with local vs GitHub projects analysis."""
+    GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+    comparison_path = GENERATED_DIR / "comparison.html"
+
+    # Prepare local projects data
+    local_projects_data = []
+    for p in projects:
+        # Get icon path relative to generated directory
+        icon_path = None
+        if p.has_icon:
+            if p.rel_path.startswith(".."):
+                # Project in parent directory
+                icon_path = f"../{p.rel_path}/icon.png"
+            elif p.rel_path == ".":
+                # Current repo
+                icon_path = "../icon.png"
+            else:
+                # Relative path in repo
+                icon_path = f"../{p.rel_path}/icon.png"
+
+        local_projects_data.append({
+            "name": p.name,
+            "category": p.group.lower(),
+            "hasGit": p.git.is_git,
+            "dirty": p.git.dirty,
+            "noRemote": p.git.is_git and not p.git.has_remote,
+            "iconPath": icon_path
+        })
+
+    # Fetch GitHub repos using subprocess to avoid dependencies
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["curl", "-s", "https://api.github.com/users/mondary/repos?per_page=100&type=all"],
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        if result.returncode == 0:
+            import json
+            github_data = json.loads(result.stdout)
+            github_repos_data = []
+            for repo in github_data:
+                name = repo["name"]
+                is_fork = repo.get("fork", False)
+                # Mark old repos (not updated in last 2 years)
+                from datetime import datetime, timezone
+                updated_at = datetime.fromisoformat(repo["updated_at"].replace("Z", "+00:00"))
+                is_old = (datetime.now(timezone.utc) - updated_at).days > 730
+
+                # Determine category
+                category = "other"
+                if name.startswith("Chrome_") or name.startswith("chrome_"):
+                    category = "chrome"
+                elif name.startswith("CLI_") or name.startswith("cli_"):
+                    category = "cli"
+                elif name.startswith("Macos_") or name.startswith("macos_"):
+                    category = "macos"
+                elif name.startswith("VS_") or name.startswith("vs_"):
+                    category = "vs"
+                elif name.startswith("Web_") or name.startswith("web_") or name.startswith("WEB_"):
+                    category = "web"
+                elif name.startswith("WP_") or name.startswith("wp_"):
+                    category = "wp"
+
+                github_repos_data.append({
+                    "name": name,
+                    "category": category,
+                    "isFork": is_fork,
+                    "isOld": is_old
+                })
+
+            # Generate JSON data for the HTML
+            local_json = json.dumps(local_projects_data)
+            github_json = json.dumps(github_repos_data)
+        else:
+            local_json = "[]"
+            github_json = "[]"
+    except Exception as e:
+        print(f"Warning: Could not fetch GitHub data: {e}")
+        local_json = json.dumps(local_projects_data)
+        github_json = "[]"
+
+    html_content = f'''<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparaison GitHub vs Dashboard</title>
+    <style>
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            padding: 20px;
+            line-height: 1.5;
+        }}
+
+        .container {{
+            max-width: 1600px;
+            margin: 0 auto;
+        }}
+
+        h1 {{
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }}
+
+        .subtitle {{
+            font-size: 18px;
+            color: #6e6e73;
+            margin-bottom: 30px;
+        }}
+
+        .stats {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }}
+
+        .stat-card {{
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }}
+
+        .stat-value {{
+            font-size: 36px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }}
+
+        .stat-label {{
+            font-size: 13px;
+            color: #6e6e73;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }}
+
+        .main-table {{
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            overflow-x: auto;
+        }}
+
+        .search-box {{
+            margin-bottom: 20px;
+        }}
+
+        .search-box input {{
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 16px;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }}
+
+        .search-box input:focus {{
+            border-color: #0066cc;
+        }}
+
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }}
+
+        th {{
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6e6e73;
+            border-bottom: 2px solid #e5e5e7;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }}
+
+        th:hover {{
+            background: #f5f5f7;
+        }}
+
+        th.sort-asc::after {{
+            content: " ▲";
+            font-size: 10px;
+        }}
+
+        th.sort-desc::after {{
+            content: " ▼";
+            font-size: 10px;
+        }}
+
+        td {{
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e5e7;
+        }}
+
+        tr:last-child td {{
+            border-bottom: none;
+        }}
+
+        tr:hover {{
+            background: #f9f9f9;
+        }}
+
+        .project-name {{
+            font-weight: 500;
+            color: #1d1d1f;
+        }}
+
+        .project-icon {{
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 10px;
+            vertical-align: middle;
+            border: 1px solid #e5e5e7;
+        }}
+
+        .project-cell {{
+            display: flex;
+            align-items: center;
+        }}
+
+        .status-local, .status-github {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }}
+
+        .status-icon {{
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }}
+
+        .status-ok {{
+            background: #dcfce7;
+            color: #166534;
+        }}
+
+        .status-ko {{
+            background: #fee2e2;
+            color: #991b1b;
+        }}
+
+        .status-text {{
+            font-weight: 500;
+        }}
+
+        .tag {{
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }}
+
+        .tag-fork {{
+            background: #fef3c7;
+            color: #92400e;
+        }}
+
+        .tag-old {{
+            background: #e5e5e7;
+            color: #6e6e73;
+        }}
+
+        .tag-no-git {{
+            background: #fecaca;
+            color: #991b1b;
+        }}
+
+        .tag-no-remote {{
+            background: #fed7aa;
+            color: #9a3412;
+        }}
+
+        .tag-dirty {{
+            background: #e9d5ff;
+            color: #6b21a8;
+        }}
+
+        .category-badge {{
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }}
+
+        .cat-chrome {{ background: #fee2e2; color: #991b1b; }}
+        .cat-cli {{ background: #dcfce7; color: #166534; }}
+        .cat-macos {{ background: #f3e8ff; color: #6b21a8; }}
+        .cat-vs {{ background: #dbeafe; color: #1e40af; }}
+        .cat-web {{ background: #d1fae5; color: #065f46; }}
+        .cat-wp {{ background: #fef3c7; color: #92400e; }}
+        .cat-other {{ background: #e5e5e7; color: #6e6e73; }}
+
+        .github-link {{
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 13px;
+        }}
+
+        .github-link:hover {{
+            text-decoration: underline;
+        }}
+
+        .filters {{
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }}
+
+        .filter-btn {{
+            padding: 8px 16px;
+            border: 1px solid #e5e5e7;
+            background: white;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }}
+
+        .filter-btn:hover {{
+            background: #f5f5f7;
+        }}
+
+        .filter-btn.active {{
+            background: #1d1d1f;
+            color: white;
+            border-color: #1d1d1f;
+        }}
+
+        .legend {{
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }}
+
+        .legend-item {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Comparaison GitHub vs Local</h1>
+        <p class="subtitle">Analyse de l'état des projets entre GitHub et le dashboard local</p>
+
+        <div class="stats" id="stats">
+            <!-- Stats will be inserted here -->
+        </div>
+
+        <div class="main-table">
+            <div class="legend" id="legend">
+                <!-- Legend will be inserted here -->
+            </div>
+
+            <div class="search-box">
+                <input type="text" placeholder="🔍 Rechercher un projet..." id="search">
+            </div>
+
+            <div class="filters" id="filters">
+                <!-- Filters will be inserted here -->
+            </div>
+
+            <table id="projects-table">
+                <thead>
+                    <tr>
+                        <th data-sort="name">Projet</th>
+                        <th data-sort="category">Catégorie</th>
+                        <th data-sort="local">Local</th>
+                        <th data-sort="github">GitHub</th>
+                        <th data-sort="status">Statut</th>
+                        <th data-sort="link">Lien</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Projects will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Data from Python
+        const localProjects = {local_json};
+        const githubRepos = {github_json};
+
+        // Merge and process data
+        const allProjectNames = new Set([...localProjects.map(p => p.name), ...githubRepos.map(r => r.name)]);
+        const projects = [];
+
+        allProjectNames.forEach(name => {{
+            const local = localProjects.find(p => p.name === name);
+            const github = githubRepos.find(r => r.name === name);
+
+            const category = local?.category || github?.category || 'other';
+
+            let tags = [];
+            let status = [];
+
+            if (github && github.isFork) tags.push({{class: 'tag-fork', text: 'fork'}});
+            if (github && github.isOld) tags.push({{class: 'tag-old', text: 'ancien'}});
+
+            if (local) {{
+                if (!local.hasGit) {{
+                    tags.push({{class: 'tag-no-git', text: 'no git'}});
+                }} else if (local.noRemote) {{
+                    tags.push({{class: 'tag-no-remote', text: 'no remote'}});
+                }}
+                if (local.dirty) {{
+                    tags.push({{class: 'tag-dirty', text: 'dirty'}});
+                }}
+            }}
+
+            projects.push({{
+                name,
+                category,
+                hasLocal: !!local,
+                hasGithub: !!github,
+                tags,
+                localData: local,
+                githubData: github,
+                iconPath: local?.iconPath
+            }});
+        }});
+
+        // Sort: local+github first, then by name
+        projects.sort((a, b) => {{
+            const aScore = (a.hasLocal ? 1 : 0) + (a.hasGithub ? 1 : 0);
+            const bScore = (b.hasLocal ? 1 : 0) + (b.hasGithub ? 1 : 0);
+            if (aScore !== bScore) return bScore - aScore;
+            return a.name.localeCompare(b.name);
+        }});
+
+        // Update stats
+        function updateStats() {{
+            const total = projects.length;
+            const localCount = projects.filter(p => p.hasLocal).length;
+            const githubCount = projects.filter(p => p.hasGithub).length;
+            const bothCount = projects.filter(p => p.hasLocal && p.hasGithub).length;
+            const localOnlyCount = projects.filter(p => p.hasLocal && !p.hasGithub).length;
+            const githubOnlyCount = projects.filter(p => !p.hasLocal && p.hasGithub).length;
+
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card"><div class="stat-value">${{total}}</div><div class="stat-label">Total Projets Uniques</div></div>
+                <div class="stat-card"><div class="stat-value">${{localCount}}</div><div class="stat-label">Projets Locaux</div></div>
+                <div class="stat-card"><div class="stat-value">${{githubCount}}</div><div class="stat-label">Repos GitHub</div></div>
+                <div class="stat-card"><div class="stat-value">${{bothCount}}</div><div class="stat-label">Projets Communs</div></div>
+                <div class="stat-card"><div class="stat-value" style="color: #166534;">${{localOnlyCount}}</div><div class="stat-label">Local OK + GitHub KO</div></div>
+                <div class="stat-card"><div class="stat-value" style="color: #991b1b;">${{githubOnlyCount}}</div><div class="stat-label">Local KO + GitHub OK</div></div>
+            `;
+        }}
+
+        updateStats();
+
+        // Legend
+        document.getElementById('legend').innerHTML = `
+            <div class="legend-item"><span class="status-icon status-ok">✓</span><span>Présent</span></div>
+            <div class="legend-item"><span class="status-icon status-ko">✗</span><span>Absent</span></div>
+            <div class="legend-item"><span class="tag tag-fork">fork</span></div>
+            <div class="legend-item"><span class="tag tag-old">ancien</span></div>
+            <div class="legend-item"><span class="tag tag-no-git">no git</span></div>
+            <div class="legend-item"><span class="tag tag-no-remote">no remote</span></div>
+        `;
+
+        // Filters
+        document.getElementById('filters').innerHTML = `
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="local-only">Local uniquement</button>
+            <button class="filter-btn" data-filter="github-only">GitHub uniquement</button>
+            <button class="filter-btn" data-filter="both">Les deux</button>
+            <button class="filter-btn" data-filter="chrome">Chrome</button>
+            <button class="filter-btn" data-filter="cli">CLI</button>
+            <button class="filter-btn" data-filter="macos">macOS</button>
+            <button class="filter-btn" data-filter="web">Web</button>
+        `;
+
+        // Attach filter events
+        document.querySelectorAll('.filter-btn').forEach(btn => {{
+            btn.addEventListener('click', function() {{
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.dataset.filter;
+                let filtered = projects;
+
+                if (filter === 'local-only') {{
+                    filtered = projects.filter(p => p.hasLocal && !p.hasGithub);
+                }} else if (filter === 'github-only') {{
+                    filtered = projects.filter(p => !p.hasLocal && p.hasGithub);
+                }} else if (filter === 'both') {{
+                    filtered = projects.filter(p => p.hasLocal && p.hasGithub);
+                }} else if (filter !== 'all') {{
+                    filtered = projects.filter(p => p.category === filter);
+                }}
+
+                currentFilteredProjects = filtered;
+                renderTable(filtered);
+            }});
+        }});
+
+        // Sort state
+        let currentSort = {{ column: null, direction: 'asc' }};
+        let currentFilteredProjects = projects;
+
+        // Render table
+        function renderTable(projects) {{
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            projects.forEach(project => {{
+                const row = document.createElement('tr');
+
+                const categoryClass = {{
+                    'chrome': 'cat-chrome',
+                    'cli': 'cat-cli',
+                    'macos': 'cat-macos',
+                    'vs': 'cat-vs',
+                    'web': 'cat-web',
+                    'wp': 'cat-wp',
+                    'other': 'cat-other'
+                }}[project.category] || 'cat-other';
+
+                const categoryName = {{
+                    'chrome': 'Chrome',
+                    'cli': 'CLI',
+                    'macos': 'macOS',
+                    'vs': 'VS Code',
+                    'web': 'Web',
+                    'wp': 'WordPress',
+                    'other': 'Autre'
+                }}[project.category] || 'Autre';
+
+                const tagsHtml = project.tags.map(t => `<span class="tag ${{t.class}}">${{t.text}}</span>`).join('');
+
+                // Project icon
+                let iconHtml = '';
+                if (project.iconPath) {{
+                    iconHtml = `<img src="${{project.iconPath}}" class="project-icon" alt="${{project.name}}" onerror="this.style.display='none'">`;
+                }}
+
+                row.innerHTML = `
+                    <td><div class="project-cell">${{iconHtml}}<span class="project-name">${{project.name}}</span></div></td>
+                    <td><span class="category-badge ${{categoryClass}}">${{categoryName}}</span></td>
+                    <td>
+                        ${{project.hasLocal
+                            ? '<span class="status-local"><span class="status-icon status-ok">✓</span> <span class="status-text">OK</span></span>'
+                            : '<span class="status-local"><span class="status-icon status-ko">✗</span> <span class="status-text">KO</span></span>'
+                        }}
+                    </td>
+                    <td>
+                        ${{project.hasGithub
+                            ? '<span class="status-github"><span class="status-icon status-ok">✓</span> <span class="status-text">OK</span></span>'
+                            : '<span class="status-github"><span class="status-icon status-ko">✗</span> <span class="status-text">KO</span></span>'
+                        }}
+                    </td>
+                    <td>${{tagsHtml || '-'}}</td>
+                    <td>
+                        ${{project.hasGithub
+                            ? `<a href="https://github.com/mondary/${{project.name}}" class="github-link" target="_blank">Voir →</a>`
+                            : '-'
+                        }}
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            }});
+        }}
+
+        renderTable(projects);
+
+        // Sorting
+        document.querySelectorAll('th[data-sort]').forEach(th => {{
+            th.addEventListener('click', function() {{
+                const column = this.dataset.sort;
+
+                // Toggle direction
+                if (currentSort.column === column) {{
+                    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                }} else {{
+                    currentSort.column = column;
+                    currentSort.direction = 'asc';
+                }}
+
+                // Update header styles
+                document.querySelectorAll('th[data-sort]').forEach(h => {{
+                    h.classList.remove('sort-asc', 'sort-desc');
+                }});
+                this.classList.add('sort-' + currentSort.direction);
+
+                // Sort data
+                const sorted = [...currentFilteredProjects].sort((a, b) => {{
+                    let valA, valB;
+
+                    switch(column) {{
+                        case 'name':
+                            valA = a.name.toLowerCase();
+                            valB = b.name.toLowerCase();
+                            break;
+                        case 'category':
+                            valA = a.category;
+                            valB = b.category;
+                            break;
+                        case 'local':
+                            valA = a.hasLocal ? 1 : 0;
+                            valB = b.hasLocal ? 1 : 0;
+                            break;
+                        case 'github':
+                            valA = a.hasGithub ? 1 : 0;
+                            valB = b.hasGithub ? 1 : 0;
+                            break;
+                        case 'status':
+                            valA = a.tags.length;
+                            valB = b.tags.length;
+                            break;
+                        case 'link':
+                            valA = a.hasGithub ? 1 : 0;
+                            valB = b.hasGithub ? 1 : 0;
+                            break;
+                        default:
+                            return 0;
+                    }}
+
+                    if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+                    if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+                    return 0;
+                }});
+
+                renderTable(sorted);
+            }});
+        }});
+
+        // Search
+        document.getElementById('search').addEventListener('input', function(e) {{
+            const search = e.target.value.toLowerCase();
+            const filtered = projects.filter(p => p.name.toLowerCase().includes(search));
+            currentFilteredProjects = filtered;
+            renderTable(filtered);
+        }});
+    </script>
+</body>
+</html>'''
+
+    comparison_path.write_text(html_content, encoding="utf-8")
+    print(f"Generated comparison.html with analysis of {len(projects)} local projects")
+
+
 def main() -> None:
     projects = _discover_projects()
     _write_projects_md(projects)
@@ -1964,6 +2647,9 @@ def main() -> None:
 
     # Generate hub.html with all projects
     _generate_hub_html(projects)
+
+    # Generate comparison.html with local vs GitHub analysis
+    _generate_comparison_html(projects)
 
 
 if __name__ == "__main__":

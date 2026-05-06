@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-05-06 16:05**
+> Généré: **2026-05-06 22:33**
 
 ## 🧭 Sommaire
 
-CHROME (10) | CLI (4) | MACOS (5) | RC (1) | VS (3) | WEB (42) | WP (13) | OTHER (5)
+CHROME (10) | CLI (4) | MACOS (5) | RC (1) | VS (3) | WEB (32) | WP (10) | OTHER (4)
 
-> Total: **83** projets détectés.
+> Total: **69** projets détectés.
 
 ## CHROME
 
@@ -67,7 +67,6 @@ CHROME (10) | CLI (4) | MACOS (5) | RC (1) | VS (3) | WEB (42) | WP (13) | OTHER
 - **Web_pkdiffchecker** — Description non disponible. (`../../Web_pkdiffchecker`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_PKdomains** — Minimal web dashboard for tracking domain expirations with email alerts. (`../../Web_PKdomains`) ✳️ dirty
 - **Web_PKdotanimation** — Description non disponible. (`../../Web_PKdotanimation`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_pkgg** — Description non disponible. (`../../Web_pkgg`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_pkimagetools** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_pkimagetools`) ✳️ dirty
 - **Web_pkmenus** — A simple, beautiful web-based dashboard designed to be displayed on a TV screen (or tablet) to show the weekly family menu and a photo slideshow. (`../../Web_pkmenus`) ✳️ dirty
 - **Web_PKmusicplayer** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_PKmusicplayer`) ✳️ dirty
@@ -76,32 +75,20 @@ CHROME (10) | CLI (4) | MACOS (5) | RC (1) | VS (3) | WEB (42) | WP (13) | OTHER
 - **Web_PKwhiteboard** — Whiteboard minimal en **Node.js natif + HTML/CSS/JS** (zéro dépendance) avec aperçu de liens type Open Graph. (`../../Web_PKwhiteboard`) ⚠️ no icon.png ⚠️ no git
 - **Web_PlaningArtiste** — Prototype web pour rechercher des dates de spectacles de comiques par départements et proposer un planning optimisé. (`../../Web_PlaningArtiste`) ⚠️ no icon.png ✳️ dirty
 - **Web_Raptor** — Description non disponible. (`../../Web_Raptor`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_Reactbits** — Description non disponible. (`../../Web_Reactbits`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_SciFi** — Description non disponible. (`../../Web_SciFi`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_Scrappers** — Description non disponible. (`../../Web_Scrappers`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_ServeurPK** — Description non disponible. (`../../Web_ServeurPK`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_ShadcnPK** — Description non disponible. (`../../Web_ShadcnPK`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_SKILLS.shwebsite** — Description non disponible. (`../../Web_SKILLS.shwebsite`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_Snippets_bga-css** — The BGA site is pretty old school and sometimes just unclear! This is an attempt to improve it a little using only CSS. (`../../Web_Snippets_bga-css`) ⚠️ no icon.png ✳️ dirty
 - **Web_steamYearinreview** — Minimal hub for personal Steam Year in Review recaps with dynamic stats. (`../../Web_steamYearinreview`) ✳️ dirty
-- **Web_Tailwind+baseUI** — Description non disponible. (`../../Web_Tailwind+baseUI`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_test** — Description non disponible. (`../../Web_test`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_TimeZone** — Description non disponible. (`../../Web_TimeZone`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_UsageAI** — Description non disponible. (`../../Web_UsageAI`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_youtubedl** — Description non disponible. (`../../Web_youtubedl`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **Web_Zombi** — Description non disponible. (`../../Web_Zombi`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_ZombiGame** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Web_ZombiGame`) ✳️ dirty
 
 ## WP
 
-- **WP_BlackHole** — Description non disponible. (`../../WP_BlackHole`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **WP_MoneyRadar_NL** — Description non disponible. (`../../WP_MoneyRadar_NL`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_pknewsletter** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../WP_pknewsletter`) ✳️ dirty
 - **WP_pkpremium** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../WP_pkpremium`) ✳️ dirty
 - **WP_pkSocialSharing** — Plugin WordPress “maison” pour publier automatiquement sur LinkedIn à la publication d’un article (image mise en avant + extrait + lien). (`../../WP_pkSocialSharing`) ✳️ dirty
 - **WP_ProjectsPage** — Description non disponible. (`../../WP_ProjectsPage`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_RSocial** — Collection of HTML assets and exports used for social/CV experiments. (`../../WP_RSocial`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
-- **WP_ShortURL** — Description non disponible. (`../../WP_ShortURL`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_Snippets** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../WP_Snippets`) ✳️ dirty
 - **WP_websocket** — Description non disponible. (`../../WP_websocket`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_WordpressPOSTS** — Description non disponible. (`../../WP_WordpressPOSTS`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
@@ -113,5 +100,4 @@ CHROME (10) | CLI (4) | MACOS (5) | RC (1) | VS (3) | WEB (42) | WP (13) | OTHER
 - **Codexbar** — Description non disponible. (`../../Codexbar`) ⚠️ no desc ⚠️ no git
 - **OpenIsland** — Description non disponible. (`../../OpenIsland`) ⚠️ no desc ⚠️ no git
 - **PKnotes** — Description non disponible. (`../../PKnotes`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
-- **projects.md** — Description non disponible. (`../../projects.md`) ⚠️ no desc ⚠️ no git
-- **Stats** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Stats`) ✳️ dirty
+- **Stats** — [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md) (`../../Stats`)

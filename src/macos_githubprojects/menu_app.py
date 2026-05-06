@@ -280,9 +280,10 @@ class ProjectHubApp(rumps.App):
 
             rumps.notification("Project Hub", "Success", f"Dashboard updated with {self.title.replace('📁 ', '')} projects!\n\nRelaunch the app to see the updated project list.")
 
-            # Open both HTML files
+            # Open all HTML files
             self.open_dashboard(None)
             self.open_hub(None)
+            self.open_comparison(None)
         except subprocess.CalledProcessError as e:
             rumps.alert("Update Error", f"Failed to update dashboard:\n\n{e.stderr}")
         except Exception as e:
@@ -300,6 +301,13 @@ class ProjectHubApp(rumps.App):
             webbrowser.open(f"file://{hub_path.absolute()}")
         else:
             rumps.alert("Error", "Hub file not found. Please run update first.")
+
+    def open_comparison(self, _):
+        comparison_path = REPO_ROOT / "generated" / "comparison.html"
+        if comparison_path.exists():
+            webbrowser.open(f"file://{comparison_path.absolute()}")
+        else:
+            rumps.alert("Error", "Comparison file not found. Please run update first.")
 
 if __name__ == "__main__":
     import logging
