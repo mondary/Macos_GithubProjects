@@ -3,7 +3,13 @@
     "allow": [
       "Bash(python3 src/macos_githubprojects/update_projects_dashboard.py)",
       "Bash(python3)",
-      "Bash(/Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects/.venv/bin/python3 src/macos_githubprojects/update_projects_dashboard.py)"
+      "Bash(/Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects/.venv/bin/python3 src/macos_githubprojects/update_projects_dashboard.py)",
+      "Bash(open /Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects/generated/comparison.html)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'Fix alias system: prevent duplicate projects in comparison *)",
+      "Bash(git push *)",
+      "Bash(mkdir -p ../archives)",
+      "Read(//Users/clm/Documents/GitHub/PROJECTS/**)"
     ]
   }
 }
