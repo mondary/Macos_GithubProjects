@@ -3202,7 +3202,7 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
     for p in sorted_projects:
         emoji = get_emoji(p.name)
         desc = clean_description(p.description)
-        project_lines.append(f"{emoji} {p.name} - {desc}")
+        project_lines.append(f"- {emoji} {p.name} - {desc}")
 
     # Build projects section with blank lines between items
     projects_section = "\n\n".join(project_lines)
