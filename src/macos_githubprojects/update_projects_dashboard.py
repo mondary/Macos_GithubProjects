@@ -49,7 +49,8 @@ def _readme_description(project_path: Path) -> str | None:
         return None
 
     candidates: list[Path] = []
-    for pattern in ("README.md", "readme.md", "README.MD", "README", "readme"):
+    # Try English version first
+    for pattern in ("README_en.md", "README_EN.md", "README.md", "readme.md", "README.MD", "README", "readme"):
         p = project_path / pattern
         if p.exists() and p.is_file():
             candidates.append(p)
@@ -69,43 +70,60 @@ def _readme_description(project_path: Path) -> str | None:
     import re
     lines = [ln.strip() for ln in text.splitlines()]
 
-    # Skip empty lines, code blocks, and headers
-    cleaned_lines = []
-    for ln in lines:
+    # Look for the best description line
+    # We want a complete sentence that describes what the project does
+    for i, ln in enumerate(lines):
         ln = ln.strip()
+
+        # Skip empty lines, code blocks, and HTML comments
         if not ln or ln.startswith("```") or ln.startswith("<!--"):
             continue
-        # Skip headers but keep their content
-        if ln.startswith("#"):
-            ln = ln.lstrip("#").strip()
-        cleaned_lines.append(ln)
 
-    if not cleaned_lines:
-        return None
-
-    # Look for meaningful descriptions
-    for ln in cleaned_lines[:80]:
-        # Skip lines that are just badges, images, or metadata
-        if ln.startswith("!") or ln.startswith(">") or ln.startswith("<!--"):
+        # Skip headers, badges, images, and metadata
+        if ln.startswith(("#", "!", ">", "<!--", "[", "*")):
             continue
+
         # Skip very short lines or just URLs/links
-        if len(ln) < 15 or ln.startswith("http"):
+        if len(ln) < 20 or ln.startswith("http"):
             continue
-        # Skip lines that are mostly punctuation or special chars
-        if sum(c.isalnum() for c in ln) < len(ln) * 0.3:
+
+        # Skip lines that are mostly emojis or special chars
+        if sum(c.isalnum() for c in ln) < len(ln) * 0.4:
             continue
+
+        # Skip language indicators (FR, EN, etc.)
+        if re.match(r'^[🇫🇬🇧🇪🇸🇩🇮🇹]\s*\w+\s*[:·]', ln):
+            continue
+
         # Remove markdown links but keep text
         clean_ln = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', ln)
-        clean_ln = re.sub(r'🇫🇷.*?FR', '', clean_ln)
+        clean_ln = re.sub(r'[🇫🇷🇬🇧🇪🇸🇩🇮🇹]', '', clean_ln)
         clean_ln = ' '.join(clean_ln.split())
-        if len(clean_ln) > 15:
-            return clean_ln[:240]
 
-    # Fallback: first non-header line
-    for ln in cleaned_lines:
+        # Check if this looks like a real description
+        # A good description usually:
+        # - Starts with a capital letter or "Un"/"Une"/"A"/"An"
+        # - Contains verbs like "is", "allows", "lets", "surligne", "permet"
+        # - Is at least 20 chars but not too long
+        if len(clean_ln) > 30 and len(clean_ln) < 300:
+            # Check if it contains descriptive words
+            descriptive_indicators = [
+                "est", "allows", "lets", "enables", "provides", "offers",
+                "surligne", "permet", "une", "extension", "application", "outil",
+                "web", "chrome", "script", "plugin", "manager"
+            ]
+            if any(indicator in clean_ln.lower() for indicator in descriptive_indicators):
+                return clean_ln[:240]
+
+    # Fallback: first substantial non-header line
+    for ln in lines[:100]:
+        ln = ln.strip()
+        if not ln or ln.startswith(("#", "!", ">", "```", "[", "*")):
+            continue
         clean_ln = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', ln)
-        clean_ln = clean_ln.strip()
-        if len(clean_ln) > 10:
+        clean_ln = re.sub(r'[🇫🇷🇬🇧🇪🇸🇩🇮🇹]', '', clean_ln)
+        clean_ln = ' '.join(clean_ln.split())
+        if len(clean_ln) > 20:
             return clean_ln[:240]
 
     return None
@@ -3264,17 +3282,15 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
         desc = ' '.join(desc.split())
         desc = desc.strip()
 
-        # Check if description is too similar to project name
-        if project_name:
+        # Check if description is basically just the project name (too redundant)
+        # Only return "Various tools" if description is essentially the same as project name
+        if project_name and len(desc.split()) <= 3:  # Only check short descriptions
             name_lower = project_name.lower().replace('_', ' ').replace('-', ' ')
             desc_lower = desc.lower().replace('_', ' ').replace('-', ' ')
-            desc_words = set(desc_lower.split())
-            name_words = set(name_lower.split())
 
-            if desc_words and name_words:
-                overlap = len(desc_words & name_words)
-                if len(desc_words) > 0 and overlap / len(desc_words) > 0.7:
-                    return "Various tools"
+            # If description is 85%+ similar to project name, it's redundant
+            if desc_lower == name_lower or (len(desc_lower) > 0 and desc_lower in name_lower):
+                return "Various tools"
 
         # Remove common useless prefixes
         for prefix in ["Project", "Description", "Ce projet", "This project"]:
