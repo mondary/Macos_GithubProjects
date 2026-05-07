@@ -3204,8 +3204,8 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
         desc = clean_description(p.description)
         project_lines.append(f"- {emoji} {p.name} - {desc}")
 
-    # Build projects section with blank lines between items
-    projects_section = "\n\n".join(project_lines)
+    # Build projects section - each item on its own line
+    projects_section = "\n".join(project_lines)
 
     readme_content = f"""### Hi, I'm Clément — AI Agent Builder & Full-Stack Developer
 ---
