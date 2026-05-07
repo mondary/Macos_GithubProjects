@@ -66,18 +66,49 @@ def _readme_description(project_path: Path) -> str | None:
     except OSError:
         return None
 
+    import re
     lines = [ln.strip() for ln in text.splitlines()]
-    lines = [ln for ln in lines if ln and not ln.startswith("```")]
-    if not lines:
+
+    # Skip empty lines, code blocks, and headers
+    cleaned_lines = []
+    for ln in lines:
+        ln = ln.strip()
+        if not ln or ln.startswith("```") or ln.startswith("<!--"):
+            continue
+        # Skip headers but keep their content
+        if ln.startswith("#"):
+            ln = ln.lstrip("#").strip()
+        cleaned_lines.append(ln)
+
+    if not cleaned_lines:
         return None
 
-    for ln in lines[:60]:
-        if ln.startswith("#") or ln.startswith("!") or ln.startswith(">"):
+    # Look for meaningful descriptions
+    for ln in cleaned_lines[:80]:
+        # Skip lines that are just badges, images, or metadata
+        if ln.startswith("!") or ln.startswith(">") or ln.startswith("<!--"):
             continue
-        return ln[:240]
+        # Skip very short lines or just URLs/links
+        if len(ln) < 15 or ln.startswith("http"):
+            continue
+        # Skip lines that are mostly punctuation or special chars
+        if sum(c.isalnum() for c in ln) < len(ln) * 0.3:
+            continue
+        # Remove markdown links but keep text
+        clean_ln = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', ln)
+        clean_ln = re.sub(r'🇫🇷.*?FR', '', clean_ln)
+        clean_ln = ' '.join(clean_ln.split())
+        if len(clean_ln) > 15:
+            return clean_ln[:240]
 
-    first = lines[0].lstrip("#").strip()
-    return first[:240] if first else None
+    # Fallback: first non-header line
+    for ln in cleaned_lines:
+        clean_ln = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', ln)
+        clean_ln = clean_ln.strip()
+        if len(clean_ln) > 10:
+            return clean_ln[:240]
+
+    return None
 
 
 def _group_key(name: str) -> str:
@@ -3181,16 +3212,21 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
         desc = ' '.join(desc.split())
         desc = desc.strip()
 
-        # Take first meaningful sentence
+        # Remove common useless prefixes
+        for prefix in ["Project", "Description", "Ce projet", "This project"]:
+            if desc.startswith(prefix):
+                desc = desc[len(prefix):].strip()
+
+        # Take first meaningful sentence if available
         if '.' in desc:
             parts = desc.split('.')
             first = parts[0].strip()
-            if len(first) > 15:
+            if len(first) > 20 and len(first) < 100:
                 desc = first
 
-        # Truncate if too long
-        if len(desc) > 50:
-            desc = desc[:47] + "..."
+        # Truncate if too long (increased from 50 to 80)
+        if len(desc) > 80:
+            desc = desc[:77] + "..."
 
         return desc if desc else "Various tools"
 
