@@ -3203,6 +3203,54 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
             return "Various tools"
 
         import re
+
+        # Detect and translate French to English
+        french_chars = set("àâäéèêëïîôùûüÿœæç")
+        has_french = any(char in french_chars for char in desc.lower())
+
+        # Common French words to detect
+        french_indicators = [" une ", " un ", " le ", " la ", " les ", " de ", " des ", " et ", " pour ",
+                            " est ", " sont ", " avec ", " dans ", " sur ", " cette ", " cet ", " cette ",
+                            " application ", " outil ", " projet ", " extension ", " permet "]
+
+        if has_french or any(indicator in desc.lower() for indicator in french_indicators):
+            # Try to translate using deep_translator
+            try:
+                from deep_translator import GoogleTranslator
+                translated = GoogleTranslator(source='auto', target='en').translate(desc)
+                desc = translated
+            except Exception:
+                # Fallback: simple word replacements if translation fails
+                replacements = {
+                    "Extension Chrome qui": "Chrome extension that",
+                    "Une extension Chrome": "A Chrome extension",
+                    "Application web": "Web application",
+                    "Outil de": "Tool for",
+                    "Gestion de": "Management of",
+                    "Projet de": "Project for",
+                    "Permet de": "Allows to",
+                    "Permettant de": "Allowing to",
+                    "Simple et efficace": "Simple and efficient",
+                    "Ultra-légère": "Ultra-lightweight",
+                    "Minimal": "Minimal",
+                    "Mini": "Mini",
+                    "Hub personnel": "Personal hub",
+                    "Centralisant": "Centralizing",
+                    "Ensemble de": "Set of",
+                    "Recettes de cuisine": "Recipes",
+                    "Départager": "Separate",
+                    "Détourage d'images": "Image cropping",
+                    "Supprime l'arrière-plan": "Remove background",
+                    "Surveillance de pages web": "Web page monitoring",
+                    "Suite de jeux": "Game suite",
+                    "Voyages et soirées": "Travel and parties",
+                    " Vue d'ensemble": "Overview",
+                    " Extensions": "Extensions",
+                    "l'Explorer": "Explorer",
+                }
+                for fr, en in replacements.items():
+                    desc = desc.replace(fr, en)
+
         # Remove markdown links and language indicators
         desc = re.sub(r'\[.*?\]\(.*?\)', '', desc)
         desc = re.sub(r'🇫🇷.*?FR', '', desc)
