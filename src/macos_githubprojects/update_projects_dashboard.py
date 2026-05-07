@@ -3202,7 +3202,8 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
     for p in sorted_projects:
         emoji = get_emoji(p.name)
         desc = clean_description(p.description)
-        project_lines.append(f"- {emoji} {p.name} - {desc}")
+        gh_url = f"https://github.com/mondary/{p.name}"
+        project_lines.append(f"- {emoji} [{p.name}]({gh_url}) - {desc}")
 
     # Build projects section - each item on its own line
     projects_section = "\n".join(project_lines)
