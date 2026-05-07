@@ -2011,6 +2011,15 @@ def _generate_comparison_html(projects: list[Project]) -> None:
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     comparison_path = GENERATED_DIR / "comparison.html"
 
+    # Project aliases mapping (local name -> GitHub name or vice versa)
+    # This handles renamed projects
+    project_aliases = {
+        # Local name -> GitHub name (for renamed local projects)
+        "Web_allaitement": "Web_tete",
+        # Add more aliases here as needed
+        # Format: "old_name": "new_name" or "local_name": "github_name"
+    }
+
     # Prepare local projects data
     local_projects_data = []
     for p in projects:
@@ -2082,6 +2091,7 @@ def _generate_comparison_html(projects: list[Project]) -> None:
             # Generate JSON data for the HTML
             local_json = json.dumps(local_projects_data)
             github_json = json.dumps(github_repos_data)
+            aliases_json = json.dumps(project_aliases)
         else:
             local_json = "[]"
             github_json = "[]"
@@ -2336,6 +2346,11 @@ def _generate_comparison_html(projects: list[Project]) -> None:
             color: #6b21a8;
         }}
 
+        .tag-alias {{
+            background: #cffafe;
+            color: #0e7490;
+        }}
+
         .category-badge {{
             display: inline-block;
             padding: 4px 10px;
@@ -2448,15 +2463,63 @@ def _generate_comparison_html(projects: list[Project]) -> None:
         // Data from Python
         const localProjects = {local_json};
         const githubRepos = {github_json};
+        const projectAliases = {aliases_json};
+
+        // Helper function to find local project by name or alias
+        function findLocal(name) {{
+            let local = localProjects.find(p => p.name === name);
+            if (!local) {{
+                // Check if this name has an alias to a local project
+                for (const [localName, githubName] of Object.entries(projectAliases)) {{
+                    if (githubName === name) {{
+                        local = localProjects.find(p => p.name === localName);
+                        break;
+                    }}
+                }}
+            }}
+            return local;
+        }}
+
+        // Helper function to find GitHub repo by name or alias
+        function findGithub(name) {{
+            let github = githubRepos.find(r => r.name === name);
+            if (!github) {{
+                // Check if this name has an alias to a GitHub repo
+                for (const [localName, githubName] of Object.entries(projectAliases)) {{
+                    if (localName === name) {{
+                        github = githubRepos.find(r => r.name === githubName);
+                        break;
+                    }}
+                }}
+            }}
+            return github;
+        }}
 
         // Merge and process data
-        const allProjectNames = new Set([...localProjects.map(p => p.name), ...githubRepos.map(r => r.name)]);
+        const allProjectNames = new Set([
+            ...localProjects.map(p => p.name),
+            ...githubRepos.map(r => r.name),
+            ...Object.keys(projectAliases),
+            ...Object.values(projectAliases)
+        ]);
+
         const projects = [];
 
         allProjectNames.forEach(name => {{
-            const local = localProjects.find(p => p.name === name);
-            const github = githubRepos.find(r => r.name === name);
+            const local = findLocal(name);
+            const github = findGithub(name);
 
+            // Skip if this is an alias (we'll use the primary name)
+            if (Object.values(projectAliases).includes(name) && !local) {{
+                // This is a GitHub name that's an alias, check if we already added the local version
+                const localName = Object.keys(projectAliases).find(key => projectAliases[key] === name);
+                if (localName && projects.some(p => p.name === localName)) {{
+                    return; // Skip, will be merged under local name
+                }}
+            }}
+
+            // Use local name if it exists, otherwise use GitHub name
+            const displayName = local?.name || github?.name || name;
             const category = local?.category || github?.category || 'other';
 
             let tags = [];
@@ -2476,8 +2539,21 @@ def _generate_comparison_html(projects: list[Project]) -> None:
                 }}
             }}
 
+            // Add alias tag if this project has an alias
+            const aliasInfo = Object.entries(projectAliases).find(([local, github]) =>
+                local === displayName || github === displayName
+            );
+            if (aliasInfo) {{
+                const [localName, githubName] = aliasInfo;
+                if (displayName === localName) {{
+                    tags.push({{class: 'tag-alias', text: 'aka ' + githubName}});
+                }} else if (displayName === githubName) {{
+                    tags.push({{class: 'tag-alias', text: 'aka ' + localName}});
+                }}
+            }}
+
             projects.push({{
-                name,
+                name: displayName,
                 category,
                 hasLocal: !!local,
                 hasGithub: !!github,
@@ -2525,6 +2601,7 @@ def _generate_comparison_html(projects: list[Project]) -> None:
             <div class="legend-item"><span class="tag tag-old">ancien</span></div>
             <div class="legend-item"><span class="tag tag-no-git">no git</span></div>
             <div class="legend-item"><span class="tag tag-no-remote">no remote</span></div>
+            <div class="legend-item"><span class="tag tag-alias">aka</span></div>
         `;
 
         // Filters
