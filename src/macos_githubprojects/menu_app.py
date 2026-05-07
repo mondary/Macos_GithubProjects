@@ -168,6 +168,7 @@ class ProjectHubApp(rumps.App):
             rumps.MenuItem("Open Dashboard", callback=self.open_dashboard),
             rumps.MenuItem("Open Hub", callback=self.open_hub),
             rumps.MenuItem("Open Comparaison", callback=self.open_comparison),
+            rumps.MenuItem("Open GitHub Profile", callback=self.open_github_profile),
             rumps.MenuItem("Quit", callback=self.quit_app),
             None,  # Separator
             self.quick_actions_menu,
@@ -313,6 +314,13 @@ class ProjectHubApp(rumps.App):
             webbrowser.open(f"file://{comparison_path.absolute()}")
         else:
             rumps.alert("Error", "Comparison file not found. Please run update first.")
+
+    def open_github_profile(self, _):
+        profile_path = REPO_ROOT / "generated" / "github-profile.html"
+        if profile_path.exists():
+            webbrowser.open(f"file://{profile_path.absolute()}")
+        else:
+            rumps.alert("Error", "GitHub profile file not found. Please run update first.")
 
 if __name__ == "__main__":
     import logging

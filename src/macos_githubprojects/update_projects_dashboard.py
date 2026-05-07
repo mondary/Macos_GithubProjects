@@ -2662,6 +2662,483 @@ def _generate_comparison_html(projects: list[Project]) -> None:
     print(f"Generated comparison.html with analysis of {len(projects)} local projects")
 
 
+def _generate_github_profile_html(projects: list[Project]) -> None:
+    """Generate GitHub profile page (github-profile.html)."""
+    profile_path = GENERATED_DIR / "github-profile.html"
+
+    html_content = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mondary Clément - GitHub Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {{
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-tertiary: #9ca3af;
+            --accent: #0066cc;
+            --accent-hover: #0052a3;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }}
+
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+
+        body {{
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }}
+
+        .container {{
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }}
+
+        /* Header */
+        .header {{
+            text-align: center;
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+        }}
+
+        .avatar {{
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }}
+
+        .name {{
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }}
+
+        .tagline {{
+            font-size: 20px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }}
+
+        .location {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 20px;
+        }}
+
+        .socials {{
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }}
+
+        .social-link {{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }}
+
+        .social-link:hover {{
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }}
+
+        /* Tech Stack */
+        .tech-stack {{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }}
+
+        .tech-item {{
+            padding: 6px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }}
+
+        /* Section */
+        .section {{
+            margin-bottom: 48px;
+        }}
+
+        .section-title {{
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }}
+
+        .section-title::before {{
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 2px;
+        }}
+
+        /* Projects */
+        .projects-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }}
+
+        .project-card {{
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }}
+
+        .project-card:hover {{
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }}
+
+        .project-name {{
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }}
+
+        .project-desc {{
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }}
+
+        /* Stats */
+        .stats-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }}
+
+        .stat-item {{
+            text-align: center;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }}
+
+        .stat-value {{
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }}
+
+        .stat-label {{
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }}
+
+        /* Activity */
+        .activity-item {{
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }}
+
+        .activity-item:last-child {{
+            border-bottom: none;
+        }}
+
+        .activity-date {{
+            color: var(--text-tertiary);
+            font-size: 13px;
+            min-width: 100px;
+        }}
+
+        .activity-content {{
+            flex: 1;
+        }}
+
+        .activity-title {{
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }}
+
+        .activity-desc {{
+            font-size: 14px;
+            color: var(--text-secondary);
+        }}
+
+        /* Footer */
+        .footer {{
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }}
+
+        .footer a {{
+            color: var(--accent);
+            text-decoration: none;
+        }}
+
+        .footer a:hover {{
+            text-decoration: underline;
+        }}
+
+        /* Responsive */
+        @media (max-width: 768px) {{
+            .container {{
+                padding: 40px 20px;
+            }}
+
+            .name {{
+                font-size: 36px;
+            }}
+
+            .tagline {{
+                font-size: 18px;
+            }}
+
+            .projects-grid {{
+                grid-template-columns: 1fr;
+            }}
+        }}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="avatar">M</div>
+            <h1 class="name">Mondary Clément</h1>
+            <p class="tagline">📍 France | 🤖 AI Agent Builder | 🚀 Full-Stack Developer | 🎨 UI/UX Designer</p>
+
+            <div class="location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Paris, France</span>
+            </div>
+
+            <div class="socials">
+                <a href="https://github.com/mondary" target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/clementmondary/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://x.com/Clement_mondary" target="_blank" rel="noopener noreferrer" class="social-link" title="X (Twitter)">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://mondary.design" target="_blank" rel="noopener noreferrer" class="social-link" title="Portfolio">
+                    <i class="fas fa-globe"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <div class="tech-item">Python</div>
+            <div class="tech-item">Swift</div>
+            <div class="tech-item">TypeScript</div>
+            <div class="tech-item">JavaScript</div>
+            <div class="tech-item">Node.js</div>
+            <div class="tech-item">PHP</div>
+            <div class="tech-item">CSS</div>
+            <div class="tech-item">HTML</div>
+            <div class="tech-item">macOS</div>
+            <div class="tech-item">SwiftUI</div>
+            <div class="tech-item">Claude</div>
+            <div class="tech-item">VS Code</div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">About</h2>
+            <p style="color: var(--text-secondary); line-height: 1.7;">
+                Passionate developer building AI-powered tools and beautiful interfaces.
+                Currently exploring the intersection of AI agents and development workflows.
+                Love creating clean, functional apps that solve real problems.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Current Projects</h2>
+            <div class="projects-grid">
+                <a href="https://github.com/mondary/Macos_GithubProjects" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <div class="project-name">📁 Macos_GithubProjects</div>
+                    <div class="project-desc">Project hub with dashboard, portfolio, and menu bar app for managing {len(projects)}+ local projects</div>
+                </a>
+
+                <a href="https://github.com/mondary/Web_hub" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <div class="project-name">🌐 Web_hub</div>
+                    <div class="project-desc">Personal portfolio hub showcasing all web projects with beautiful animations</div>
+                </a>
+
+                <a href="https://github.com/mondary" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <div class="project-name">🚀 {len(projects)}+ Projects</div>
+                    <div class="project-desc">Chrome extensions, CLI tools, macOS apps, WordPress plugins, and more</div>
+                </a>
+
+                <a href="https://mondary.design" target="_blank" rel="noopener noreferrer" class="project-card">
+                    <div class="project-name">🎨 mondary.design</div>
+                    <div class="project-desc">Design portfolio showcasing UI/UX work and creative projects</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">{len(projects)}</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">6k+</div>
+                    <div class="stat-label">Commits</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{len(projects)}+</div>
+                    <div class="stat-label">Repos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Contributors</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Recent Activity</h2>
+            <div class="activity">
+                <div class="activity-item">
+                    <div class="activity-date">Today</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Added comparison.html with GitHub vs local analysis</div>
+                        <div class="activity-desc">Created sortable table comparing local projects and GitHub repos</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-date">Yesterday</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Enhanced hub.html with Git SVG logo</div>
+                        <div class="activity-desc">Replaced Font Awesome icon with custom Git SVG in portfolio</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-date">This week</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Built menu bar app with auto-update</div>
+                        <div class="activity-desc">macOS menu bar app for managing projects with dashboard generation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🚀 Building tools at ludicrous speed</p>
+            <p style="margin-top: 8px;">
+                <a href="https://mondary.design" target="_blank" rel="noopener noreferrer">mondary.design</a> •
+                <a href="https://github.com/mondary" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animate stats on load
+        document.addEventListener('DOMContentLoaded', function() {{
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(stat => {{
+                const finalValue = parseInt(stat.textContent);
+                let currentValue = 0;
+                const duration = 1000;
+                const increment = finalValue / (duration / 16);
+
+                const animate = () => {{
+                    currentValue += increment;
+                    if (currentValue < finalValue) {{
+                        stat.textContent = Math.floor(currentValue);
+                        requestAnimationFrame(animate);
+                    }} else {{
+                        stat.textContent = finalValue;
+                    }}
+                }};
+
+                animate();
+            }});
+        }});
+    </script>
+
+</body>
+</html>'''
+
+    profile_path.write_text(html_content, encoding="utf-8")
+    print(f"Generated github-profile.html")
+
+
 def main() -> None:
     projects = _discover_projects()
     _write_projects_md(projects)
@@ -2672,6 +3149,9 @@ def main() -> None:
 
     # Generate comparison.html with local vs GitHub analysis
     _generate_comparison_html(projects)
+
+    # Generate github-profile.html
+    _generate_github_profile_html(projects)
 
 
 if __name__ == "__main__":
