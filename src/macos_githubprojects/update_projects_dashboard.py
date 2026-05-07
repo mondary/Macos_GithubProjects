@@ -3140,65 +3140,59 @@ def _generate_github_profile_html(projects: list[Project]) -> None:
 
 
 def _generate_mondary_readme(projects: list[Project]) -> None:
-    """Generate mondary README.md with project list."""
+    """Generate mondary README.md with project list in Steipete style."""
     # REPO_ROOT is .../Macos_GithubProjects, we need .../mondary
     # So we go up two levels to get .../GitHub then to mondary
     github_dir = REPO_ROOT.parent.parent
     mondary_repo = github_dir / "mondary"
     readme_path = mondary_repo / "README.md"
 
-    # Emoji mapping based on project type
-    emoji_map = {
-        "Chrome": "🌐",
-        "CLI": "💻",
-        "Macos": "🍎",
-        "Web": "🌍",
-        "WP": "📝",
-        "VS": "📦",
-        "RC": "⚙️",
-        "Site": "🌐",
-        "Codex": "📦",
-        "PK": "🔧",
-        "manifest": "📋",
-        "mondary": "👤",
-        "open-vibe": "🏝️",
-        "pknote": "📝",
-        "scriptcat": "🐱",
-        "showly": "📺",
-        "stats": "📊",
-        "web": "🌐",
-    }
+    # Unique emojis for each project (deterministic based on project name hash)
+    emojis = [
+        "🦞", "🐾", "🧹", "🦀", "🧪", "🚇", "🎚️", "🚀", "👉", "🚦",
+        "🧵", "🛟", "🧰", "🧭", "👻", "🗃️", "🧾", "🪶", "🛰️", "🧱",
+        "🗣️", "🎙️", "📞", "🔊", "📣", "🌊", "📍", "🪵", "🧲", "📸",
+        "🎧", "🛵", "🫐", "🤖", "🧑‍💻", "🧙‍♂️", "🕸️", "🧮", "⏳", "✂️",
+        "🖥️", "🎛️", "📝", "🧳", "🍪", "🥠", "🧁", "🍭", "🐦", "🧿",
+        "👀", "🎨", "🌈", "📖", "📊", "🧽", "🛏️", "💬", "🍺", "🔄",
+        "🧩", "🪝", "📄", "🛑", "🪢", "🛡️", "🍵", "🌡️", "🌐", "💻",
+        "🍎", "📦", "⚙️", "🔧", "📋", "👤", "🏝️", "📺", "⚡", "🎯",
+        "🔥", "💡", "🎪", "🎭", "🎪", "🎵", "🎶", "🎹", "🎸", "🎺",
+        "🎻", "🥁", "🎤", "🎧", "📻", "🎬", "🎨", "🎭", "🎪", "🎯"
+    ]
 
     def get_emoji(name: str) -> str:
-        for prefix, emoji in emoji_map.items():
-            if name.startswith(prefix):
-                return emoji
-        return "📦"
+        """Deterministic emoji based on project name."""
+        hash_val = sum(ord(c) for c in name)
+        return emojis[hash_val % len(emojis)]
 
     def clean_description(desc: str | None) -> str:
         """Clean and shorten description for README."""
         if not desc:
-            return "Various tools and utilities"
+            return "Various tools"
 
-        # Remove markdown links and language indicators
         import re
+        # Remove markdown links and language indicators
         desc = re.sub(r'\[.*?\]\(.*?\)', '', desc)
         desc = re.sub(r'🇫🇷.*?FR', '', desc)
-        desc = re.sub(r'Project', '', desc)
+        desc = re.sub(r'^[-*•]\s*', '', desc)
 
-        # Clean up whitespace
+        # Clean up whitespace and special chars
         desc = ' '.join(desc.split())
         desc = desc.strip()
 
-        # Take first sentence
+        # Take first meaningful sentence
         if '.' in desc:
-            desc = desc.split('.')[0]
+            parts = desc.split('.')
+            first = parts[0].strip()
+            if len(first) > 15:
+                desc = first
 
         # Truncate if too long
-        if len(desc) > 55:
-            desc = desc[:52] + "..."
+        if len(desc) > 50:
+            desc = desc[:47] + "..."
 
-        return desc if desc else "Various tools and utilities"
+        return desc if desc else "Various tools"
 
     # Sort projects by name
     sorted_projects = sorted(projects, key=lambda p: p.name.lower())
@@ -3208,14 +3202,10 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
     for p in sorted_projects:
         emoji = get_emoji(p.name)
         desc = clean_description(p.description)
+        project_lines.append(f"{emoji} {p.name} - {desc}")
 
-        # GitHub URL
-        gh_url = f"https://github.com/mondary/{p.name}"
-
-        project_lines.append(f"{emoji} [{p.name}]({gh_url}) - {desc}")
-
-    # Build projects section
-    projects_section = "\n".join(project_lines)
+    # Build projects section with blank lines between items
+    projects_section = "\n\n".join(project_lines)
 
     readme_content = f"""### Hi, I'm Clément — AI Agent Builder & Full-Stack Developer
 ---
@@ -3225,13 +3215,7 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
 💬 Ask me about macOS apps, Chrome extensions, CLI tools, or AI automation.
 ⚡ Fun fact: I have {len(projects)}+ projects and counting.
 
-📊 Stats
----
-📁 {len(projects)}+ local projects
-🚀 Building tools at ludicrous speed
-📍 Paris, France
-
-🖌️ Current Projects
+Current Projects
 ---
 {projects_section}
 
