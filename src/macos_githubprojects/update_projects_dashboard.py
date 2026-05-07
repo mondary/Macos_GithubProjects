@@ -3197,7 +3197,7 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
         hash_val = sum(ord(c) for c in name)
         return emojis[hash_val % len(emojis)]
 
-    def clean_description(desc: str | None) -> str:
+    def clean_description(desc: str | None, project_name: str = "") -> str:
         """Clean and shorten description for README."""
         if not desc:
             return "Various tools"
@@ -3244,8 +3244,8 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
                     "Surveillance de pages web": "Web page monitoring",
                     "Suite de jeux": "Game suite",
                     "Voyages et soirées": "Travel and parties",
-                    " Vue d'ensemble": "Overview",
-                    " Extensions": "Extensions",
+                    "Vue d'ensemble": "Overview",
+                    "Extensions": "Extensions",
                     "l'Explorer": "Explorer",
                 }
                 for fr, en in replacements.items():
@@ -3254,16 +3254,43 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
         # Remove markdown links and language indicators
         desc = re.sub(r'\[.*?\]\(.*?\)', '', desc)
         desc = re.sub(r'🇫🇷.*?FR', '', desc)
+        desc = re.sub(r'🇬🇧.*?ENGLISH', '', desc)
         desc = re.sub(r'^[-*•]\s*', '', desc)
 
-        # Clean up whitespace and special chars
+        # Remove all emojis except basic punctuation
+        desc = re.sub(r'[^\w\s\-\.\,\!\?\(\)]+', '', desc)
+
+        # Clean up whitespace
         desc = ' '.join(desc.split())
         desc = desc.strip()
+
+        # Check if description is too similar to project name
+        if project_name:
+            name_lower = project_name.lower().replace('_', ' ').replace('-', ' ')
+            desc_lower = desc.lower().replace('_', ' ').replace('-', ' ')
+            desc_words = set(desc_lower.split())
+            name_words = set(name_lower.split())
+
+            if desc_words and name_words:
+                overlap = len(desc_words & name_words)
+                if len(desc_words) > 0 and overlap / len(desc_words) > 0.7:
+                    return "Various tools"
 
         # Remove common useless prefixes
         for prefix in ["Project", "Description", "Ce projet", "This project"]:
             if desc.startswith(prefix):
                 desc = desc[len(prefix):].strip()
+
+        # Remove duplicate words (case-insensitive)
+        words = desc.split()
+        seen = set()
+        cleaned_words = []
+        for word in words:
+            word_lower = word.lower()
+            if word_lower not in seen:
+                seen.add(word_lower)
+                cleaned_words.append(word)
+        desc = ' '.join(cleaned_words)
 
         # Take first meaningful sentence if available
         if '.' in desc:
@@ -3272,9 +3299,48 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
             if len(first) > 20 and len(first) < 100:
                 desc = first
 
-        # Truncate if too long (increased from 50 to 80)
+        # Truncate if too long
         if len(desc) > 80:
             desc = desc[:77] + "..."
+
+        # Clean up whitespace one more time
+        desc = ' '.join(desc.split())
+        desc = desc.strip()
+
+        # FINAL CLEANUP - after all other processing
+        # These replacements must be done LAST to ensure they stick
+        desc = desc.replace("Vue densemble", "Overview")
+        desc = desc.replace("vue densemble", "Overview")
+        desc = desc.replace("Simple Code extension", "VS Code extension")
+        desc = desc.replace("Simple and effective Code extension", "Simple and effective VS Code extension")
+        desc = desc.replace("A extension", "An extension")
+        desc = desc.replace("a application", "an application")
+        desc = desc.replace("Is a application", "It is an application")
+        desc = desc.replace("is a application", "It is an application")
+        desc = desc.replace("Is a lightweight", "It is a lightweight")
+        desc = desc.replace("is a lightweight", "It is a lightweight")
+        # Handle VERSION (all caps) and Version (mixed case)
+        if "VERSION" in desc and "ENGLISH" not in desc and "English" not in desc:
+            desc = desc.replace("VERSION", "ENGLISH VERSION", 1)
+        elif "Version" in desc and "English" not in desc:
+            desc = desc.replace("Version", "ENGLISH VERSION", 1)
+
+        # Remove leading dash/hyphen if present
+        if desc.startswith("- "):
+            desc = desc[2:].strip()
+        if desc.startswith("-"):
+            desc = desc[1:].strip()
+
+        # Fix double spaces
+        desc = ' '.join(desc.split())
+
+        # If description is too short or empty after cleaning
+        if len(desc) < 10:
+            return "Various tools"
+
+        # Capitalize first letter
+        if desc and desc[0].islower():
+            desc = desc[0].upper() + desc[1:]
 
         return desc if desc else "Various tools"
 
@@ -3285,7 +3351,7 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
     project_lines = []
     for p in sorted_projects:
         emoji = get_emoji(p.name)
-        desc = clean_description(p.description)
+        desc = clean_description(p.description, p.name)
         gh_url = f"https://github.com/mondary/{p.name}"
         project_lines.append(f"- {emoji} [{p.name}]({gh_url}) - {desc}")
 
