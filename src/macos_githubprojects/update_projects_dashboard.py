@@ -3139,6 +3139,125 @@ def _generate_github_profile_html(projects: list[Project]) -> None:
     print(f"Generated github-profile.html")
 
 
+def _generate_mondary_readme(projects: list[Project]) -> None:
+    """Generate mondary README.md with project list."""
+    # REPO_ROOT is .../Macos_GithubProjects, we need .../mondary
+    # So we go up two levels to get .../GitHub then to mondary
+    github_dir = REPO_ROOT.parent.parent
+    mondary_repo = github_dir / "mondary"
+    readme_path = mondary_repo / "README.md"
+
+    # Emoji mapping based on project type
+    emoji_map = {
+        "Chrome": "🌐",
+        "CLI": "💻",
+        "Macos": "🍎",
+        "Web": "🌍",
+        "WP": "📝",
+        "VS": "📦",
+        "RC": "⚙️",
+        "Site": "🌐",
+        "Codex": "📦",
+        "PK": "🔧",
+        "manifest": "📋",
+        "mondary": "👤",
+        "open-vibe": "🏝️",
+        "pknote": "📝",
+        "scriptcat": "🐱",
+        "showly": "📺",
+        "stats": "📊",
+        "web": "🌐",
+    }
+
+    def get_emoji(name: str) -> str:
+        for prefix, emoji in emoji_map.items():
+            if name.startswith(prefix):
+                return emoji
+        return "📦"
+
+    def clean_description(desc: str | None) -> str:
+        """Clean and shorten description for README."""
+        if not desc:
+            return "Various tools and utilities"
+
+        # Remove markdown links and language indicators
+        import re
+        desc = re.sub(r'\[.*?\]\(.*?\)', '', desc)
+        desc = re.sub(r'🇫🇷.*?FR', '', desc)
+        desc = re.sub(r'Project', '', desc)
+
+        # Clean up whitespace
+        desc = ' '.join(desc.split())
+        desc = desc.strip()
+
+        # Take first sentence
+        if '.' in desc:
+            desc = desc.split('.')[0]
+
+        # Truncate if too long
+        if len(desc) > 55:
+            desc = desc[:52] + "..."
+
+        return desc if desc else "Various tools and utilities"
+
+    # Sort projects by name
+    sorted_projects = sorted(projects, key=lambda p: p.name.lower())
+
+    # Build project list
+    project_lines = []
+    for p in sorted_projects:
+        emoji = get_emoji(p.name)
+        desc = clean_description(p.description)
+
+        # GitHub URL
+        gh_url = f"https://github.com/mondary/{p.name}"
+
+        project_lines.append(f"{emoji} [{p.name}]({gh_url}) - {desc}")
+
+    # Build projects section
+    projects_section = "\n".join(project_lines)
+
+    readme_content = f"""### Hi, I'm Clément — AI Agent Builder & Full-Stack Developer
+---
+🔭 I build AI-powered tools and automation systems.
+🌱 I love vibecoding with Claude, Cursor, and lightweight stacks.
+⚙️ Currently exploring the intersection of AI agents and development workflows.
+💬 Ask me about macOS apps, Chrome extensions, CLI tools, or AI automation.
+⚡ Fun fact: I have {len(projects)}+ projects and counting.
+
+📊 Stats
+---
+📁 {len(projects)}+ local projects
+🚀 Building tools at ludicrous speed
+📍 Paris, France
+
+🖌️ Current Projects
+---
+{projects_section}
+
+💬 Let's talk about
+---
+AI agents & automation
+macOS apps & CLI tools
+Chrome extensions & browser automation
+Full-stack development (Python, Swift, TypeScript, PHP)
+Design systems & UI/UX
+
+📫 How to reach me:
+---
+⭐️ If you are interested in what I do, you can hit the Follow button here or find me on [LinkedIn](https://www.linkedin.com/in/clementmondary/)
+📄 Check out my CV: https://mondary.me
+🧪 I share daily geek discoveries and free apps on: https://mondary.design
+☕️ If you like the work that I do, you can consider sponsoring me: [GitHub Badge](https://github.com/sponsors/mondary)
+"""
+
+    try:
+        readme_path.write_text(readme_content, encoding="utf-8")
+        print(f"Generated mondary README.md with {len(projects)} projects")
+    except OSError as e:
+        print(f"Warning: Could not write mondary README.md: {e}")
+
+
 def main() -> None:
     projects = _discover_projects()
     _write_projects_md(projects)
@@ -3152,6 +3271,9 @@ def main() -> None:
 
     # Generate github-profile.html
     _generate_github_profile_html(projects)
+
+    # Generate mondary README.md
+    _generate_mondary_readme(projects)
 
 
 if __name__ == "__main__":
