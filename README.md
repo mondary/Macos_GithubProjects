@@ -11,16 +11,16 @@
 - **Menu Bar App** : Accès rapide à tous les projets depuis la barre de menu macOS, avec icône par projet et compteur en temps réel.
 - **Dashboard HTML** : Interface web avec recherche instantanée, filtres par groupe et par statut Git.
 - **Hub portfolio** (`hub.html`) : Page centralisant tous mes projets, sites et extensions.
-- **Comparaison local ↔ GitHub** (`comparison.html`) : Analyse croisée des projets locaux et des dépôts GitHub.
+- **Comparaison local ↔ GitHub** (`comparison.html`) : Analyse croisée projets locaux ↔ dépôts GitHub avec **matching par remote** (gère renommages/typos/casse), dépôts **privés** inclus (via `gh`) et dépôts **archivés** filtrés.
 - **Profil GitHub** (`github-profile.html`) : Page de profil générée automatiquement.
 - **Liste Markdown** (`projects.md`) : Documentation des projets avec avertissements (no desc, no icon, no git, dirty…).
 - **Icônes personnalisées** : Affichage des `icon.png` de chaque projet.
 - **Statut Git** : Indicateurs visuels (Clean, Dirty, No Remote, No Git).
-- **Parité GitHub** : Script de vérification de la cohérence local ↔ GitHub via les remotes.
+- **Parité GitHub** : Script `check_github_parity.py` vérifiant la cohérence local ↔ GitHub via les remotes.
 
 ## Menu Bar App
 
-Application `rumps` accessible depuis la barre de menu. Le titre affiche le nombre de projets (`📁 72`).
+Application `rumps` accessible depuis la barre de menu. Le titre affiche le nombre de projets (ex. `📁 106`).
 
 ### Lancement
 
@@ -55,13 +55,35 @@ Le scanner (`src/app/scanner.py`) analyse `PROJECTS/` et génère 5 fichiers dan
 
 ## Parité local ↔ GitHub
 
-Vérifie que les projets locaux et les dépôts GitHub sont alignés, en se basant sur les **remotes git** (source de vérité, pas les noms de dossiers) :
+La comparaison et le script de parité reposent sur les **remotes git** (source de vérité), jamais sur les noms de dossiers :
 
 ```bash
+# Vue HTML interactive (local ↔ GitHub)
+open generated/comparison.html
+
+# Check CLI rapide
 ./.venv/bin/python3 src/macos_githubprojects/check_github_parity.py --user mondary
 ```
 
+**Matching** (par ordre de fiabilité) :
+1. Remote `origin` du projet local → repo GitHub (résout renommages & typos)
+2. Alias explicites (fallback)
+3. Nom insensible à la casse (fallback)
+
+**Fetch GitHub** : authentifié via `gh auth token` si disponible → inclut les **dépôts privés** (badge *privé*) et augmente le rate limit. Sinon fallback anonyme (publics seulement). Les **dépôts archivés** sont automatiquement filtrés.
+
 Affiche : projets locaux sans remote (à pousser) et dépôts GitHub sans dossier local (à cloner/archiver).
+
+## Convention de nommage
+
+Tous les projets suivent `<Plateforme>_PK<Nom>[--fork]` :
+
+- **Plateforme** *(obligatoire)* : `Chrome_` `Macos_` `Web_` `CLI_` `WP_` `VS_` `RC_` `Android_`…
+- **PK** *(toujours présent)* : marqueur de mes produits (trouvabilité stores)
+- **Nom** : PascalCase, descriptif
+- **--fork** : uniquement pour un fork suivi en parallèle de l'upstream
+
+Exemples : `Macos_PKpowerlines`, `Web_PKcuisto`, `Chrome_PKScriptcat`.
 
 ## Structure
 
@@ -122,6 +144,7 @@ Les projets affichent un indicateur selon leur état Git :
 
 ## 🧾 Changelog
 
+- **2.1.0** : Matching comparaison par remote (renommages/typos), fetch GitHub authentifié (dépôts privés), filtrage des archivés, convention de nommage `<Plateforme>_PK<Nom>`, badges *privé*/*aka*.
 - **2.0.0** : Hub portfolio, comparaison local/GitHub, profil GitHub, parité GitHub, structure `src/app/` + `src/macos_githubprojects/`.
 - 1.0.0 : Version initiale (menu bar app + dashboard).
 
