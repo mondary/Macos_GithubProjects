@@ -2103,6 +2103,10 @@ def _generate_comparison_html(projects: list[Project]) -> None:
         github_data = _fetch_github_repos()
         github_repos_data = []
         for repo in github_data:
+            # Skip archived repos: they are dead/duplicate and should not
+            # clutter the comparison (they can be deleted permanently later).
+            if repo.get("archived"):
+                continue
             name = repo["name"]
             is_fork = repo.get("fork", False)
             # Mark old repos (not updated in last 2 years)
