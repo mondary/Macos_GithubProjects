@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-05-07 14:41**
+> Généré: **2026-06-16 16:46**
 
 ## 🧭 Sommaire
 
-CHROME (11) | CLI (4) | MACOS (5) | RC (1) | VS (2) | WEB (32) | WP (9) | OTHER (4)
+CHROME (11) | CLI (4) | MACOS (5) | RC (1) | VS (2) | WEB (32) | WP (9) | OTHER (8)
 
-> Total: **68** projets détectés.
+> Total: **72** projets détectés.
 
 ## CHROME
 
@@ -86,10 +86,10 @@ CHROME (11) | CLI (4) | MACOS (5) | RC (1) | VS (2) | WEB (32) | WP (9) | OTHER 
 
 - **WP_PKnewsletter** — ✨ WordPress plugin to manage a daily editorial newsletter with subscriber management, HTML digest rendering, subscription history, and built-in SMTP delivery. (`../../WP_PKnewsletter`) ✳️ dirty
 - **WP_PKpremium** — WordPress plugin powering Mondary's premium offer: PayPal subscriptions, dedicated member pages, and early access to scheduled posts. (`../../WP_PKpremium`)
-- **WP_PKSocialSharing** — Plugin WordPress “maison” pour publier automatiquement sur LinkedIn à la publication d’un article (image mise en avant + extrait + lien). (`../../WP_PKSocialSharing`) ✳️ dirty
+- **WP_PKSocialSharing** — ✨ WordPress plugin to automatically or manually share posts to LinkedIn, X, Facebook, Instagram, Threads, and Medium. (`../../WP_PKSocialSharing`) ✳️ dirty
 - **WP_ProjectsPage** — Description non disponible. (`../../WP_ProjectsPage`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_RSocial** — - `Manifest/` - HTML prototype labeled "My Sticky Notes". (`../../WP_RSocial`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
-- **WP_Snippets** — 2. Import a snippet into WordPress (Code Snippets / WPCode plugin). (`../../WP_Snippets`)
+- **WP_Snippets** — 2. Import a snippet into WordPress (Code Snippets / WPCode plugin). (`../../WP_Snippets`) ✳️ dirty
 - **WP_WordpressPOSTS** — Description non disponible. (`../../WP_WordpressPOSTS`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_wpagent** — Plugin to capture quick "topics" from mobile (inbox) and turn them into drafts (`../../WP_wpagent`) ✳️ dirty
 - **WP_YearInPixel** — Description non disponible. (`../../WP_YearInPixel`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
@@ -98,5 +98,9 @@ CHROME (11) | CLI (4) | MACOS (5) | RC (1) | VS (2) | WEB (32) | WP (9) | OTHER 
 
 - **Codexbar** — Description non disponible. (`../../Codexbar`) ⚠️ no desc ⚠️ no git
 - **OpenIsland** — Description non disponible. (`../../OpenIsland`) ⚠️ no desc ⚠️ no git
+- **PKbrain** — - reliable target-app restoration before injecting `Cmd+V` (`../../PKbrain`)
+- **pkLDVELH** — <p align="center">Interactive web library for gamebooks (LDVELH).<br>Built-in reader with decision tree, text-to-speech, edit mode, dice and save/restore.</p> (`../../pkLDVELH`) ✳️ dirty
 - **PKnotes** — Description non disponible. (`../../PKnotes`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
+- **PKwindowsManagement** — PKwindowsManagement is a macOS menu bar app for keyboard-driven window management and fast application launching. (`../../PKwindowsManagement`) ✳️ dirty
+- **releases** — Description non disponible. (`../../releases`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Stats** — ✨ Local workspace for `mondary/stats` fork with custom LLM extension. (`../../Stats`) ✳️ dirty
