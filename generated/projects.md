@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-06-16 21:38**
+> Généré: **2026-06-16 21:46**
 
 ## 🧭 Sommaire
 
-CHROME (11) | CLI (4) | MACOS (6) | RC (1) | VS (2) | WEB (33) | WP (9) | OTHER (6)
+CHROME (11) | CLI (4) | MACOS (6) | RC (1) | VS (2) | WEB (32) | WP (9) | OTHER (6)
 
-> Total: **72** projets détectés.
+> Total: **71** projets détectés.
 
 ## CHROME
 
@@ -63,7 +63,6 @@ CHROME (11) | CLI (4) | MACOS (6) | RC (1) | VS (2) | WEB (33) | WP (9) | OTHER 
 - **Web_PKallaitement** — Simple breastfeeding timer with session tracking and charts. (`../../Web_PKallaitement`) ⚠️ no icon.png ✳️ dirty
 - **Web_PKchangedetection** — Application PHP simple pour surveiller les changements de pages web. (`../../Web_PKchangedetection`) ✳️ dirty
 - **Web_PKcuisto** — Pkcuisto is a lightweight recipe locker with authentication, an admin console, and Gemini-powered extraction from any URL or free-text note. The stack stays 100 % PHP + vanilla Web Components so it can run on shared hosting without an exter (`../../Web_PKcuisto`) ⚠️ no icon.png ✳️ dirty
-- **Web_pkcuisto_WA** — Pkcuisto is a lightweight recipe locker with authentication, an admin console, and Gemini-powered extraction from any URL or free-text note. The stack stays 100 % PHP + vanilla Web Components so it can run on shared hosting without an exter (`../../Web_pkcuisto_WA`) ⚠️ no icon.png ✳️ dirty
 - **Web_PKcv** — Interactive web resume — version 2. Multi-profile, dynamic settings, A4 print export. (`../../Web_PKcv`)
 - **Web_pkdiffchecker** — Description non disponible. (`../../Web_pkdiffchecker`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **Web_PKdomains** — Minimal web dashboard for tracking domain expirations with email alerts. (`../../Web_PKdomains`)
@@ -88,7 +87,7 @@ CHROME (11) | CLI (4) | MACOS (6) | RC (1) | VS (2) | WEB (33) | WP (9) | OTHER 
 
 - **WP_PKnewsletter** — ✨ WordPress plugin to manage a daily editorial newsletter with subscriber management, HTML digest rendering, subscription history, and built-in SMTP delivery. (`../../WP_PKnewsletter`) ✳️ dirty
 - **WP_PKpremium** — WordPress plugin powering Mondary's premium offer: PayPal subscriptions, dedicated member pages, and early access to scheduled posts. (`../../WP_PKpremium`)
-- **WP_PKSocialSharing** — ✨ WordPress plugin to automatically or manually share posts to LinkedIn, X, Facebook, Instagram, Threads, and Medium. (`../../WP_PKSocialSharing`) ✳️ dirty
+- **WP_PKSocialSharing** — ✨ WordPress plugin to automatically or manually share posts to LinkedIn, X, Facebook, Instagram, Threads, and Medium. (`../../WP_PKSocialSharing`)
 - **WP_ProjectsPage** — Description non disponible. (`../../WP_ProjectsPage`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_RSocial** — - `Manifest/` - HTML prototype labeled "My Sticky Notes". (`../../WP_RSocial`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **WP_Snippets** — 2. Import a snippet into WordPress (Code Snippets / WPCode plugin). (`../../WP_Snippets`)
