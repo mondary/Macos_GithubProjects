@@ -2041,13 +2041,21 @@ def _generate_comparison_html(projects: list[Project]) -> None:
                 # Relative path in repo
                 icon_path = f"../{p.rel_path}/icon.png"
 
+        # Authoritative GitHub repo name from the git remote (if any).
+        # Used by comparison.html to match local <-> GitHub robustly.
+        github_name = None
+        if p.git.remote_url and "github.com" in p.git.remote_url.lower():
+            tail = p.git.remote_url.rstrip("/").split("/")[-1]
+            github_name = tail[:-4] if tail.endswith(".git") else tail
+
         local_projects_data.append({
             "name": p.name,
             "category": p.group.lower(),
             "hasGit": p.git.is_git,
             "dirty": p.git.dirty,
             "noRemote": p.git.is_git and not p.git.has_remote,
-            "iconPath": icon_path
+            "iconPath": icon_path,
+            "githubName": github_name,
         })
 
     # Fetch GitHub repos using subprocess to avoid dependencies
@@ -2470,83 +2478,74 @@ def _generate_comparison_html(projects: list[Project]) -> None:
         const githubRepos = {github_json};
         const projectAliases = {aliases_json};
 
-        // Helper function to find GitHub repo by name or alias
-        function findGithub(name) {{
-            let github = githubRepos.find(r => r.name === name);
-            if (!github) {{
-                // Check if this local name has an alias to a GitHub repo
-                for (const [localName, githubName] of Object.entries(projectAliases)) {{
-                    if (localName === name) {{
-                        github = githubRepos.find(r => r.name === githubName);
-                        break;
-                    }}
-                }}
-            }}
-            return github;
-        }}
-
-        // Merge and process data - use local names as primary source
-        const allProjectNames = new Set([
-            ...localProjects.map(p => p.name),
-            ...githubRepos.map(r => r.name)
-        ]);
-
-        // Filter out GitHub names that are aliases (we'll handle them via local names)
-        const githubAliasNames = new Set(Object.values(projectAliases));
+        // Case-insensitive index of GitHub repos
+        const ghByLower = {{}};
+        githubRepos.forEach(r => {{ ghByLower[r.name.toLowerCase()] = r; }});
 
         const projects = [];
+        const consumedGithub = new Set();
 
-        allProjectNames.forEach(name => {{
-            // Skip if this name is a GitHub alias (will be handled via local name)
-            if (githubAliasNames.has(name)) {{
-                return;
+        // Local projects are the primary source. Resolve each one's GitHub repo
+        // via: remote name (authoritative) > alias > case-insensitive name match.
+        // This prevents duplicate rows when names differ only by case or typo.
+        localProjects.forEach(local => {{
+            let github = null;
+            if (local.githubName && ghByLower[local.githubName.toLowerCase()]) {{
+                github = ghByLower[local.githubName.toLowerCase()];
+            }} else if (projectAliases[local.name] && ghByLower[(projectAliases[local.name] || '').toLowerCase()]) {{
+                github = ghByLower[projectAliases[local.name].toLowerCase()];
+            }} else if (ghByLower[local.name.toLowerCase()]) {{
+                github = ghByLower[local.name.toLowerCase()];
             }}
+            if (github) consumedGithub.add(github.name.toLowerCase());
 
-            const local = localProjects.find(p => p.name === name);
-            const github = findGithub(name);
-
-            const category = local?.category || github?.category || 'other';
+            const name = local.name;
+            const category = local.category || github?.category || 'other';
 
             let tags = [];
-            let status = [];
-
             if (github && github.isFork) tags.push({{class: 'tag-fork', text: 'fork'}});
             if (github && github.isOld) tags.push({{class: 'tag-old', text: 'ancien'}});
-
-            if (local) {{
-                if (!local.hasGit) {{
-                    tags.push({{class: 'tag-no-git', text: 'no git'}});
-                }} else if (local.noRemote) {{
-                    tags.push({{class: 'tag-no-remote', text: 'no remote'}});
-                }}
-                if (local.dirty) {{
-                    tags.push({{class: 'tag-dirty', text: 'dirty'}});
-                }}
+            if (!local.hasGit) {{
+                tags.push({{class: 'tag-no-git', text: 'no git'}});
+            }} else if (local.noRemote) {{
+                tags.push({{class: 'tag-no-remote', text: 'no remote'}});
             }}
-
-            // Add alias tag if this project has an alias
-            const aliasInfo = Object.entries(projectAliases).find(([local, github]) =>
-                local === name || github === name
-            );
-            if (aliasInfo) {{
-                const [localName, githubName] = aliasInfo;
-                if (name === localName) {{
-                    tags.push({{class: 'tag-alias', text: 'aka ' + githubName}});
-                }} else if (name === githubName) {{
-                    // This shouldn't happen since we skip GitHub aliases above
-                    tags.push({{class: 'tag-alias', text: 'aka ' + localName}});
-                }}
+            if (local.dirty) {{
+                tags.push({{class: 'tag-dirty', text: 'dirty'}});
+            }}
+            // Surface genuine renames/typos (ignore pure case differences)
+            if (github && github.name.toLowerCase() !== name.toLowerCase()) {{
+                tags.push({{class: 'tag-alias', text: 'aka ' + github.name}});
             }}
 
             projects.push({{
                 name,
                 category,
-                hasLocal: !!local,
+                hasLocal: true,
                 hasGithub: !!github,
                 tags,
                 localData: local,
                 githubData: github,
-                iconPath: local?.iconPath
+                iconPath: local.iconPath
+            }});
+        }});
+
+        // Remaining GitHub repos (not matched to any local project)
+        githubRepos.forEach(r => {{
+            if (consumedGithub.has(r.name.toLowerCase())) return;
+            const category = r.category || 'other';
+            const tags = [];
+            if (r.isFork) tags.push({{class: 'tag-fork', text: 'fork'}});
+            if (r.isOld) tags.push({{class: 'tag-old', text: 'ancien'}});
+            projects.push({{
+                name: r.name,
+                category,
+                hasLocal: false,
+                hasGithub: true,
+                tags,
+                localData: null,
+                githubData: r,
+                iconPath: null
             }});
         }});
 

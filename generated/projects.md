@@ -1,7 +1,7 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-06-16 16:46**
+> Généré: **2026-06-16 16:54**
 
 ## 🧭 Sommaire
 
@@ -89,7 +89,7 @@ CHROME (11) | CLI (4) | MACOS (5) | RC (1) | VS (2) | WEB (32) | WP (9) | OTHER 
 - **WP_PKSocialSharing** — ✨ WordPress plugin to automatically or manually share posts to LinkedIn, X, Facebook, Instagram, Threads, and Medium. (`../../WP_PKSocialSharing`) ✳️ dirty
 - **WP_ProjectsPage** — Description non disponible. (`../../WP_ProjectsPage`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_RSocial** — - `Manifest/` - HTML prototype labeled "My Sticky Notes". (`../../WP_RSocial`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
-- **WP_Snippets** — 2. Import a snippet into WordPress (Code Snippets / WPCode plugin). (`../../WP_Snippets`) ✳️ dirty
+- **WP_Snippets** — 2. Import a snippet into WordPress (Code Snippets / WPCode plugin). (`../../WP_Snippets`)
 - **WP_WordpressPOSTS** — Description non disponible. (`../../WP_WordpressPOSTS`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_wpagent** — Plugin to capture quick "topics" from mobile (inbox) and turn them into drafts (`../../WP_wpagent`) ✳️ dirty
 - **WP_YearInPixel** — Description non disponible. (`../../WP_YearInPixel`) ⚠️ no desc ⚠️ no icon.png ✳️ dirty
