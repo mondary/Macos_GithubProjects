@@ -2058,19 +2058,12 @@ def _generate_comparison_html(projects: list[Project]) -> None:
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     comparison_path = GENERATED_DIR / "comparison.html"
 
-    # Project aliases mapping (local name -> GitHub name or vice versa)
-    # This handles renamed projects and different names between local/GitHub
-    project_aliases = {
-        # Local name -> GitHub name (for renamed local projects)
-        "Web_allaitement": "Web_tete",
-        "Macos_HUBprojets": "Web_hub",  # HUBprojets became Web_hub on GitHub
-        "Web_Hub": "Web_hub",  # Local version
-        # GitHub name -> Local name (for local-only projects)
-        "Macos_FinderGithubLogo": "Macos_FinderGithubLogo",  # Same name
-        "Macos_ProjectTracker": "Macos_ProjectTracker",  # Same name
-        # Add more aliases here as needed
-        # Format: "local_name": "github_name"
-    }
+    # Project aliases (local name -> GitHub name). Kept as a last-resort
+    # fallback for genuine renames whose git remote does not point to GitHub
+    # and whose name does not match case-insensitively. Remote-based matching
+    # (see _fetch_github_repos + githubName) now handles the common cases, so
+    # this is usually empty. Format: "local_name": "github_name".
+    project_aliases = {}
 
     # Prepare local projects data
     local_projects_data = []
@@ -2401,8 +2394,8 @@ def _generate_comparison_html(projects: list[Project]) -> None:
         }}
 
         .tag-private {{
-            background: #f3e8ff;
-            color: #7e22ce;
+            background: #e0e7ff;
+            color: #4338ca;
         }}
 
         .category-badge {{
