@@ -1,7 +1,7 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/PROJECTS`
-> Généré: **2026-06-16 16:54**
+> Généré: **2026-06-16 17:12**
 
 ## 🧭 Sommaire
 
@@ -86,7 +86,7 @@ CHROME (11) | CLI (4) | MACOS (5) | RC (1) | VS (2) | WEB (32) | WP (9) | OTHER 
 
 - **WP_PKnewsletter** — ✨ WordPress plugin to manage a daily editorial newsletter with subscriber management, HTML digest rendering, subscription history, and built-in SMTP delivery. (`../../WP_PKnewsletter`) ✳️ dirty
 - **WP_PKpremium** — WordPress plugin powering Mondary's premium offer: PayPal subscriptions, dedicated member pages, and early access to scheduled posts. (`../../WP_PKpremium`)
-- **WP_PKSocialSharing** — ✨ WordPress plugin to automatically or manually share posts to LinkedIn, X, Facebook, Instagram, Threads, and Medium. (`../../WP_PKSocialSharing`) ✳️ dirty
+- **WP_PKSocialSharing** — ✨ WordPress plugin to automatically or manually share posts to LinkedIn, X, Facebook, Instagram, Threads, and Medium. (`../../WP_PKSocialSharing`)
 - **WP_ProjectsPage** — Description non disponible. (`../../WP_ProjectsPage`) ⚠️ no desc ⚠️ no icon.png ⚠️ no git
 - **WP_RSocial** — - `Manifest/` - HTML prototype labeled "My Sticky Notes". (`../../WP_RSocial`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **WP_Snippets** — 2. Import a snippet into WordPress (Code Snippets / WPCode plugin). (`../../WP_Snippets`)

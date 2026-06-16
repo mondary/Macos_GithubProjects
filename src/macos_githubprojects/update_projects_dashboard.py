@@ -8,6 +8,7 @@ import json
 import os
 import subprocess
 import urllib.parse
+import urllib.request
 from pathlib import Path
 
 
@@ -2006,6 +2007,52 @@ def _generate_hub_html(projects: list[Project]) -> None:
     print(f"Generated hub.html with {len(projects)} projects")
 
 
+def _fetch_github_repos() -> list[dict]:
+    """Fetch GitHub repos, including private ones when a token is available.
+
+    Uses `gh auth token` for authenticated access (reveals private repos and
+    raises rate limits). Falls back to an anonymous public request otherwise.
+    Follows pagination via the Link header when authenticated.
+    """
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "macos-githubprojects",
+    }
+    token = ""
+    try:
+        tok = subprocess.run(
+            ["gh", "auth", "token"], capture_output=True, text=True, check=False
+        )
+        if tok.returncode == 0:
+            token = tok.stdout.strip()
+    except FileNotFoundError:
+        pass
+
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+        url = "https://api.github.com/user/repos?per_page=100&type=all"
+    else:
+        url = "https://api.github.com/users/mondary/repos?per_page=100&type=all"
+
+    repos: list[dict] = []
+    while url:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            page = json.loads(resp.read().decode("utf-8"))
+            if isinstance(page, list):
+                repos.extend(page)
+            link = resp.headers.get("Link", "")
+            nxt = ""
+            if link:
+                import re as _re
+                m = _re.search(r'<([^>]+)>;\s*rel="next"', link)
+                nxt = m.group(1) if m else ""
+            url = nxt
+            if not token:
+                break  # anonymous: a single page is enough for the public list
+    return repos
+
+
 def _generate_comparison_html(projects: list[Project]) -> None:
     """Generate comparison.html with local vs GitHub projects analysis."""
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
@@ -2058,56 +2105,45 @@ def _generate_comparison_html(projects: list[Project]) -> None:
             "githubName": github_name,
         })
 
-    # Fetch GitHub repos using subprocess to avoid dependencies
-    import subprocess
+    # Fetch GitHub repos (authenticated via gh if available -> includes private)
     try:
-        result = subprocess.run(
-            ["curl", "-s", "https://api.github.com/users/mondary/repos?per_page=100&type=all"],
-            capture_output=True,
-            text=True,
-            check=False
-        )
-        if result.returncode == 0:
-            import json
-            github_data = json.loads(result.stdout)
-            github_repos_data = []
-            for repo in github_data:
-                name = repo["name"]
-                is_fork = repo.get("fork", False)
-                # Mark old repos (not updated in last 2 years)
-                from datetime import datetime, timezone
-                updated_at = datetime.fromisoformat(repo["updated_at"].replace("Z", "+00:00"))
-                is_old = (datetime.now(timezone.utc) - updated_at).days > 730
+        github_data = _fetch_github_repos()
+        github_repos_data = []
+        for repo in github_data:
+            name = repo["name"]
+            is_fork = repo.get("fork", False)
+            # Mark old repos (not updated in last 2 years)
+            from datetime import datetime, timezone
+            updated_at = datetime.fromisoformat(repo["updated_at"].replace("Z", "+00:00"))
+            is_old = (datetime.now(timezone.utc) - updated_at).days > 730
 
-                # Determine category
-                category = "other"
-                if name.startswith("Chrome_") or name.startswith("chrome_"):
-                    category = "chrome"
-                elif name.startswith("CLI_") or name.startswith("cli_"):
-                    category = "cli"
-                elif name.startswith("Macos_") or name.startswith("macos_"):
-                    category = "macos"
-                elif name.startswith("VS_") or name.startswith("vs_"):
-                    category = "vs"
-                elif name.startswith("Web_") or name.startswith("web_") or name.startswith("WEB_"):
-                    category = "web"
-                elif name.startswith("WP_") or name.startswith("wp_"):
-                    category = "wp"
+            # Determine category
+            category = "other"
+            if name.startswith("Chrome_") or name.startswith("chrome_"):
+                category = "chrome"
+            elif name.startswith("CLI_") or name.startswith("cli_"):
+                category = "cli"
+            elif name.startswith("Macos_") or name.startswith("macos_"):
+                category = "macos"
+            elif name.startswith("VS_") or name.startswith("vs_"):
+                category = "vs"
+            elif name.startswith("Web_") or name.startswith("web_") or name.startswith("WEB_"):
+                category = "web"
+            elif name.startswith("WP_") or name.startswith("wp_"):
+                category = "wp"
 
-                github_repos_data.append({
-                    "name": name,
-                    "category": category,
-                    "isFork": is_fork,
-                    "isOld": is_old
-                })
+            github_repos_data.append({
+                "name": name,
+                "category": category,
+                "isFork": is_fork,
+                "isOld": is_old,
+                "isPrivate": repo.get("private", False),
+            })
 
-            # Generate JSON data for the HTML
-            local_json = json.dumps(local_projects_data)
-            github_json = json.dumps(github_repos_data)
-            aliases_json = json.dumps(project_aliases)
-        else:
-            local_json = "[]"
-            github_json = "[]"
+        # Generate JSON data for the HTML
+        local_json = json.dumps(local_projects_data)
+        github_json = json.dumps(github_repos_data)
+        aliases_json = json.dumps(project_aliases)
     except Exception as e:
         print(f"Warning: Could not fetch GitHub data: {e}")
         local_json = json.dumps(local_projects_data)
@@ -2364,6 +2400,11 @@ def _generate_comparison_html(projects: list[Project]) -> None:
             color: #0e7490;
         }}
 
+        .tag-private {{
+            background: #f3e8ff;
+            color: #7e22ce;
+        }}
+
         .category-badge {{
             display: inline-block;
             padding: 4px 10px;
@@ -2504,6 +2545,7 @@ def _generate_comparison_html(projects: list[Project]) -> None:
 
             let tags = [];
             if (github && github.isFork) tags.push({{class: 'tag-fork', text: 'fork'}});
+            if (github && github.isPrivate) tags.push({{class: 'tag-private', text: 'privé'}});
             if (github && github.isOld) tags.push({{class: 'tag-old', text: 'ancien'}});
             if (!local.hasGit) {{
                 tags.push({{class: 'tag-no-git', text: 'no git'}});
@@ -2536,6 +2578,7 @@ def _generate_comparison_html(projects: list[Project]) -> None:
             const category = r.category || 'other';
             const tags = [];
             if (r.isFork) tags.push({{class: 'tag-fork', text: 'fork'}});
+            if (r.isPrivate) tags.push({{class: 'tag-private', text: 'privé'}});
             if (r.isOld) tags.push({{class: 'tag-old', text: 'ancien'}});
             projects.push({{
                 name: r.name,
@@ -2583,6 +2626,7 @@ def _generate_comparison_html(projects: list[Project]) -> None:
             <div class="legend-item"><span class="status-icon status-ok">✓</span><span>Présent</span></div>
             <div class="legend-item"><span class="status-icon status-ko">✗</span><span>Absent</span></div>
             <div class="legend-item"><span class="tag tag-fork">fork</span></div>
+            <div class="legend-item"><span class="tag tag-private">privé</span></div>
             <div class="legend-item"><span class="tag tag-old">ancien</span></div>
             <div class="legend-item"><span class="tag tag-no-git">no git</span></div>
             <div class="legend-item"><span class="tag tag-no-remote">no remote</span></div>
