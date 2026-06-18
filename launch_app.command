@@ -1,7 +1,7 @@
 #!/bin/bash
 # Launcher for Macos_GithubProjects menu bar app
 
-cd /Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects
+cd "$(dirname "$0")"
 
 # Kill any existing instance
 pkill -f "menu_app.py" 2>/dev/null
