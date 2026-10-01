@@ -6,29 +6,65 @@ Usage: ./check_github_parity.py [--user mondary]
 """
 import argparse
 import json
-import os
+import re
 import subprocess
 import urllib.request
+from pathlib import Path
 
-PROJECTS_DIR = "/Users/clm/Documents/GitHub/PROJECTS"
+try:
+    from macos_githubprojects.paths import PROJECTS_DIR
+except ModuleNotFoundError:
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from macos_githubprojects.paths import PROJECTS_DIR
 
 
 def github_repos(user: str) -> list[str]:
-    url = f"https://api.github.com/users/{user}/repos?per_page=100&type=all"
-    with urllib.request.urlopen(url) as r:
-        data = json.load(r)
-    return sorted(repo["name"] for repo in data)
+    token = github_token()
+    headers = {"Accept": "application/vnd.github+json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+        url = "https://api.github.com/user/repos?per_page=100&type=all"
+    else:
+        url = f"https://api.github.com/users/{user}/repos?per_page=100&type=all"
+
+    repos: list[dict] = []
+    while url:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=20) as r:
+            data = json.load(r)
+            if isinstance(data, list):
+                repos.extend(data)
+            link = r.headers.get("Link", "")
+        match = re.search(r'<([^>]+)>;\s*rel="next"', link)
+        url = match.group(1) if match else ""
+        if not token:
+            break
+
+    return sorted(repo["name"] for repo in repos if not repo.get("archived"))
+
+
+def github_token() -> str | None:
+    proc = subprocess.run(
+        ["gh", "auth", "token"],
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        return None
+    return proc.stdout.strip() or None
 
 
 def local_remotes() -> tuple[dict[str, str], list[str]]:
     remotes: dict[str, str] = {}
     no_remote: list[str] = []
-    for d in sorted(os.listdir(PROJECTS_DIR)):
-        p = os.path.join(PROJECTS_DIR, d)
-        if d.startswith(".") or not os.path.isdir(p):
+    for p in iter_local_projects():
+        d = p.name
+        if d.startswith(".") or not p.is_dir():
             continue
         r = subprocess.run(
-            ["git", "-C", p, "remote", "get-url", "origin"],
+            ["git", "-C", str(p), "remote", "get-url", "origin"],
             capture_output=True, text=True,
         )
         url = r.stdout.strip()
@@ -40,6 +76,34 @@ def local_remotes() -> tuple[dict[str, str], list[str]]:
         else:
             no_remote.append(d)
     return remotes, no_remote
+
+
+def is_git_repo(path: Path) -> bool:
+    r = subprocess.run(
+        ["git", "-C", str(path), "rev-parse", "--is-inside-work-tree"],
+        capture_output=True,
+        text=True,
+    )
+    return r.returncode == 0 and r.stdout.strip().lower() == "true"
+
+
+def iter_local_projects() -> list[Path]:
+    paths: list[Path] = []
+    for child in sorted(PROJECTS_DIR.iterdir(), key=lambda p: p.name.lower()):
+        if child.name.startswith(".") or not child.is_dir():
+            continue
+        nested_git_projects: list[Path] = []
+        if "+++" in child.name and not is_git_repo(child):
+            nested_git_projects = [
+                nested
+                for nested in sorted(child.iterdir(), key=lambda p: p.name.lower())
+                if not nested.name.startswith(".") and nested.is_dir() and is_git_repo(nested)
+            ]
+        if nested_git_projects:
+            paths.extend(nested_git_projects)
+        else:
+            paths.append(child)
+    return paths
 
 
 def main() -> int:

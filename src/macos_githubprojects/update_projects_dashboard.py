@@ -11,10 +11,14 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+try:
+    from macos_githubprojects.paths import PROJECTS_DIR, REPO_ROOT, ROOT_HUB
+except ModuleNotFoundError:
+    import sys
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-PROJECTS_DIR = REPO_ROOT.parent
-ROOT_HUB = PROJECTS_DIR.parent
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from macos_githubprojects.paths import PROJECTS_DIR, REPO_ROOT, ROOT_HUB
+
 GENERATED_DIR = REPO_ROOT / "generated"
 PROJECTS_MD = GENERATED_DIR / "projects.md"
 DASHBOARD_HTML = GENERATED_DIR / "dashboard-projets.html"
@@ -188,6 +192,29 @@ def _sanitize_remote_url(remote_url: str | None) -> str | None:
     return remote_url
 
 
+def _iter_project_paths() -> list[Path]:
+    project_paths: list[Path] = []
+    for child in sorted(PROJECTS_DIR.iterdir(), key=lambda p: p.name.lower()):
+        if _is_excluded(child.name):
+            continue
+
+        git = _git_info(child)
+        nested_git_projects: list[Path] = []
+        if child.is_dir() and "+++" in child.name and not git.is_git:
+            nested_git_projects = [
+                nested
+                for nested in sorted(child.iterdir(), key=lambda p: p.name.lower())
+                if not _is_excluded(nested.name) and nested.is_dir() and _git_info(nested).is_git
+            ]
+
+        if nested_git_projects:
+            project_paths.extend(nested_git_projects)
+        else:
+            project_paths.append(child)
+
+    return project_paths
+
+
 @dataclasses.dataclass(frozen=True)
 class Project:
     name: str
@@ -204,9 +231,7 @@ def _discover_projects() -> list[Project]:
         raise SystemExit(f"Missing folder: {PROJECTS_DIR}")
 
     projects: list[Project] = []
-    for child in sorted(PROJECTS_DIR.iterdir(), key=lambda p: p.name.lower()):
-        if _is_excluded(child.name):
-            continue
+    for child in _iter_project_paths():
         rel_path = os.path.relpath(child, REPO_ROOT)
         desc = _readme_description(child)
         icon_path = child / "icon.png" if child.is_dir() else None
@@ -3293,10 +3318,7 @@ def _generate_github_profile_html(projects: list[Project]) -> None:
 
 def _generate_mondary_readme(projects: list[Project]) -> None:
     """Generate mondary README.md with project list in Steipete style."""
-    # REPO_ROOT is .../Macos_GithubProjects, we need .../mondary
-    # So we go up two levels to get .../GitHub then to mondary
-    github_dir = REPO_ROOT.parent.parent
-    mondary_repo = github_dir / "mondary"
+    mondary_repo = PROJECTS_DIR / "mondary"
     readme_path = mondary_repo / "README.md"
 
     # Unique emojis for each project (deterministic based on project name hash)

@@ -12,14 +12,18 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 import urllib.parse
 
 try:
+    from macos_githubprojects.paths import PROJECTS_DIR, REPO_ROOT
+except ModuleNotFoundError:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from macos_githubprojects.paths import PROJECTS_DIR, REPO_ROOT
+
+try:
     import rumps
 except ImportError:
     print("Installing rumps...")
     subprocess.run([sys.executable, "-m", "pip", "install", "rumps"])
     import rumps
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-PROJECTS_DIR = REPO_ROOT.parent
 LAUNCHER_HOST = "127.0.0.1"
 LAUNCHER_PORT = 37645
 DASHBOARD_PATH = REPO_ROOT / "generated" / "dashboard-projets.html"
@@ -40,15 +44,12 @@ DEFAULT_ICONS = {
 
 def project_count() -> int:
     try:
-        REPO_ROOT = Path(__file__).resolve().parents[2]
-        PROJECTS_DIR = REPO_ROOT.parent
         DASHBOARD_PATH = REPO_ROOT / "generated" / "dashboard-projets.html"
         
         # Use more reliable path
         dashboard_paths = [
             REPO_ROOT / "dashboard-projets.html",
             DASHBOARD_PATH,
-            Path("/Users/clm/Documents/GitHub/PROJECTS/Macos_GithubProjects/src/generated/dashboard-projets.html")
         ]
         
         for dashboard_path in dashboard_paths:
