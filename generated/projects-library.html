@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pk · projects — catalogue local</title>
+<meta name="description" content="Catalogue local de tous les projets PK : apps macOS, extensions Chrome, web, WordPress, CLI.">
+<script>
+(function(){try{var t=localStorage.getItem('pk-projects-theme')||'dark';
+if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+document.documentElement.dataset.theme=t;}catch(e){}})();
+</script>
+<style>
+:root{
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --page:#ececeb; --wall:#f3f3f2; --surface:#f7f7f6;
+  --fg:#121211; --muted:#5c5c5a;
+  --border:rgba(28,28,26,.08); --ring:rgba(28,28,26,.16);
+  --tint:rgba(28,28,26,.035); --hover:rgba(28,28,26,.05);
+  --ok:#1a7f37; --warn:#9a6700; --off:#bc4c00; --no:#6e7781;
+  --fill:#0c0c0b; --onfill:#fbfbfa;
+}
+[data-theme=dark]{
+  --page:#050608; --wall:#0a0b0d; --surface:#101113;
+  --fg:#f7f8f8; --muted:#8a8f98;
+  --border:rgba(255,255,255,.05); --ring:rgba(255,255,255,.14);
+  --tint:rgba(255,255,255,.03); --hover:rgba(255,255,255,.05);
+  --ok:#3fb950; --warn:#d29922; --off:#db6b28; --no:#8b949e;
+  --fill:#edeef0; --onfill:#0a0b0d;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--page);color:var(--fg);font-family:var(--font-mono);
+  font-size:14px;line-height:22px;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+h1,h2,h3,p{margin:0;font-weight:inherit}
+.scroll{overflow-y:auto;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ---------- topbar (mobile) ---------- */
+.topbar{display:none;position:fixed;z-index:50;top:0;left:0;right:0;height:48px;
+  padding:0 14px;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:var(--wall)}
+.brand-mini{font-weight:600;font-size:13px;letter-spacing:-.2px}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:22rem minmax(0,1fr);height:100dvh}
+.side{display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--wall)}
+.side-head{padding:22px 20px 14px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;letter-spacing:-.2px}
+.brand-dot{width:9px;height:9px;border-radius:50%;background:var(--fill)}
+.brand small{color:var(--muted);font-weight:400;margin-left:auto;font-size:11px}
+.search-wrap{position:relative;padding:4px 20px 14px}
+.search{width:100%;padding:8px 30px 8px 12px;border:.5px solid var(--border);border-radius:7px;
+  background:var(--surface);color:var(--fg);font:inherit;font-size:13px;outline:0}
+.search:focus{border-color:var(--ring)}
+.search-kbd{position:absolute;right:28px;top:14px;font-size:10px;color:var(--muted);
+  border:.5px solid var(--border);border-radius:4px;padding:0 5px;background:var(--tint)}
+.sort-row{display:flex;gap:6px;padding:0 20px 14px}
+.sort-btn{flex:1;text-align:center;font-size:11px;padding:6px 0;border-radius:6px;
+  border:.5px solid var(--border);color:var(--muted);background:var(--tint)}
+.sort-btn.on{background:var(--fill);color:var(--onfill);border-color:transparent}
+.side-scroll{flex:1;padding:4px 12px}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);padding:8px 8px 6px}
+.cat-btn{display:flex;width:100%;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;
+  font-size:13px;color:var(--muted);text-align:left}
+.cat-btn:hover{background:var(--hover);color:var(--fg)}
+.cat-btn.on{background:var(--fill);color:var(--onfill)}
+.cat-btn .cnt{margin-left:auto;font-size:11px;opacity:.6}
+.side-foot{padding:14px 20px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.theme-row{display:flex;gap:6px;margin-bottom:10px}
+.theme-btn{flex:1;text-align:center;font-size:10px;padding:5px 0;border-radius:5px;
+  border:.5px solid var(--border);color:var(--muted);background:var(--tint)}
+.theme-btn.on{background:var(--fill);color:var(--onfill);border-color:transparent}
+
+/* ---------- main ---------- */
+.main{display:flex;flex-direction:column;height:100dvh}
+.main-head{padding:26px 32px 18px;border-bottom:1px solid var(--border);background:var(--wall)}
+.main-head h1{font-size:17px;font-weight:600;letter-spacing:-.3px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.stat{font-size:11px;color:var(--muted);border:.5px solid var(--border);
+  border-radius:20px;padding:2px 11px;background:var(--tint)}
+.stat b{color:var(--fg);font-weight:600}
+.gen{margin-left:auto;font-size:11px;color:var(--muted)}
+.content{flex:1;padding:24px 32px 60px}
+.search-status{display:none;font-size:12px;color:var(--muted);padding:0 0 14px}
+.search-status.show{display:block}
+.sec{margin-bottom:34px}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;
+  border-bottom:1px solid var(--border);padding-bottom:8px}
+.sec-head h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.sec-head .n{font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+
+/* ---------- card ---------- */
+.item{display:grid;grid-template-columns:96px minmax(0,1fr);border:.5px solid var(--border);
+  border-radius:10px;background:var(--surface);overflow:hidden;
+  opacity:0;transform:translateY(6px);animation:pop .4s cubic-bezier(.16,1,.3,1) forwards;
+  animation-delay:calc(var(--i) * 28ms)}
+@keyframes pop{to{opacity:1;transform:none}}
+.media{position:relative;display:flex;align-items:center;justify-content:center;
+  background:var(--tint);border-right:1px solid var(--border);min-height:96px}
+.icon-wrap{position:relative;width:56px;height:56px}
+.icon-wrap img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain}
+.mono-letter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:26px;font-weight:600;color:var(--muted);opacity:.5}
+.body{padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.titlerow{display:flex;align-items:center;gap:8px;min-width:0}
+.titlerow h3{font-size:13px;font-weight:600;letter-spacing:-.2px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.badge{font-size:9px;font-weight:700;letter-spacing:.08em;border:.5px solid var(--border);
+  border-radius:4px;padding:1px 6px;color:var(--muted);background:var(--tint);flex:none}
+.badge.new{background:var(--fill);color:var(--onfill);border-color:transparent}
+.desc{font-size:12px;color:var(--muted);line-height:17px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:auto}
+.chip{font-size:10px;border-radius:4px;padding:1px 7px;border:.5px solid var(--border)}
+.chip.ok{color:var(--ok)} .chip.warn{color:var(--warn)}
+.chip.off{color:var(--off)} .chip.no{color:var(--no)}
+.tag{font-size:10px;color:var(--muted);border:.5px solid var(--border);
+  border-radius:4px;padding:1px 7px;background:var(--tint)}
+.tag:hover{color:var(--fg);background:var(--hover)}
+.links{margin-left:auto;display:flex;gap:10px}
+.lnk{font-size:11px;color:var(--muted);border-bottom:1px dotted var(--ring)}
+.lnk:hover{color:var(--fg)}
+
+/* ---------- responsive ---------- */
+@media (max-width:960px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  .topbar{display:flex}
+  .main{height:auto;min-height:100dvh;padding-top:48px}
+  .content{padding:18px 16px 50px}
+  .main-head{padding:18px 16px 14px}
+  .grid{grid-template-columns:1fr}
+  .gen{display:none}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <span class="brand-mini">pk·projects</span>
+  <input class="search" id="q-top" type="search" placeholder="Rechercher…" aria-label="Rechercher">
+</header>
+<div class="app">
+  <aside class="side">
+    <div class="side-head">
+      <div class="brand"><span class="brand-dot"></span>pk·projects<small>local</small></div>
+    </div>
+    <div class="search-wrap">
+      <input class="search" id="q" type="search" placeholder="Rechercher un projet…" aria-label="Rechercher">
+      <span class="search-kbd">/</span>
+    </div>
+    <div class="sort-row">
+      <button class="sort-btn on" data-sort="recent">Récents</button>
+      <button class="sort-btn" data-sort="alpha">A → Z</button>
+    </div>
+    <nav class="side-scroll scroll" aria-label="Catégories">
+      <div class="nav-label">Catégories</div>
+      <div id="cats"></div>
+    </nav>
+    <div class="side-foot">
+      <div class="theme-row">
+        <button class="theme-btn" data-t="dark">Sombre</button>
+        <button class="theme-btn" data-t="light">Clair</button>
+        <button class="theme-btn" data-t="system">Auto</button>
+      </div>
+      <div>57 projets · généré le 06/10/2026 11:01</div>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="main-head">
+      <h1>Tous mes projets</h1>
+      <div class="stats">
+        <span class="stat"><b>57</b> projets</span>
+        <span class="stat"><b>46</b> sur GitHub</span>
+        <span class="stat"><b>27</b> git propre</span>
+        <span class="stat"><b>22</b> modifiés</span>
+        <span class="gen">généré le 06/10/2026 11:01</span>
+      </div>
+    </div>
+    <div class="content scroll">
+      <p class="search-status" id="status" role="status"></p>
+      <div id="list"></div>
+    </div>
+  </main>
+</div>
+<script>
+var CATS = [{"id": "CHROME", "label": "Extensions Chrome"}, {"id": "CLI", "label": "CLI & Scripts"}, {"id": "MACOS", "label": "Apps macOS"}, {"id": "VS", "label": "VS Code"}, {"id": "WEB", "label": "Web"}, {"id": "WP", "label": "WordPress"}, {"id": "GH", "label": "GitHub & Distribution"}, {"id": "OTHER", "label": "Divers"}];
+var DATA = [{"n": "GH_HomebrewCask", "cat": "GH", "d": "Homebrew tap for PK apps", "gh": "https://github.com/mondary/homebrew-tap", "local": "../../GH_HomebrewCask", "ic": null, "m": 1790947043, "st": "clean"}, {"n": "Macos_FinderGithubLogo", "cat": "MACOS", "d": "Script to replace folder icons for GitHub repos", "gh": "https://github.com/mondary/Macos_FinderGithubLogo", "local": "../../Macos_FinderGithubLogo", "ic": "../../Macos_FinderGithubLogo/icon.png", "m": 1788780613, "st": "clean"}, {"n": "Macos_GithubProjects", "cat": "MACOS", "d": "Automation Tools The operational project lives in src code, CLI wrappers, ins...", "gh": "https://github.com/mondary/Macos_GithubProjects", "local": "../.", "ic": ".././icon.png", "m": 1788780613, "st": "dirty"}, {"n": "Macos_ProjectTracker", "cat": "MACOS", "d": "A native macOS menu bar application built with SwiftUI and Swift 6 that monit...", "gh": "https://github.com/mondary/Macos_ProjectTracker", "local": "../../Macos_ProjectTracker", "ic": "../../Macos_ProjectTracker/icon.png", "m": 1788780613, "st": "clean"}, {"n": "Web_HubApps", "cat": "WEB", "d": "Web hub centralizing Mondary apps app showcase, cinema page and a wallpaper c...", "gh": "https://github.com/mondary/Web_HubApps", "local": "../../Web_HubApps", "ic": null, "m": 1790946077, "st": "clean"}, {"n": "Chrome_PKhighlighter", "cat": "CHROME", "d": "A Chrome extension that highlights your keywords and strikes through excluded...", "gh": "https://github.com/mondary/Chrome_pkhighlighter", "local": "../../../PROJECTS/Chrome_PKhighlighter", "ic": "../../../PROJECTS/Chrome_PKhighlighter/icon.png", "m": 1790848384, "st": "clean"}, {"n": "Chrome_PKnewTab", "cat": "CHROME", "d": "A beautiful way to start browsing every new tab shows the latest articles fro...", "gh": "https://github.com/mondary/Chrome_PKnewTab", "local": "../../../PROJECTS/Chrome_PKnewTab", "ic": "../../../PROJECTS/Chrome_PKnewTab/icon.png", "m": 1790932855, "st": "clean"}, {"n": "Chrome_PKshortcuts", "cat": "CHROME", "d": "Chrome extension to control tabs, navigation, and split view with keyboard sh...", "gh": "https://github.com/mondary/Chrome_PKshortcuts", "local": "../../../PROJECTS/Chrome_PKshortcuts", "ic": "../../../PROJECTS/Chrome_PKshortcuts/icon.png", "m": 1790880940, "st": "clean"}, {"n": "Chrome_PKStickyNotesChrome", "cat": "CHROME", "d": "Add sticky notes directly to your web pages", "gh": "https://github.com/mondary/Chrome_PKStickyNotesChrome", "local": "../../../PROJECTS/Chrome_PKStickyNotesChrome", "ic": "../../../PROJECTS/Chrome_PKStickyNotesChrome/icon.png", "m": 1782463790, "st": "dirty"}, {"n": "Chrome_PKTraduction", "cat": "CHROME", "d": "Popup translation Select any text on a webpage, the displays automatically be...", "gh": "https://github.com/mondary/Chrome_TranslateHighlighter", "local": "../../../PROJECTS/Chrome_PKTraduction", "ic": "../../../PROJECTS/Chrome_PKTraduction/icon.png", "m": 1790956147, "st": "clean"}, {"n": "Chrome_PKweb-memory", "cat": "CHROME", "d": "Img srcicon.png width88 altIcône PK Web Memory", "gh": "https://github.com/mondary/Chrome_PKweb-memory", "local": "../../../PROJECTS/Chrome_PKweb-memory", "ic": "../../../PROJECTS/Chrome_PKweb-memory/icon.png", "m": 1790883204, "st": "clean"}, {"n": "holdmynotePK", "cat": "OTHER", "d": "At rest Fanned A note pulled open", "gh": "https://github.com/aimen08/noty", "local": "../../../PROJECTS/holdmynotePK", "ic": null, "m": 1788780613, "st": "dirty"}, {"n": "Macos_monocodePK", "cat": "MACOS", "d": "Works with your subscriptions on Claude Code, Codex, Cursor, Grok Build, Open...", "gh": "https://github.com/mondary/monocode", "local": "../../../PROJECTS/Macos_monocodePK", "ic": "../../../PROJECTS/Macos_monocodePK/icon.png", "m": 1790574358, "st": "dirty"}, {"n": "Macos_monocodePK-legacy43", "cat": "MACOS", "d": "Providers directs Claude, Codex, Cursor, Grok, OpenCode, Pi, omp, fx Z", "gh": null, "local": "../../../PROJECTS/Macos_monocodePK-legacy43", "ic": null, "m": 1790946315, "st": "nogit"}, {"n": "Macos_monocodePK-stable", "cat": "MACOS", "d": "Providers directs Claude, Codex, Cursor, Grok, OpenCode, Pi, omp, fx Z", "gh": null, "local": "../../../PROJECTS/Macos_monocodePK-stable", "ic": null, "m": 1790946316, "st": "nogit"}, {"n": "Macos_monocodePK-v54", "cat": "MACOS", "d": "Works with your subscriptions on Claude Code, Codex, Cursor, Grok Build, Open...", "gh": null, "local": "../../../PROJECTS/Macos_monocodePK-v54", "ic": "../../../PROJECTS/Macos_monocodePK-v54/icon.png", "m": 1790862162, "st": "nogit"}, {"n": "Macos_PKarchives", "cat": "MACOS", "d": "Shared archive script", "gh": "https://github.com/mondary/Macos_PKarchives", "local": "../../../PROJECTS/Macos_PKarchives", "ic": "../../../PROJECTS/Macos_PKarchives/icon.png", "m": 1790857420, "st": "clean"}, {"n": "Macos_PKbrain", "cat": "MACOS", "d": "Reliable target-app restoration before injecting CmdV", "gh": "https://github.com/mondary/PKbrain", "local": "../../../PROJECTS/Macos_PKbrain", "ic": "../../../PROJECTS/Macos_PKbrain/icon.png", "m": 1790946312, "st": "clean"}, {"n": "Macos_PKmediadownloader", "cat": "MACOS", "d": "Alias pkmdApplicationsPKMediaDownloader", "gh": "https://github.com/mondary/media-downloader", "local": "../../../PROJECTS/Macos_PKmediadownloader", "ic": "../../../PROJECTS/Macos_PKmediadownloader/icon.png", "m": 1790945744, "st": "clean"}, {"n": "Macos_PKmonitor", "cat": "MACOS", "d": "Real-time sparkline with dominant application icons", "gh": "https://github.com/mondary/PKmonitor", "local": "../../../PROJECTS/Macos_PKmonitor", "ic": "../../../PROJECTS/Macos_PKmonitor/icon.png", "m": 1791277177, "st": "dirty"}, {"n": "Macos_PKmotion", "cat": "MACOS", "d": "A local macOS application, CLI and skill for storyboards motion design with", "gh": null, "local": "../../../PROJECTS/Macos_PKmotion", "ic": "../../../PROJECTS/Macos_PKmotion/icon.png", "m": 1790847384, "st": "noremote"}, {"n": "Macos_PKpowerlines", "cat": "MACOS", "d": "Curl -L -o PKpowerlines", "gh": "https://github.com/mondary/Macos_PKpowerlines", "local": "../../../PROJECTS/Macos_PKpowerlines", "ic": "../../../PROJECTS/Macos_PKpowerlines/icon.png", "m": 1790862270, "st": "clean"}, {"n": "Macos_PKScriptsUtilities", "cat": "MACOS", "d": "MacOS scripts for Raycast Menu bar application", "gh": "https://github.com/mondary/Macos_PKScriptsUtilities", "local": "../../../PROJECTS/Macos_PKScriptsUtilities", "ic": "../../../PROJECTS/Macos_PKScriptsUtilities/icon.png", "m": 1788780613, "st": "dirty"}, {"n": "Macos_PKvoicecloner", "cat": "MACOS", "d": "GitHub release v0.6.0 also offers a DMG, and the Homebrew tap has cask, but n...", "gh": "https://github.com/mondary/Macos_PKvoicecloner", "local": "../../../PROJECTS/Macos_PKvoicecloner", "ic": "../../../PROJECTS/Macos_PKvoicecloner/icon.png", "m": 1791201011, "st": "clean"}, {"n": "Macos_PKwindowsManagement", "cat": "MACOS", "d": "PKwindowsManagement is a macOS menu bar app for keyboard-driven window manage...", "gh": "https://github.com/mondary/PKwindowsManagement", "local": "../../../PROJECTS/Macos_PKwindowsManagement", "ic": "../../../PROJECTS/Macos_PKwindowsManagement/icon.png", "m": 1790946314, "st": "clean"}, {"n": "VS_PKterminal", "cat": "VS", "d": "A simple and efficient VS Code extension to open terminals inside the editor ...", "gh": "https://github.com/mondary/VS_pkterminal", "local": "../../../PROJECTS/VS_PKterminal", "ic": "../../../PROJECTS/VS_PKterminal/icon.png", "m": 1788780664, "st": "dirty"}, {"n": "VS_PKvsconf", "cat": "VS", "d": "Simple VS Code extension to boost Explorer and project navigation", "gh": "https://github.com/mondary/VS_pkvsconf", "local": "../../../PROJECTS/VS_PKvsconf", "ic": "../../../PROJECTS/VS_PKvsconf/icon.png", "m": 1790948780, "st": "clean"}, {"n": "Web_About", "cat": "WEB", "d": "Various tools", "gh": null, "local": "../../../PROJECTS/Web_About", "ic": "../../../PROJECTS/Web_About/icon.png", "m": 1790667715, "st": "nogit"}, {"n": "Web_FinanceTracker", "cat": "WEB", "d": "Uv pip install --python", "gh": "https://github.com/mondary/Web_FinanceTracker", "local": "../../../PROJECTS/Web_FinanceTracker", "ic": "../../../PROJECTS/Web_FinanceTracker/icon.png", "m": 1791104814, "st": "clean"}, {"n": "Web_Hub", "cat": "WEB", "d": "Personal hub centralizing all my projects, websites and extensions", "gh": "https://github.com/mondary/Web_hub", "local": "../../../PROJECTS/Web_Hub", "ic": "../../../PROJECTS/Web_Hub/icon.png", "m": 1788780650, "st": "dirty"}, {"n": "Web_omp-statusline-creator", "cat": "WEB", "d": "Context_total, time_spent, time, usage) description, sample rendering, leftright", "gh": "https://github.com/mondary/omp-statusline-creator", "local": "../../../PROJECTS/Web_omp-statusline-creator", "ic": "../../../PROJECTS/Web_omp-statusline-creator/icon.png", "m": 1790847163, "st": "clean"}, {"n": "Web_PKcards", "cat": "WEB", "d": "Vote for your favorite games and check the Best ranking", "gh": "https://github.com/mondary/PKcards", "local": "../../../PROJECTS/Web_PKcards", "ic": "../../../PROJECTS/Web_PKcards/icon.png", "m": 1790946334, "st": "clean"}, {"n": "Web_PKcv", "cat": "WEB", "d": "Interactive web resume version 3", "gh": "https://github.com/mondary/Web_PKcv", "local": "../../../PROJECTS/Web_PKcv", "ic": "../../../PROJECTS/Web_PKcv/icon.png", "m": 1790946340, "st": "dirty"}, {"n": "Web_PKimagetools", "cat": "WEB", "d": "Remove image backgrounds with remove", "gh": "https://github.com/mondary/Web_pkimagetools", "local": "../../../PROJECTS/Web_PKimagetools", "ic": "../../../PROJECTS/Web_PKimagetools/icon.png", "m": 1790933140, "st": "clean"}, {"n": "Web_PKLDVELH", "cat": "WEB", "d": "P aligncenterInteractive web library for gamebooks (LDVELH)", "gh": "https://github.com/mondary/Web_PKLDVELH", "local": "../../../PROJECTS/Web_PKLDVELH", "ic": "../../../PROJECTS/Web_PKLDVELH/icon.png", "m": 1790946331, "st": "dirty"}, {"n": "Web_PKportfolio", "cat": "WEB", "d": "Various tools", "gh": null, "local": "../../../PROJECTS/Web_PKportfolio", "ic": "../../../PROJECTS/Web_PKportfolio/icon.png", "m": 1790946341, "st": "dirty"}, {"n": "Web_PKrubik", "cat": "WEB", "d": "Various tools", "gh": "https://github.com/mondary/Web_pkrubik", "local": "../../../PROJECTS/Web_PKrubik", "ic": null, "m": 1789228163, "st": "clean"}, {"n": "Web_PKstore", "cat": "WEB", "d": "Web storefront of the PK app library a hub one page per application,", "gh": null, "local": "../../../PROJECTS/Web_PKstore", "ic": null, "m": 1790946342, "st": "dirty"}, {"n": "Web_PKTarot", "cat": "WEB", "d": "An editorial website for exploring the 78 Rider-Waite-Smith Tarot cards, thei...", "gh": "https://github.com/mondary/Web_Tarot", "local": "../../../PROJECTS/Web_PKTarot", "ic": "../../../PROJECTS/Web_PKTarot/icon.png", "m": 1791274663, "st": "clean"}, {"n": "Web_PKtransport", "cat": "WEB", "d": "Lapplication répond à une seule question où puis-je me rendre depuis", "gh": null, "local": "../../../PROJECTS/Web_PKtransport", "ic": null, "m": 1791275148, "st": "noremote"}, {"n": "Web_PKtravelgames", "cat": "WEB", "d": "Black for Heads Up). Pigeon restores the original", "gh": "https://github.com/mondary/WEB_PKtravelGames", "local": "../../../PROJECTS/Web_PKtravelgames", "ic": "../../../PROJECTS/Web_PKtravelgames/icon.png", "m": 1790946343, "st": "dirty"}, {"n": "Web_PKumami", "cat": "WEB", "d": "Pas de framework, build, Node", "gh": null, "local": "../../../PROJECTS/Web_PKumami", "ic": null, "m": 1790946345, "st": "dirty"}, {"n": "Web_PKumami-Umami", "cat": "WEB", "d": "Les fichiers du checkout officiel sont rangés dans UmamiOfficial", "gh": null, "local": "../../../PROJECTS/Web_PKumami-Umami", "ic": "../../../PROJECTS/Web_PKumami-Umami/icon.png", "m": 1790942597, "st": "nogit"}, {"n": "Web_PKYearInPixel", "cat": "WEB", "d": "Two layouts to choose from Classic (full-screen mosaic) or Taste (one row per...", "gh": "https://github.com/mondary/WP_YearInPixel", "local": "../../../PROJECTS/Web_PKYearInPixel", "ic": "../../../PROJECTS/Web_PKYearInPixel/icon.png", "m": 1790946334, "st": "clean"}, {"n": "CHROME-WPgptPost ++", "cat": "CHROME", "d": "Various tools", "gh": "https://github.com/mondary/CHROME-WPgptPost", "local": "../../../PROJECTS/WP_Chrome_WPGPT +++/CHROME-WPgptPost ++", "ic": "../../../PROJECTS/WP_Chrome_WPGPT +++/CHROME-WPgptPost ++/icon.png", "m": 1788604304, "st": "dirty"}, {"n": "Chrome_Send2Wordpress", "cat": "CHROME", "d": "Minimalist Chrome extension to quickly summarize and publish content WordPress", "gh": "https://github.com/mondary/Chrome_Send2Wordpress", "local": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_Send2Wordpress", "ic": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_Send2Wordpress/icon.png", "m": 1788604304, "st": "clean"}, {"n": "Chrome_sumarizerGPT2Wordpress", "cat": "CHROME", "d": "Various tools", "gh": "https://github.com/mondary/Chrome_Send2Wordpress", "local": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_sumarizerGPT2Wordpress", "ic": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_sumarizerGPT2Wordpress/icon.png", "m": 1790667715, "st": "dirty"}, {"n": "Chrome_WPautomation", "cat": "CHROME", "d": "Various tools", "gh": "https://github.com/mondary/Chrome_WPautomation", "local": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_WPautomation", "ic": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_WPautomation/icon.png", "m": 1790667715, "st": "dirty"}, {"n": "Chrome_WPautomation ++++", "cat": "CHROME", "d": "Various tools", "gh": "https://github.com/mondary/Chrome_WPautomation", "local": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_WPautomation ++++", "ic": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_WPautomation ++++/icon.png", "m": 1788604305, "st": "dirty"}, {"n": "Chrome_WPgptPost", "cat": "CHROME", "d": "Chrome extension that grabs the current page title and meta description, then", "gh": "https://github.com/mondary/CHROME-WPgptPost", "local": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_WPgptPost", "ic": "../../../PROJECTS/WP_Chrome_WPGPT +++/Chrome_WPgptPost/icon.png", "m": 1790667715, "st": "dirty"}, {"n": "CLI_WPpostdraft ++", "cat": "CLI", "d": "WordPress scripts are centralized in with one shared credentials file secrets", "gh": "https://github.com/mondary/CLI_WPpostdraft", "local": "../../../PROJECTS/WP_Chrome_WPGPT +++/CLI_WPpostdraft ++", "ic": null, "m": 1788780664, "st": "dirty"}, {"n": "WP_PKnewsletter", "cat": "WP", "d": "WordPress plugin to manage a daily editorial newsletter with subscriber manag...", "gh": "https://github.com/mondary/WP_pknewsletter", "local": "../../../PROJECTS/WP_PKnewsletter", "ic": "../../../PROJECTS/WP_PKnewsletter/icon.png", "m": 1789032335, "st": "clean"}, {"n": "WP_PKpremium", "cat": "WP", "d": "WordPress plugin powering Mondarys premium offer PayPal subscriptions, dedica...", "gh": "https://github.com/mondary/WP_pkpremium", "local": "../../../PROJECTS/WP_PKpremium", "ic": "../../../PROJECTS/WP_PKpremium/icon.png", "m": 1789032344, "st": "clean"}, {"n": "WP_PKSocialSharing", "cat": "WP", "d": "WordPress plugin to automatically or manually share posts LinkedIn, X, Facebo...", "gh": "https://github.com/mondary/WP_pkSocialSharing", "local": "../../../PROJECTS/WP_PKSocialSharing", "ic": "../../../PROJECTS/WP_PKSocialSharing/icon.png", "m": 1790946317, "st": "clean"}, {"n": "WP_PKwordpressTools", "cat": "WP", "d": "Various tools", "gh": "https://github.com/mondary/WP_PKwordpressTools", "local": "../../../PROJECTS/WP_PKwordpressTools", "ic": "../../../PROJECTS/WP_PKwordpressTools/icon.png", "m": 1790946322, "st": "dirty"}, {"n": "WP_Snippets", "cat": "WP", "d": "2. Import a snippet into WordPress (Code Snippets WPCode plugin).", "gh": "https://github.com/mondary/WP_Snippets", "local": "../../../PROJECTS/WP_Snippets", "ic": "../../../PROJECTS/WP_Snippets/icon.png", "m": 1790852974, "st": "dirty"}, {"n": "Y Scripts", "cat": "OTHER", "d": "Various tools", "gh": null, "local": "../../../PROJECTS/Y Scripts", "ic": null, "m": 1771518817, "st": "nogit"}];
+var ST = {
+  clean:   {l:"git ✓",          c:"ok"},
+  dirty:   {l:"git ⚠︎ modifié", c:"warn"},
+  noremote:{l:"☁︎ sans remote", c:"off"},
+  nogit:   {l:"⛔ hors git",    c:"no"}
+};
+var CAT_LABEL = {}; CATS.forEach(function(c){ CAT_LABEL[c.id] = c.label; });
+
+var state = { q:"", sort:"recent", filter:null };
+
+function esc(s){ var d=document.createElement("div"); d.textContent=s==null?"":String(s); return d.innerHTML; }
+function escAttr(s){ return esc(s).replace(/"/g,"&quot;"); }
+function catLabel(id){ return CAT_LABEL[id] || "Divers"; }
+function isRecent(it){ return Date.now()/1000 - it.m < 60*60*24*10; }
+function fmtMonth(ts){
+  var d = new Date(ts*1000);
+  if(isNaN(d)) return "—";
+  return ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][d.getMonth()]
+    + " " + String(d.getDate()).padStart(2,"0");
+}
+function sortedItems(){
+  var arr = DATA.slice();
+  if(state.sort==="recent") arr.sort(function(a,b){ return b.m - a.m; });
+  else arr.sort(function(a,b){ return a.n.toLowerCase() < b.n.toLowerCase() ? -1 : 1; });
+  return arr;
+}
+function matches(it){
+  if(state.filter && it.cat!==state.filter) return false;
+  if(!state.q) return true;
+  var q = state.q.toLowerCase();
+  return (it.n+" "+it.d+" "+catLabel(it.cat)).toLowerCase().indexOf(q) !== -1;
+}
+function card(it, idx){
+  var st = ST[it.st] || ST.nogit;
+  var badge = isRecent(it) ? '<span class="badge new">NEW</span>'
+                           : '<span class="badge">'+fmtMonth(it.m)+'</span>';
+  var monogram = '<span class="mono-letter" aria-hidden="true">'+esc(it.n.charAt(0).toUpperCase())+'</span>';
+  var icon = it.ic
+    ? '<img alt="" loading="lazy" src="'+escAttr(it.ic)+'" onerror="this.remove()">'+monogram
+    : monogram;
+  var links = "";
+  if(it.gh) links += '<a class="lnk" href="'+escAttr(it.gh)+'" target="_blank" rel="noopener noreferrer">GitHub ↗</a>';
+  links += '<a class="lnk" href="'+escAttr(it.local)+'/" title="Ouvrir le dossier">Dossier</a>';
+  return '<article class="item" style="--i:'+Math.min(idx,14)+'">'
+    + '<a class="media" href="'+escAttr(it.local)+'/" tabindex="-1" aria-hidden="true">'
+    +   '<span class="icon-wrap">'+icon+'</span></a>'
+    + '<div class="body">'
+    +   '<div class="titlerow"><h3>'+esc(it.n)+'</h3>'+badge+'</div>'
+    +   '<p class="desc">'+esc(it.d)+'</p>'
+    +   '<div class="meta"><span class="chip '+st.c+'">'+st.l+'</span>'
+    +   '<button class="tag" data-cat="'+escAttr(it.cat)+'">'+esc(catLabel(it.cat))+'</button>'
+    +   '<span class="links">'+links+'</span></div>'
+    + '</div></article>';
+}
+function render(){
+  var items = sortedItems();
+  var visible = items.filter(matches);
+  var n = 0, html = "";
+  CATS.forEach(function(c){
+    var inCat = visible.filter(function(it){ return it.cat===c.id; });
+    if(!inCat.length) return;
+    html += '<section class="sec" aria-label="'+esc(c.label)+'">'
+      + '<div class="sec-head"><h2>'+esc(c.label)+'</h2><span class="n">'+inCat.length+'</span></div>'
+      + '<div class="grid">' + inCat.map(function(it){ return card(it, n++); }).join("") + "</div></section>";
+  });
+  document.getElementById("list").innerHTML = html || "";
+  var status = document.getElementById("status");
+  if(visible.length===DATA.length){ status.className="search-status"; }
+  else{
+    status.className="search-status show";
+    status.textContent = visible.length
+      ? visible.length+" projet"+(visible.length>1?"s":"")+(state.q?" pour « "+state.q+" »":"")
+      : "Aucun résultat"+(state.q?" pour « "+state.q+" »":"")+".";
+  }
+  renderCats();
+}
+function renderCats(){
+  var html = '<button class="cat-btn'+(state.filter?"":" on")+'" data-cat="">Tous <span class="cnt">'+DATA.length+"</span></button>";
+  CATS.forEach(function(c){
+    var n = DATA.filter(function(it){ return it.cat===c.id; }).length;
+    if(!n) return;
+    html += '<button class="cat-btn'+(state.filter===c.id?" on":"")+'" data-cat="'+c.id+'">'
+      + esc(c.label) + '<span class="cnt">'+n+"</span></button>";
+  });
+  document.getElementById("cats").innerHTML = html;
+}
+
+/* ---------- events ---------- */
+document.getElementById("cats").addEventListener("click", function(e){
+  var b = e.target.closest("[data-cat]"); if(!b) return;
+  state.filter = b.dataset.cat || null; render();
+});
+document.getElementById("list").addEventListener("click", function(e){
+  var b = e.target.closest(".tag[data-cat]"); if(!b) return;
+  state.filter = b.dataset.cat || null; render();
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+document.querySelectorAll(".sort-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll(".sort-btn").forEach(function(b){ b.classList.remove("on"); });
+    btn.classList.add("on"); state.sort = btn.dataset.sort; render();
+  });
+});
+["q","q-top"].forEach(function(id, i){
+  var el = document.getElementById(id);
+  el.addEventListener("input", function(){
+    state.q = el.value.trim();
+    var other = document.getElementById(i===0 ? "q-top" : "q");
+    if(other.value !== el.value) other.value = el.value;
+    render();
+  });
+});
+document.addEventListener("keydown", function(e){
+  if(e.key==="/" && document.activeElement.tagName!=="INPUT"){ e.preventDefault(); document.getElementById("q").focus(); }
+  if(e.key==="Escape"){ state.q=""; document.getElementById("q").value=""; document.getElementById("q-top").value=""; render(); }
+});
+document.querySelectorAll(".theme-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var t = btn.dataset.t;
+    try{ localStorage.setItem("pk-projects-theme", t); }catch(err){}
+    var eff = t==="system" ? (matchMedia("(prefers-color-scheme: light)").matches?"light":"dark") : t;
+    document.documentElement.dataset.theme = eff;
+    document.querySelectorAll(".theme-btn").forEach(function(b){
+      b.classList.toggle("on", b===btn || (t==="system" && b.dataset.t==="system"));
+    });
+  });
+});
+(function initTheme(){
+  var t; try{ t = localStorage.getItem("pk-projects-theme") || "dark"; }catch(err){ t = "dark"; }
+  document.querySelectorAll(".theme-btn").forEach(function(b){ b.classList.toggle("on", b.dataset.t===t); });
+})();
+render();
+</script>
+</body>
+</html>

@@ -33,8 +33,9 @@ Application code lives in `src/macos_githubprojects/`. The `src/tools/*.py` scri
 ```
 
 Generated files:
-- `src/generated/dashboard-projets.html`
-- `src/generated/projects.md`
+- `generated/dashboard-projets.html` (dashboard + GitHub profile README)
+- `generated/projects-library.html` (local catalog, inspi·library style)
+- `generated/projects.md`
 
 ### Skills (`.agent/-skills/`)
 These Markdown files are designed to be injected into an AI agent's context to provide precise instructions for complex tasks.

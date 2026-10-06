@@ -43,11 +43,12 @@ Double-cliquez sur `launch_app.command` ou :
 
 ## Dashboard & vues générées
 
-Le scanner (`src/app/scanner.py`) analyse `PROJECTS/` et génère 5 fichiers dans `generated/` :
+Le scanner (`src/app/scanner.py`) analyse `-projects/` et `PROJECTS/` et génère 6 fichiers dans `generated/` :
 
 | Fichier | Rôle |
 |---|---|
 | `dashboard-projets.html` | Dashboard interactif (recherche, filtres groupe/statut Git) |
+| `projects-library.html` | Catalogue local façon inspi·library (recherche, tri, catégories, thème) |
 | `hub.html` | Hub portfolio central |
 | `comparison.html` | Comparaison projets locaux ↔ dépôts GitHub |
 | `github-profile.html` | Profil GitHub auto-généré |
@@ -100,6 +101,7 @@ Macos_GithubProjects/
 │       └── check_github_parity.py          # Parité local ↔ GitHub
 ├── generated/
 │   ├── dashboard-projets.html
+│   ├── projects-library.html
 │   ├── hub.html
 │   ├── comparison.html
 │   ├── github-profile.html

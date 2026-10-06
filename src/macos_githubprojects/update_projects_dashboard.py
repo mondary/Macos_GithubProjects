@@ -3321,185 +3321,188 @@ def _generate_github_profile_html(projects: list[Project]) -> None:
     print(f"Generated github-profile.html")
 
 
+_EMOJIS = [
+    "🦞", "🐾", "🧹", "🦀", "🧪", "🚇", "🎚️", "🚀", "👉", "🚦",
+    "🧵", "🛟", "🧰", "🧭", "👻", "🗃️", "🧾", "🪶", "🛰️", "🧱",
+    "🗣️", "🎙️", "📞", "🔊", "📣", "🌊", "📍", "🪵", "🧲", "📸",
+    "🎧", "🛵", "🫐", "🤖", "🧑‍💻", "🧙‍♂️", "🕸️", "🧮", "⏳", "✂️",
+    "🖥️", "🎛️", "📝", "🧳", "🍪", "🥠", "🧁", "🍭", "🐦", "🧿",
+    "👀", "🎨", "🌈", "📖", "📊", "🧽", "🛏️", "💬", "🍺", "🔄",
+    "🧩", "🪝", "📄", "🛑", "🪢", "🛡️", "🍵", "🌡️", "🌐", "💻",
+    "🍎", "📦", "⚙️", "🔧", "📋", "👤", "🏝️", "📺", "⚡", "🎯",
+    "🔥", "💡", "🎪", "🎭", "🎪", "🎵", "🎶", "🎹", "🎸", "🎺",
+    "🎻", "🥁", "🎤", "🎧", "📻", "🎬", "🎨", "🎭", "🎪", "🎯"
+]
+
+def _project_emoji(name: str) -> str:
+    """Deterministic emoji based on project name."""
+    hash_val = sum(ord(c) for c in name)
+    return _EMOJIS[hash_val % len(_EMOJIS)]
+
+
+def _clean_description(desc: str | None, project_name: str = "") -> str:
+    """Clean and shorten description for README (shared by README + library)."""
+    if not desc:
+        return "Various tools"
+
+    import re
+
+    # Detect and translate French to English
+    french_chars = set("àâäéèêëïîôùûüÿœæç")
+    has_french = any(char in french_chars for char in desc.lower())
+
+    # Common French words to detect
+    french_indicators = [" une ", " un ", " le ", " la ", " les ", " de ", " des ", " et ", " pour ",
+                        " est ", " sont ", " avec ", " dans ", " sur ", " cette ", " cet ", " cette ",
+                        " application ", " outil ", " projet ", " extension ", " permet "]
+
+    if has_french or any(indicator in desc.lower() for indicator in french_indicators):
+        # Try to translate using deep_translator
+        try:
+            from deep_translator import GoogleTranslator
+            translated = GoogleTranslator(source='auto', target='en').translate(desc)
+            desc = translated
+        except Exception:
+            # Fallback: simple word replacements if translation fails
+            replacements = {
+                "Extension Chrome qui": "Chrome extension that",
+                "Une extension Chrome": "A Chrome extension",
+                "Application web": "Web application",
+                "Outil de": "Tool for",
+                "Gestion de": "Management of",
+                "Projet de": "Project for",
+                "Permet de": "Allows to",
+                "Permettant de": "Allowing to",
+                "Simple et efficace": "Simple and efficient",
+                "Ultra-légère": "Ultra-lightweight",
+                "Minimal": "Minimal",
+                "Mini": "Mini",
+                "Hub personnel": "Personal hub",
+                "Centralisant": "Centralizing",
+                "Ensemble de": "Set of",
+                "Recettes de cuisine": "Recipes",
+                "Départager": "Separate",
+                "Détourage d'images": "Image cropping",
+                "Supprime l'arrière-plan": "Remove background",
+                "Surveillance de pages web": "Web page monitoring",
+                "Suite de jeux": "Game suite",
+                "Voyages et soirées": "Travel and parties",
+                "Vue d'ensemble": "Overview",
+                "Extensions": "Extensions",
+                "l'Explorer": "Explorer",
+            }
+            for fr, en in replacements.items():
+                desc = desc.replace(fr, en)
+
+    # Remove markdown links and language indicators
+    desc = re.sub(r'\[.*?\]\(.*?\)', '', desc)
+    desc = re.sub(r'🇫🇷.*?FR', '', desc)
+    desc = re.sub(r'🇬🇧.*?ENGLISH', '', desc)
+    desc = re.sub(r'^[-*•]\s*', '', desc)
+
+    # Remove all emojis except basic punctuation
+    desc = re.sub(r'[^\w\s\-\.\,\!\?\(\)]+', '', desc)
+
+    # Clean up whitespace
+    desc = ' '.join(desc.split())
+    desc = desc.strip()
+
+    # Check if description is basically just the project name (too redundant)
+    # Only return "Various tools" if description is essentially the same as project name
+    if project_name and len(desc.split()) <= 3:  # Only check short descriptions
+        name_lower = project_name.lower().replace('_', ' ').replace('-', ' ')
+        desc_lower = desc.lower().replace('_', ' ').replace('-', ' ')
+
+        # If description is 85%+ similar to project name, it's redundant
+        if desc_lower == name_lower or (len(desc_lower) > 0 and desc_lower in name_lower):
+            return "Various tools"
+
+    # Remove common useless prefixes
+    for prefix in ["Project", "Description", "Ce projet", "This project"]:
+        if desc.startswith(prefix):
+            desc = desc[len(prefix):].strip()
+
+    # Remove duplicate words (case-insensitive)
+    words = desc.split()
+    seen = set()
+    cleaned_words = []
+    for word in words:
+        word_lower = word.lower()
+        if word_lower not in seen:
+            seen.add(word_lower)
+            cleaned_words.append(word)
+    desc = ' '.join(cleaned_words)
+
+    # Take first meaningful sentence if available
+    if '.' in desc:
+        parts = desc.split('.')
+        first = parts[0].strip()
+        if len(first) > 20 and len(first) < 100:
+            desc = first
+
+    # Truncate if too long
+    if len(desc) > 80:
+        desc = desc[:77] + "..."
+
+    # Clean up whitespace one more time
+    desc = ' '.join(desc.split())
+    desc = desc.strip()
+
+    # FINAL CLEANUP - after all other processing
+    # These replacements must be done LAST to ensure they stick
+    desc = desc.replace("Vue densemble", "Overview")
+    desc = desc.replace("vue densemble", "Overview")
+    desc = desc.replace("Simple Code extension", "VS Code extension")
+    desc = desc.replace("Simple and effective Code extension", "Simple and effective VS Code extension")
+    desc = desc.replace("A extension", "An extension")
+    desc = desc.replace("a application", "an application")
+    desc = desc.replace("Is a application", "It is an application")
+    desc = desc.replace("is a application", "It is an application")
+    desc = desc.replace("Is a lightweight", "It is a lightweight")
+    desc = desc.replace("is a lightweight", "It is a lightweight")
+    # Handle VERSION (all caps) and Version (mixed case)
+    if "VERSION" in desc and "ENGLISH" not in desc and "English" not in desc:
+        desc = desc.replace("VERSION", "ENGLISH VERSION", 1)
+    elif "Version" in desc and "English" not in desc:
+        desc = desc.replace("Version", "ENGLISH VERSION", 1)
+
+    # Remove leading dash/hyphen if present
+    if desc.startswith("- "):
+        desc = desc[2:].strip()
+    if desc.startswith("-"):
+        desc = desc[1:].strip()
+
+    # Fix double spaces
+    desc = ' '.join(desc.split())
+
+    # If description is too short or empty after cleaning
+    if len(desc) < 10:
+        return "Various tools"
+
+    # Capitalize first letter
+    if desc and desc[0].islower():
+        desc = desc[0].upper() + desc[1:]
+
+    return desc if desc else "Various tools"
+
+def _project_github_url(p: Project) -> str | None:
+    """GitHub URL from the git remote, so renamed repos keep working."""
+    import re
+
+    remote = p.git.remote_url or ""
+    m = re.search(r"github\.com[/:]([\w\.\-]+/[\w\.\-]+?)(?:\.git)?/?$", remote)
+    if m:
+        return f"https://github.com/{m.group(1)}"
+    return None
+
+
 def _generate_mondary_readme(projects: list[Project]) -> None:
     """Generate mondary README.md with project list in Steipete style."""
     mondary_repo = PROJECTS_DIR / "mondary"
     readme_path = mondary_repo / "README.md"
 
-    # Unique emojis for each project (deterministic based on project name hash)
-    emojis = [
-        "🦞", "🐾", "🧹", "🦀", "🧪", "🚇", "🎚️", "🚀", "👉", "🚦",
-        "🧵", "🛟", "🧰", "🧭", "👻", "🗃️", "🧾", "🪶", "🛰️", "🧱",
-        "🗣️", "🎙️", "📞", "🔊", "📣", "🌊", "📍", "🪵", "🧲", "📸",
-        "🎧", "🛵", "🫐", "🤖", "🧑‍💻", "🧙‍♂️", "🕸️", "🧮", "⏳", "✂️",
-        "🖥️", "🎛️", "📝", "🧳", "🍪", "🥠", "🧁", "🍭", "🐦", "🧿",
-        "👀", "🎨", "🌈", "📖", "📊", "🧽", "🛏️", "💬", "🍺", "🔄",
-        "🧩", "🪝", "📄", "🛑", "🪢", "🛡️", "🍵", "🌡️", "🌐", "💻",
-        "🍎", "📦", "⚙️", "🔧", "📋", "👤", "🏝️", "📺", "⚡", "🎯",
-        "🔥", "💡", "🎪", "🎭", "🎪", "🎵", "🎶", "🎹", "🎸", "🎺",
-        "🎻", "🥁", "🎤", "🎧", "📻", "🎬", "🎨", "🎭", "🎪", "🎯"
-    ]
-
-    def get_emoji(name: str) -> str:
-        """Deterministic emoji based on project name."""
-        hash_val = sum(ord(c) for c in name)
-        return emojis[hash_val % len(emojis)]
-
-    def clean_description(desc: str | None, project_name: str = "") -> str:
-        """Clean and shorten description for README."""
-        if not desc:
-            return "Various tools"
-
-        import re
-
-        # Detect and translate French to English
-        french_chars = set("àâäéèêëïîôùûüÿœæç")
-        has_french = any(char in french_chars for char in desc.lower())
-
-        # Common French words to detect
-        french_indicators = [" une ", " un ", " le ", " la ", " les ", " de ", " des ", " et ", " pour ",
-                            " est ", " sont ", " avec ", " dans ", " sur ", " cette ", " cet ", " cette ",
-                            " application ", " outil ", " projet ", " extension ", " permet "]
-
-        if has_french or any(indicator in desc.lower() for indicator in french_indicators):
-            # Try to translate using deep_translator
-            try:
-                from deep_translator import GoogleTranslator
-                translated = GoogleTranslator(source='auto', target='en').translate(desc)
-                desc = translated
-            except Exception:
-                # Fallback: simple word replacements if translation fails
-                replacements = {
-                    "Extension Chrome qui": "Chrome extension that",
-                    "Une extension Chrome": "A Chrome extension",
-                    "Application web": "Web application",
-                    "Outil de": "Tool for",
-                    "Gestion de": "Management of",
-                    "Projet de": "Project for",
-                    "Permet de": "Allows to",
-                    "Permettant de": "Allowing to",
-                    "Simple et efficace": "Simple and efficient",
-                    "Ultra-légère": "Ultra-lightweight",
-                    "Minimal": "Minimal",
-                    "Mini": "Mini",
-                    "Hub personnel": "Personal hub",
-                    "Centralisant": "Centralizing",
-                    "Ensemble de": "Set of",
-                    "Recettes de cuisine": "Recipes",
-                    "Départager": "Separate",
-                    "Détourage d'images": "Image cropping",
-                    "Supprime l'arrière-plan": "Remove background",
-                    "Surveillance de pages web": "Web page monitoring",
-                    "Suite de jeux": "Game suite",
-                    "Voyages et soirées": "Travel and parties",
-                    "Vue d'ensemble": "Overview",
-                    "Extensions": "Extensions",
-                    "l'Explorer": "Explorer",
-                }
-                for fr, en in replacements.items():
-                    desc = desc.replace(fr, en)
-
-        # Remove markdown links and language indicators
-        desc = re.sub(r'\[.*?\]\(.*?\)', '', desc)
-        desc = re.sub(r'🇫🇷.*?FR', '', desc)
-        desc = re.sub(r'🇬🇧.*?ENGLISH', '', desc)
-        desc = re.sub(r'^[-*•]\s*', '', desc)
-
-        # Remove all emojis except basic punctuation
-        desc = re.sub(r'[^\w\s\-\.\,\!\?\(\)]+', '', desc)
-
-        # Clean up whitespace
-        desc = ' '.join(desc.split())
-        desc = desc.strip()
-
-        # Check if description is basically just the project name (too redundant)
-        # Only return "Various tools" if description is essentially the same as project name
-        if project_name and len(desc.split()) <= 3:  # Only check short descriptions
-            name_lower = project_name.lower().replace('_', ' ').replace('-', ' ')
-            desc_lower = desc.lower().replace('_', ' ').replace('-', ' ')
-
-            # If description is 85%+ similar to project name, it's redundant
-            if desc_lower == name_lower or (len(desc_lower) > 0 and desc_lower in name_lower):
-                return "Various tools"
-
-        # Remove common useless prefixes
-        for prefix in ["Project", "Description", "Ce projet", "This project"]:
-            if desc.startswith(prefix):
-                desc = desc[len(prefix):].strip()
-
-        # Remove duplicate words (case-insensitive)
-        words = desc.split()
-        seen = set()
-        cleaned_words = []
-        for word in words:
-            word_lower = word.lower()
-            if word_lower not in seen:
-                seen.add(word_lower)
-                cleaned_words.append(word)
-        desc = ' '.join(cleaned_words)
-
-        # Take first meaningful sentence if available
-        if '.' in desc:
-            parts = desc.split('.')
-            first = parts[0].strip()
-            if len(first) > 20 and len(first) < 100:
-                desc = first
-
-        # Truncate if too long
-        if len(desc) > 80:
-            desc = desc[:77] + "..."
-
-        # Clean up whitespace one more time
-        desc = ' '.join(desc.split())
-        desc = desc.strip()
-
-        # FINAL CLEANUP - after all other processing
-        # These replacements must be done LAST to ensure they stick
-        desc = desc.replace("Vue densemble", "Overview")
-        desc = desc.replace("vue densemble", "Overview")
-        desc = desc.replace("Simple Code extension", "VS Code extension")
-        desc = desc.replace("Simple and effective Code extension", "Simple and effective VS Code extension")
-        desc = desc.replace("A extension", "An extension")
-        desc = desc.replace("a application", "an application")
-        desc = desc.replace("Is a application", "It is an application")
-        desc = desc.replace("is a application", "It is an application")
-        desc = desc.replace("Is a lightweight", "It is a lightweight")
-        desc = desc.replace("is a lightweight", "It is a lightweight")
-        # Handle VERSION (all caps) and Version (mixed case)
-        if "VERSION" in desc and "ENGLISH" not in desc and "English" not in desc:
-            desc = desc.replace("VERSION", "ENGLISH VERSION", 1)
-        elif "Version" in desc and "English" not in desc:
-            desc = desc.replace("Version", "ENGLISH VERSION", 1)
-
-        # Remove leading dash/hyphen if present
-        if desc.startswith("- "):
-            desc = desc[2:].strip()
-        if desc.startswith("-"):
-            desc = desc[1:].strip()
-
-        # Fix double spaces
-        desc = ' '.join(desc.split())
-
-        # If description is too short or empty after cleaning
-        if len(desc) < 10:
-            return "Various tools"
-
-        # Capitalize first letter
-        if desc and desc[0].islower():
-            desc = desc[0].upper() + desc[1:]
-
-        return desc if desc else "Various tools"
 
     # Sort projects by name
-    def _github_url(p: Project) -> str | None:
-        """GitHub URL from the git remote, so renamed repos keep working."""
-        import re
-
-        remote = p.git.remote_url or ""
-        m = re.search(r"github\.com[/:]([\w\.\-]+/[\w\.\-]+?)(?:\.git)?/?$", remote)
-        if m:
-            return f"https://github.com/{m.group(1)}"
-        return None
 
     sorted_projects = sorted(projects, key=lambda p: p.name.lower())
 
@@ -3513,9 +3516,9 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
         if not p.is_dir:
             # Fichiers égarés aux racines : pas des projets.
             continue
-        emoji = get_emoji(p.name)
-        desc = clean_description(p.description, p.name)
-        gh_url = _github_url(p)
+        emoji = _project_emoji(p.name)
+        desc = _clean_description(p.description, p.name)
+        gh_url = _project_github_url(p)
         if gh_url:
             if gh_url.lower() in seen_urls:
                 # Doublon local (dossier copié/renommé) pointant vers le même dépôt.
@@ -3566,6 +3569,407 @@ Design systems & UI/UX
         print(f"Warning: Could not write mondary README.md: {e}")
 
 
+LIBRARY_CATS = [
+    ("CHROME", "Extensions Chrome"),
+    ("CLI", "CLI & Scripts"),
+    ("MACOS", "Apps macOS"),
+    ("VS", "VS Code"),
+    ("WEB", "Web"),
+    ("WP", "WordPress"),
+    ("GH", "GitHub & Distribution"),
+    ("OTHER", "Divers"),
+]
+
+_LIBRARY_TEMPLATE = """<!doctype html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pk · projects — catalogue local</title>
+<meta name="description" content="Catalogue local de tous les projets PK : apps macOS, extensions Chrome, web, WordPress, CLI.">
+<script>
+(function(){try{var t=localStorage.getItem('pk-projects-theme')||'dark';
+if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+document.documentElement.dataset.theme=t;}catch(e){}})();
+</script>
+<style>
+:root{
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --page:#ececeb; --wall:#f3f3f2; --surface:#f7f7f6;
+  --fg:#121211; --muted:#5c5c5a;
+  --border:rgba(28,28,26,.08); --ring:rgba(28,28,26,.16);
+  --tint:rgba(28,28,26,.035); --hover:rgba(28,28,26,.05);
+  --ok:#1a7f37; --warn:#9a6700; --off:#bc4c00; --no:#6e7781;
+  --fill:#0c0c0b; --onfill:#fbfbfa;
+}
+[data-theme=dark]{
+  --page:#050608; --wall:#0a0b0d; --surface:#101113;
+  --fg:#f7f8f8; --muted:#8a8f98;
+  --border:rgba(255,255,255,.05); --ring:rgba(255,255,255,.14);
+  --tint:rgba(255,255,255,.03); --hover:rgba(255,255,255,.05);
+  --ok:#3fb950; --warn:#d29922; --off:#db6b28; --no:#8b949e;
+  --fill:#edeef0; --onfill:#0a0b0d;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--page);color:var(--fg);font-family:var(--font-mono);
+  font-size:14px;line-height:22px;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+h1,h2,h3,p{margin:0;font-weight:inherit}
+.scroll{overflow-y:auto;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ---------- topbar (mobile) ---------- */
+.topbar{display:none;position:fixed;z-index:50;top:0;left:0;right:0;height:48px;
+  padding:0 14px;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:var(--wall)}
+.brand-mini{font-weight:600;font-size:13px;letter-spacing:-.2px}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:22rem minmax(0,1fr);height:100dvh}
+.side{display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--wall)}
+.side-head{padding:22px 20px 14px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;letter-spacing:-.2px}
+.brand-dot{width:9px;height:9px;border-radius:50%;background:var(--fill)}
+.brand small{color:var(--muted);font-weight:400;margin-left:auto;font-size:11px}
+.search-wrap{position:relative;padding:4px 20px 14px}
+.search{width:100%;padding:8px 30px 8px 12px;border:.5px solid var(--border);border-radius:7px;
+  background:var(--surface);color:var(--fg);font:inherit;font-size:13px;outline:0}
+.search:focus{border-color:var(--ring)}
+.search-kbd{position:absolute;right:28px;top:14px;font-size:10px;color:var(--muted);
+  border:.5px solid var(--border);border-radius:4px;padding:0 5px;background:var(--tint)}
+.sort-row{display:flex;gap:6px;padding:0 20px 14px}
+.sort-btn{flex:1;text-align:center;font-size:11px;padding:6px 0;border-radius:6px;
+  border:.5px solid var(--border);color:var(--muted);background:var(--tint)}
+.sort-btn.on{background:var(--fill);color:var(--onfill);border-color:transparent}
+.side-scroll{flex:1;padding:4px 12px}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);padding:8px 8px 6px}
+.cat-btn{display:flex;width:100%;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;
+  font-size:13px;color:var(--muted);text-align:left}
+.cat-btn:hover{background:var(--hover);color:var(--fg)}
+.cat-btn.on{background:var(--fill);color:var(--onfill)}
+.cat-btn .cnt{margin-left:auto;font-size:11px;opacity:.6}
+.side-foot{padding:14px 20px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.theme-row{display:flex;gap:6px;margin-bottom:10px}
+.theme-btn{flex:1;text-align:center;font-size:10px;padding:5px 0;border-radius:5px;
+  border:.5px solid var(--border);color:var(--muted);background:var(--tint)}
+.theme-btn.on{background:var(--fill);color:var(--onfill);border-color:transparent}
+
+/* ---------- main ---------- */
+.main{display:flex;flex-direction:column;height:100dvh}
+.main-head{padding:26px 32px 18px;border-bottom:1px solid var(--border);background:var(--wall)}
+.main-head h1{font-size:17px;font-weight:600;letter-spacing:-.3px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.stat{font-size:11px;color:var(--muted);border:.5px solid var(--border);
+  border-radius:20px;padding:2px 11px;background:var(--tint)}
+.stat b{color:var(--fg);font-weight:600}
+.gen{margin-left:auto;font-size:11px;color:var(--muted)}
+.content{flex:1;padding:24px 32px 60px}
+.search-status{display:none;font-size:12px;color:var(--muted);padding:0 0 14px}
+.search-status.show{display:block}
+.sec{margin-bottom:34px}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;
+  border-bottom:1px solid var(--border);padding-bottom:8px}
+.sec-head h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.sec-head .n{font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+
+/* ---------- card ---------- */
+.item{display:grid;grid-template-columns:96px minmax(0,1fr);border:.5px solid var(--border);
+  border-radius:10px;background:var(--surface);overflow:hidden;
+  opacity:0;transform:translateY(6px);animation:pop .4s cubic-bezier(.16,1,.3,1) forwards;
+  animation-delay:calc(var(--i) * 28ms)}
+@keyframes pop{to{opacity:1;transform:none}}
+.media{position:relative;display:flex;align-items:center;justify-content:center;
+  background:var(--tint);border-right:1px solid var(--border);min-height:96px}
+.icon-wrap{position:relative;width:56px;height:56px}
+.icon-wrap img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain}
+.mono-letter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:26px;font-weight:600;color:var(--muted);opacity:.5}
+.body{padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.titlerow{display:flex;align-items:center;gap:8px;min-width:0}
+.titlerow h3{font-size:13px;font-weight:600;letter-spacing:-.2px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.badge{font-size:9px;font-weight:700;letter-spacing:.08em;border:.5px solid var(--border);
+  border-radius:4px;padding:1px 6px;color:var(--muted);background:var(--tint);flex:none}
+.badge.new{background:var(--fill);color:var(--onfill);border-color:transparent}
+.desc{font-size:12px;color:var(--muted);line-height:17px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:auto}
+.chip{font-size:10px;border-radius:4px;padding:1px 7px;border:.5px solid var(--border)}
+.chip.ok{color:var(--ok)} .chip.warn{color:var(--warn)}
+.chip.off{color:var(--off)} .chip.no{color:var(--no)}
+.tag{font-size:10px;color:var(--muted);border:.5px solid var(--border);
+  border-radius:4px;padding:1px 7px;background:var(--tint)}
+.tag:hover{color:var(--fg);background:var(--hover)}
+.links{margin-left:auto;display:flex;gap:10px}
+.lnk{font-size:11px;color:var(--muted);border-bottom:1px dotted var(--ring)}
+.lnk:hover{color:var(--fg)}
+
+/* ---------- responsive ---------- */
+@media (max-width:960px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  .topbar{display:flex}
+  .main{height:auto;min-height:100dvh;padding-top:48px}
+  .content{padding:18px 16px 50px}
+  .main-head{padding:18px 16px 14px}
+  .grid{grid-template-columns:1fr}
+  .gen{display:none}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <span class="brand-mini">pk·projects</span>
+  <input class="search" id="q-top" type="search" placeholder="Rechercher…" aria-label="Rechercher">
+</header>
+<div class="app">
+  <aside class="side">
+    <div class="side-head">
+      <div class="brand"><span class="brand-dot"></span>pk·projects<small>local</small></div>
+    </div>
+    <div class="search-wrap">
+      <input class="search" id="q" type="search" placeholder="Rechercher un projet…" aria-label="Rechercher">
+      <span class="search-kbd">/</span>
+    </div>
+    <div class="sort-row">
+      <button class="sort-btn on" data-sort="recent">Récents</button>
+      <button class="sort-btn" data-sort="alpha">A → Z</button>
+    </div>
+    <nav class="side-scroll scroll" aria-label="Catégories">
+      <div class="nav-label">Catégories</div>
+      <div id="cats"></div>
+    </nav>
+    <div class="side-foot">
+      <div class="theme-row">
+        <button class="theme-btn" data-t="dark">Sombre</button>
+        <button class="theme-btn" data-t="light">Clair</button>
+        <button class="theme-btn" data-t="system">Auto</button>
+      </div>
+      <div>__TOTAL__ projets · généré le __NOW__</div>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="main-head">
+      <h1>Tous mes projets</h1>
+      <div class="stats">
+        <span class="stat"><b>__TOTAL__</b> projets</span>
+        <span class="stat"><b>__N_GH__</b> sur GitHub</span>
+        <span class="stat"><b>__N_CLEAN__</b> git propre</span>
+        <span class="stat"><b>__N_DIRTY__</b> modifiés</span>
+        <span class="gen">généré le __NOW__</span>
+      </div>
+    </div>
+    <div class="content scroll">
+      <p class="search-status" id="status" role="status"></p>
+      <div id="list"></div>
+    </div>
+  </main>
+</div>
+<script>
+var CATS = __CATS_JSON__;
+var DATA = __DATA_JSON__;
+var ST = {
+  clean:   {l:"git ✓",          c:"ok"},
+  dirty:   {l:"git ⚠︎ modifié", c:"warn"},
+  noremote:{l:"☁︎ sans remote", c:"off"},
+  nogit:   {l:"⛔ hors git",    c:"no"}
+};
+var CAT_LABEL = {}; CATS.forEach(function(c){ CAT_LABEL[c.id] = c.label; });
+
+var state = { q:"", sort:"recent", filter:null };
+
+function esc(s){ var d=document.createElement("div"); d.textContent=s==null?"":String(s); return d.innerHTML; }
+function escAttr(s){ return esc(s).replace(/"/g,"&quot;"); }
+function catLabel(id){ return CAT_LABEL[id] || "Divers"; }
+function isRecent(it){ return Date.now()/1000 - it.m < 60*60*24*10; }
+function fmtMonth(ts){
+  var d = new Date(ts*1000);
+  if(isNaN(d)) return "—";
+  return ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][d.getMonth()]
+    + " " + String(d.getDate()).padStart(2,"0");
+}
+function sortedItems(){
+  var arr = DATA.slice();
+  if(state.sort==="recent") arr.sort(function(a,b){ return b.m - a.m; });
+  else arr.sort(function(a,b){ return a.n.toLowerCase() < b.n.toLowerCase() ? -1 : 1; });
+  return arr;
+}
+function matches(it){
+  if(state.filter && it.cat!==state.filter) return false;
+  if(!state.q) return true;
+  var q = state.q.toLowerCase();
+  return (it.n+" "+it.d+" "+catLabel(it.cat)).toLowerCase().indexOf(q) !== -1;
+}
+function card(it, idx){
+  var st = ST[it.st] || ST.nogit;
+  var badge = isRecent(it) ? '<span class="badge new">NEW</span>'
+                           : '<span class="badge">'+fmtMonth(it.m)+'</span>';
+  var monogram = '<span class="mono-letter" aria-hidden="true">'+esc(it.n.charAt(0).toUpperCase())+'</span>';
+  var icon = it.ic
+    ? '<img alt="" loading="lazy" src="'+escAttr(it.ic)+'" onerror="this.remove()">'+monogram
+    : monogram;
+  var links = "";
+  if(it.gh) links += '<a class="lnk" href="'+escAttr(it.gh)+'" target="_blank" rel="noopener noreferrer">GitHub ↗</a>';
+  links += '<a class="lnk" href="'+escAttr(it.local)+'/" title="Ouvrir le dossier">Dossier</a>';
+  return '<article class="item" style="--i:'+Math.min(idx,14)+'">'
+    + '<a class="media" href="'+escAttr(it.local)+'/" tabindex="-1" aria-hidden="true">'
+    +   '<span class="icon-wrap">'+icon+'</span></a>'
+    + '<div class="body">'
+    +   '<div class="titlerow"><h3>'+esc(it.n)+'</h3>'+badge+'</div>'
+    +   '<p class="desc">'+esc(it.d)+'</p>'
+    +   '<div class="meta"><span class="chip '+st.c+'">'+st.l+'</span>'
+    +   '<button class="tag" data-cat="'+escAttr(it.cat)+'">'+esc(catLabel(it.cat))+'</button>'
+    +   '<span class="links">'+links+'</span></div>'
+    + '</div></article>';
+}
+function render(){
+  var items = sortedItems();
+  var visible = items.filter(matches);
+  var n = 0, html = "";
+  CATS.forEach(function(c){
+    var inCat = visible.filter(function(it){ return it.cat===c.id; });
+    if(!inCat.length) return;
+    html += '<section class="sec" aria-label="'+esc(c.label)+'">'
+      + '<div class="sec-head"><h2>'+esc(c.label)+'</h2><span class="n">'+inCat.length+'</span></div>'
+      + '<div class="grid">' + inCat.map(function(it){ return card(it, n++); }).join("") + "</div></section>";
+  });
+  document.getElementById("list").innerHTML = html || "";
+  var status = document.getElementById("status");
+  if(visible.length===DATA.length){ status.className="search-status"; }
+  else{
+    status.className="search-status show";
+    status.textContent = visible.length
+      ? visible.length+" projet"+(visible.length>1?"s":"")+(state.q?" pour « "+state.q+" »":"")
+      : "Aucun résultat"+(state.q?" pour « "+state.q+" »":"")+".";
+  }
+  renderCats();
+}
+function renderCats(){
+  var html = '<button class="cat-btn'+(state.filter?"":" on")+'" data-cat="">Tous <span class="cnt">'+DATA.length+"</span></button>";
+  CATS.forEach(function(c){
+    var n = DATA.filter(function(it){ return it.cat===c.id; }).length;
+    if(!n) return;
+    html += '<button class="cat-btn'+(state.filter===c.id?" on":"")+'" data-cat="'+c.id+'">'
+      + esc(c.label) + '<span class="cnt">'+n+"</span></button>";
+  });
+  document.getElementById("cats").innerHTML = html;
+}
+
+/* ---------- events ---------- */
+document.getElementById("cats").addEventListener("click", function(e){
+  var b = e.target.closest("[data-cat]"); if(!b) return;
+  state.filter = b.dataset.cat || null; render();
+});
+document.getElementById("list").addEventListener("click", function(e){
+  var b = e.target.closest(".tag[data-cat]"); if(!b) return;
+  state.filter = b.dataset.cat || null; render();
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+document.querySelectorAll(".sort-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll(".sort-btn").forEach(function(b){ b.classList.remove("on"); });
+    btn.classList.add("on"); state.sort = btn.dataset.sort; render();
+  });
+});
+["q","q-top"].forEach(function(id, i){
+  var el = document.getElementById(id);
+  el.addEventListener("input", function(){
+    state.q = el.value.trim();
+    var other = document.getElementById(i===0 ? "q-top" : "q");
+    if(other.value !== el.value) other.value = el.value;
+    render();
+  });
+});
+document.addEventListener("keydown", function(e){
+  if(e.key==="/" && document.activeElement.tagName!=="INPUT"){ e.preventDefault(); document.getElementById("q").focus(); }
+  if(e.key==="Escape"){ state.q=""; document.getElementById("q").value=""; document.getElementById("q-top").value=""; render(); }
+});
+document.querySelectorAll(".theme-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var t = btn.dataset.t;
+    try{ localStorage.setItem("pk-projects-theme", t); }catch(err){}
+    var eff = t==="system" ? (matchMedia("(prefers-color-scheme: light)").matches?"light":"dark") : t;
+    document.documentElement.dataset.theme = eff;
+    document.querySelectorAll(".theme-btn").forEach(function(b){
+      b.classList.toggle("on", b===btn || (t==="system" && b.dataset.t==="system"));
+    });
+  });
+});
+(function initTheme(){
+  var t; try{ t = localStorage.getItem("pk-projects-theme") || "dark"; }catch(err){ t = "dark"; }
+  document.querySelectorAll(".theme-btn").forEach(function(b){ b.classList.toggle("on", b.dataset.t===t); });
+})();
+render();
+</script>
+</body>
+</html>
+"""
+
+
+def _library_status(git: GitInfo) -> str:
+    """Git status key used by the projects library page."""
+    if not git.is_git:
+        return "nogit"
+    if git.dirty:
+        return "dirty"
+    if not git.has_remote:
+        return "noremote"
+    return "clean"
+
+
+def _generate_projects_library_html(projects: list[Project]) -> None:
+    """Generate projects-library.html — catalogue local façon inspi·library."""
+    GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+    library_path = GENERATED_DIR / "projects-library.html"
+
+    known_cats = {cid for cid, _label in LIBRARY_CATS}
+    items: list[dict] = []
+    for p in projects:
+        if p.name == "mondary" or not p.is_dir:
+            continue
+        folder = (REPO_ROOT / p.rel_path).resolve()
+        try:
+            mtime = int(folder.stat().st_mtime)
+        except OSError:
+            mtime = 0
+        local_rel = "../" + p.rel_path
+        items.append(
+            {
+                "n": p.name,
+                "cat": p.group if p.group in known_cats else "OTHER",
+                "d": _clean_description(p.description, p.name),
+                "gh": _project_github_url(p),
+                "local": local_rel,
+                "ic": (local_rel + "/icon.png") if p.has_icon else None,
+                "m": mtime,
+                "st": _library_status(p.git),
+            }
+        )
+
+    data_json = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
+    cats_json = json.dumps(
+        [{"id": cid, "label": label} for cid, label in LIBRARY_CATS], ensure_ascii=False
+    )
+    now = _dt.datetime.now().strftime("%d/%m/%Y %H:%M")
+    n_clean = sum(1 for it in items if it["st"] == "clean")
+    n_dirty = sum(1 for it in items if it["st"] == "dirty")
+    n_gh = sum(1 for it in items if it["gh"])
+
+    html = (
+        _LIBRARY_TEMPLATE.replace("__CATS_JSON__", cats_json)
+        .replace("__DATA_JSON__", data_json)
+        .replace("__NOW__", now)
+        .replace("__TOTAL__", str(len(items)))
+        .replace("__N_GH__", str(n_gh))
+        .replace("__N_CLEAN__", str(n_clean))
+        .replace("__N_DIRTY__", str(n_dirty))
+    )
+    library_path.write_text(html, encoding="utf-8")
+    print(f"Generated projects-library.html with {len(items)} projects")
+
+
 def main() -> None:
     projects = _discover_projects()
     _write_projects_md(projects)
@@ -3582,6 +3986,9 @@ def main() -> None:
 
     # Generate mondary README.md
     _generate_mondary_readme(projects)
+
+    # Generate projects-library.html (catalogue façon inspi·library)
+    _generate_projects_library_html(projects)
 
 
 if __name__ == "__main__":

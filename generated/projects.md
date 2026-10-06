@@ -1,7 +1,7 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/-projects`
-> Généré: **2026-10-06 10:15**
+> Généré: **2026-10-06 11:01**
 
 ## 🧭 Sommaire
 
@@ -44,7 +44,7 @@ CHROME (12) | CLI (1) | GH (1) | MACOS (16) | VS (2) | WEB (18) | WP (5) | OTHER
 - **Macos_PKarchives** — └── shared/ # Shared archive script (`../../../PROJECTS/Macos_PKarchives`)
 - **Macos_PKbrain** — - reliable target-app restoration before injecting `Cmd+V` (`../../../PROJECTS/Macos_PKbrain`)
 - **Macos_PKmediadownloader** — alias pkmd='/Applications/PKMediaDownloader.app/Contents/MacOS/pkmd' (`../../../PROJECTS/Macos_PKmediadownloader`)
-- **Macos_PKmonitor** — - Real-time sparkline with dominant application icons (`../../../PROJECTS/Macos_PKmonitor`)
+- **Macos_PKmonitor** — - Real-time sparkline with dominant application icons (`../../../PROJECTS/Macos_PKmonitor`) ✳️ dirty
 - **Macos_PKmotion** — A local macOS application, CLI and skill for storyboards and motion design with (`../../../PROJECTS/Macos_PKmotion`) ⚠️ no remote
 - **Macos_PKpowerlines** — curl -L -o PKpowerlines.dmg https://github.com/mondary/Macos_PKpowerlines/releases/latest/download/PKpowerlines.dmg (`../../../PROJECTS/Macos_PKpowerlines`)
 - **Macos_PKScriptsUtilities** — ✨ macOS scripts for Raycast + Menu bar application. (`../../../PROJECTS/Macos_PKScriptsUtilities`) ✳️ dirty
@@ -71,7 +71,7 @@ CHROME (12) | CLI (1) | GH (1) | MACOS (16) | VS (2) | WEB (18) | WP (5) | OTHER
 - **Web_PKrubik** — Description non disponible. (`../../../PROJECTS/Web_PKrubik`) ⚠️ no desc ⚠️ no icon.png
 - **Web_PKstore** — Web storefront of the PK app library: a hub + one page per application, (`../../../PROJECTS/Web_PKstore`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **Web_PKTarot** — An editorial website for exploring the 78 Rider-Waite-Smith Tarot cards, their meanings, and their associations. (`../../../PROJECTS/Web_PKTarot`)
-- **Web_PKtransport** — L'application répond à une seule question : **« où puis-je me rendre depuis (`../../../PROJECTS/Web_PKtransport`) ⚠️ no icon.png ⚠️ no git
+- **Web_PKtransport** — L'application répond à une seule question : **« où puis-je me rendre depuis (`../../../PROJECTS/Web_PKtransport`) ⚠️ no icon.png ⚠️ no remote
 - **Web_PKtravelgames** — Black for Heads Up). Pigeon Pigeon restores the original (`../../../PROJECTS/Web_PKtravelgames`) ✳️ dirty
 - **Web_PKumami** — Pas de framework, pas de build, pas de Node. Tu uploades, tu installes, c'est en ligne. (`../../../PROJECTS/Web_PKumami`) ⚠️ no icon.png ⚠️ no remote ✳️ dirty
 - **Web_PKumami-Umami** — Les fichiers du checkout officiel sont rangés dans `UmamiOfficial/`. Le dossier `.git` reste à la racine pour préserver l'historique et les worktrees existants ; il ne faut pas pousser les changements de rangement vers le dépôt officiel. (`../../../PROJECTS/Web_PKumami-Umami`) ⚠️ no git
