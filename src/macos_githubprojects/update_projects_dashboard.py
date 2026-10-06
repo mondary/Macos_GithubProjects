@@ -12,12 +12,12 @@ import urllib.request
 from pathlib import Path
 
 try:
-    from macos_githubprojects.paths import PROJECTS_DIR, REPO_ROOT, ROOT_HUB
+    from macos_githubprojects.paths import PROJECTS_DIR, REPO_ROOT, ROOT_HUB, SOURCE_DIRS
 except ModuleNotFoundError:
     import sys
 
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from macos_githubprojects.paths import PROJECTS_DIR, REPO_ROOT, ROOT_HUB
+    from macos_githubprojects.paths import PROJECTS_DIR, REPO_ROOT, ROOT_HUB, SOURCE_DIRS
 
 GENERATED_DIR = REPO_ROOT / "generated"
 PROJECTS_MD = GENERATED_DIR / "projects.md"
@@ -194,23 +194,27 @@ def _sanitize_remote_url(remote_url: str | None) -> str | None:
 
 def _iter_project_paths() -> list[Path]:
     project_paths: list[Path] = []
-    for child in sorted(PROJECTS_DIR.iterdir(), key=lambda p: p.name.lower()):
-        if _is_excluded(child.name):
-            continue
+    for source_dir in SOURCE_DIRS:
+        for child in sorted(source_dir.iterdir(), key=lambda p: p.name.lower()):
+            if _is_excluded(child.name):
+                continue
+            if child.name == "@WIP":
+                # Zone de tri locale : jamais publiée sur le profil.
+                continue
 
-        git = _git_info(child)
-        nested_git_projects: list[Path] = []
-        if child.is_dir() and "+++" in child.name and not git.is_git:
-            nested_git_projects = [
-                nested
-                for nested in sorted(child.iterdir(), key=lambda p: p.name.lower())
-                if not _is_excluded(nested.name) and nested.is_dir() and _git_info(nested).is_git
-            ]
+            git = _git_info(child)
+            nested_git_projects: list[Path] = []
+            if child.is_dir() and "+++" in child.name and not git.is_git:
+                nested_git_projects = [
+                    nested
+                    for nested in sorted(child.iterdir(), key=lambda p: p.name.lower())
+                    if not _is_excluded(nested.name) and nested.is_dir() and _git_info(nested).is_git
+                ]
 
-        if nested_git_projects:
-            project_paths.extend(nested_git_projects)
-        else:
-            project_paths.append(child)
+            if nested_git_projects:
+                project_paths.extend(nested_git_projects)
+            else:
+                project_paths.append(child)
 
     return project_paths
 
@@ -227,8 +231,9 @@ class Project:
 
 
 def _discover_projects() -> list[Project]:
-    if not PROJECTS_DIR.exists():
-        raise SystemExit(f"Missing folder: {PROJECTS_DIR}")
+    missing = [d for d in SOURCE_DIRS if not d.exists()]
+    if missing:
+        raise SystemExit(f"Missing folder(s): {', '.join(str(m) for m in missing)}")
 
     projects: list[Project] = []
     for child in _iter_project_paths():
@@ -3486,15 +3491,42 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
         return desc if desc else "Various tools"
 
     # Sort projects by name
+    def _github_url(p: Project) -> str | None:
+        """GitHub URL from the git remote, so renamed repos keep working."""
+        import re
+
+        remote = p.git.remote_url or ""
+        m = re.search(r"github\.com[/:]([\w\.\-]+/[\w\.\-]+?)(?:\.git)?/?$", remote)
+        if m:
+            return f"https://github.com/{m.group(1)}"
+        return None
+
     sorted_projects = sorted(projects, key=lambda p: p.name.lower())
 
     # Build project list
     project_lines = []
+    seen_urls: set[str] = set()
     for p in sorted_projects:
+        if p.name == "mondary":
+            # Le dépôt du profil lui-même : pas d'auto-référence dans la liste.
+            continue
+        if not p.is_dir:
+            # Fichiers égarés aux racines : pas des projets.
+            continue
         emoji = get_emoji(p.name)
         desc = clean_description(p.description, p.name)
-        gh_url = f"https://github.com/mondary/{p.name}"
-        project_lines.append(f"- {emoji} [{p.name}]({gh_url}) - {desc}")
+        gh_url = _github_url(p)
+        if gh_url:
+            if gh_url.lower() in seen_urls:
+                # Doublon local (dossier copié/renommé) pointant vers le même dépôt.
+                continue
+            seen_urls.add(gh_url.lower())
+            label = f"[{p.name}]({gh_url})"
+        else:
+            label = p.name
+        project_lines.append(f"- {emoji} {label} - {desc}")
+
+    listed_count = len(project_lines)
 
     # Build projects section - each item on its own line
     projects_section = "\n".join(project_lines)
@@ -3505,7 +3537,7 @@ def _generate_mondary_readme(projects: list[Project]) -> None:
 🌱 I love vibecoding with Claude, Cursor, and lightweight stacks.
 ⚙️ Currently exploring the intersection of AI agents and development workflows.
 💬 Ask me about macOS apps, Chrome extensions, CLI tools, or AI automation.
-⚡ Fun fact: I have {len(projects)}+ projects and counting.
+⚡ Fun fact: I have {listed_count}+ projects and counting.
 
 Current Projects
 ---
