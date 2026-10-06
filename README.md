@@ -54,6 +54,12 @@ Le scanner (`src/app/scanner.py`) analyse `-projects/` et `PROJECTS/` et génèr
 | `github-profile.html` | Profil GitHub auto-généré |
 | `projects.md` | Liste Markdown avec avertissements |
 
+## Automatisation
+
+- **Menu bar** : LaunchAgent `com.user.macosgithubprojects` (KeepAlive) — bouton « Update Dashboard » pour forcer à la main.
+- **Sync quotidien** : LaunchAgent `com.user.pkprojects-sync` — tous les jours à 9h + à l'ouverture de session, lance `src/macos_githubprojects/sync_projects.py` : régénère toutes les vues puis committe et pousse `mondary/README.md` automatiquement s'il a changé.
+- **Logs** : `~/Library/Logs/pkprojects-sync.log`.
+
 ## Parité local ↔ GitHub
 
 La comparaison et le script de parité reposent sur les **remotes git** (source de vérité), jamais sur les noms de dossiers :

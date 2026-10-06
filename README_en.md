@@ -37,6 +37,10 @@ Generated files:
 - `generated/projects-library.html` (local catalog, inspi·library style)
 - `generated/projects.md`
 
+Automation:
+- Menu bar LaunchAgent `com.user.macosgithubprojects` (manual "Update Dashboard")
+- Daily LaunchAgent `com.user.pkprojects-sync` (9:00 + at login) runs `src/macos_githubprojects/sync_projects.py`: regenerates every view and auto-pushes `mondary/README.md` when it changed. Logs: `~/Library/Logs/pkprojects-sync.log`.
+
 ### Skills (`.agent/-skills/`)
 These Markdown files are designed to be injected into an AI agent's context to provide precise instructions for complex tasks.
 

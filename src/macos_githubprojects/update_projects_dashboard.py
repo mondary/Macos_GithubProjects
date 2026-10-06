@@ -1880,6 +1880,8 @@ def _generate_hub_html(projects: list[Project]) -> None:
 <div class="header-section">
     <h1 class="header-title">Mes Projets</h1>
     <div class="socials-container">
+        <a href="projects-library.html" class="social-bubble" title="Catalogue des projets (bibliothèque locale)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></a>
+        <a href="dashboard-projets.html" class="social-bubble" title="Dashboard (stats Git, parité GitHub)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20v-9"/><path d="M10 20V5"/><path d="M16 20v-7"/><path d="M3 20h18"/></svg></a>
         <a href="https://github.com/mondary" target="_blank" rel="noopener noreferrer" class="social-bubble github" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="18" height="18" fill="currentColor"><path d="M280.3 222.4L201 222.4C161 211.9 70.5 214.6 70.5 297.2C70.5 327.3 85.5 348.4 105.5 358.2C80.4 381.2 68.5 392 68.5 407.4C68.5 418.4 73 428.5 86.4 434.2C72.1 447.6 64 457.3 64 475.6C64 507.7 92 526.4 165.6 526.4C236.4 526.4 277.4 500 277.4 453.2C277.4 394.5 232.2 396.7 125.8 390.2L139.2 368.6C166.5 376.2 257.9 378.6 257.9 300.7C257.9 282 250.2 269 242.9 259.6L280.3 256.8L280.3 222.3zM216.9 464.3C216.9 496.4 112 496.4 112 466.7C112 458.6 117.3 451.7 122.6 445.2C200.3 450.5 216.9 448.6 216.9 464.3zM166.1 329.7C113.3 329.7 115.6 258.5 167.3 258.5C216.8 258.5 218.1 329.7 166.1 329.7zM299.4 430.2L299.4 398.1C326.1 394.4 326.6 396.1 326.6 387.1L326.6 267.6C326.6 259.1 324.5 260.2 299.4 251.3L303.9 218.4L388.1 218.4L388.1 387.1C388.1 393.6 388.5 394.4 394.6 395.2L415.3 398L415.3 430.1L299.4 430.1zM351.9 185.9C328.7 185.9 315.3 172.5 315.3 149.3C315.3 126.1 328.7 113.5 351.9 113.5C375.5 113.5 388.9 126.1 388.9 149.3C388.9 172.5 375.5 185.9 351.9 185.9zM576 414.5C558.5 423 532.9 430.8 509.7 430.8C461.3 430.8 443 411.3 443 365.3L443 258.8C443 253.4 444 254.7 411.3 254.7L411.3 218.5C447.1 214.4 461.3 196.5 465.8 152.2L504.4 152.2C504.4 218 503.1 214 507.7 214L565 214L565 254.6L504.4 254.6L504.4 351.7C504.4 358.6 499.5 403.1 565 378.5L576 414.3z"/></svg></a>
     </div>
 </div>
@@ -3650,6 +3652,9 @@ h1,h2,h3,p{margin:0;font-weight:inherit}
 .cat-btn.on{background:var(--fill);color:var(--onfill)}
 .cat-btn .cnt{margin-left:auto;font-size:11px;opacity:.6}
 .side-foot{padding:14px 20px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.xlinks{margin-bottom:10px}
+.xlinks a{color:var(--muted);border-bottom:1px dotted var(--ring)}
+.xlinks a:hover{color:var(--fg)}
 .theme-row{display:flex;gap:6px;margin-bottom:10px}
 .theme-btn{flex:1;text-align:center;font-size:10px;padding:5px 0;border-radius:5px;
   border:.5px solid var(--border);color:var(--muted);background:var(--tint)}
@@ -3742,6 +3747,11 @@ h1,h2,h3,p{margin:0;font-weight:inherit}
       <div id="cats"></div>
     </nav>
     <div class="side-foot">
+      <div class="xlinks">
+        <a href="dashboard-projets.html">Dashboard</a> ·
+        <a href="hub.html">Hub</a> ·
+        <a href="https://mondary.design/apps/" target="_blank" rel="noopener noreferrer">Apps en ligne ↗</a>
+      </div>
       <div class="theme-row">
         <button class="theme-btn" data-t="dark">Sombre</button>
         <button class="theme-btn" data-t="light">Clair</button>
@@ -3811,6 +3821,7 @@ function card(it, idx){
     ? '<img alt="" loading="lazy" src="'+escAttr(it.ic)+'" onerror="this.remove()">'+monogram
     : monogram;
   var links = "";
+  if(it.app) links += '<a class="lnk" href="'+escAttr(it.app)+'" target="_blank" rel="noopener noreferrer" title="Page app publiée">App ↗</a>';
   if(it.gh) links += '<a class="lnk" href="'+escAttr(it.gh)+'" target="_blank" rel="noopener noreferrer">GitHub ↗</a>';
   links += '<a class="lnk" href="'+escAttr(it.local)+'/" title="Ouvrir le dossier">Dossier</a>';
   return '<article class="item" style="--i:'+Math.min(idx,14)+'">'
@@ -3919,12 +3930,38 @@ def _library_status(git: GitInfo) -> str:
     return "clean"
 
 
+def _published_apps() -> dict[str, str]:
+    """Map folder name -> published URL, parsed from the Web_HubApps index."""
+    import re
+
+    index = PROJECTS_DIR / "Web_HubApps" / "index.html"
+    try:
+        content = index.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return {}
+    apps: dict[str, str] = {}
+    for slug in re.findall(r"mondary\.design/apps/([\w\.\-]+)/", content):
+        apps.setdefault(slug, f"https://mondary.design/apps/{slug}/")
+    return apps
+
+
+def _app_url_for(name: str, apps: dict[str, str]) -> str | None:
+    """Published app page URL for a local folder name, if any."""
+    if name in apps:
+        return apps[name]
+    for slug, url in apps.items():
+        if slug.casefold() == name.casefold():
+            return url
+    return None
+
+
 def _generate_projects_library_html(projects: list[Project]) -> None:
     """Generate projects-library.html — catalogue local façon inspi·library."""
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     library_path = GENERATED_DIR / "projects-library.html"
 
     known_cats = {cid for cid, _label in LIBRARY_CATS}
+    apps = _published_apps()
     items: list[dict] = []
     for p in projects:
         if p.name == "mondary" or not p.is_dir:
@@ -3941,6 +3978,7 @@ def _generate_projects_library_html(projects: list[Project]) -> None:
                 "cat": p.group if p.group in known_cats else "OTHER",
                 "d": _clean_description(p.description, p.name),
                 "gh": _project_github_url(p),
+                "app": _app_url_for(p.name, apps),
                 "local": local_rel,
                 "ic": (local_rel + "/icon.png") if p.has_icon else None,
                 "m": mtime,

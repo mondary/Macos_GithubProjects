@@ -3,19 +3,24 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.user.macosgithubprojects</string>
+    <string>com.user.pkprojects-sync</string>
     <key>ProgramArguments</key>
     <array>
         <string>/Users/clm/Documents/GitHub/-projects/Macos_GithubProjects/.venv/bin/python3</string>
-        <string>/Users/clm/Documents/GitHub/-projects/Macos_GithubProjects/src/macos_githubprojects/menu_app.py</string>
+        <string>/Users/clm/Documents/GitHub/-projects/Macos_GithubProjects/src/macos_githubprojects/sync_projects.py</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
-    <key>KeepAlive</key>
-    <true/>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
     <key>StandardOutPath</key>
-    <string>/tmp/macosgithubprojects.stdout</string>
+    <string>/tmp/pkprojects-sync.stdout</string>
     <key>StandardErrorPath</key>
-    <string>/tmp/macosgithubprojects.stderr</string>
+    <string>/tmp/pkprojects-sync.stderr</string>
 </dict>
 </plist>

@@ -1,13 +1,13 @@
 # 📁 Mes projets
 
 > Source: `/Users/clm/Documents/GitHub/-projects`
-> Généré: **2026-10-06 11:01**
+> Généré: **2026-10-06 15:42**
 
 ## 🧭 Sommaire
 
-CHROME (12) | CLI (1) | GH (1) | MACOS (16) | VS (2) | WEB (18) | WP (5) | OTHER (4)
+CHROME (12) | CLI (1) | GH (2) | MACOS (16) | VS (2) | WEB (18) | WP (5) | OTHER (4)
 
-> Total: **59** projets détectés.
+> Total: **60** projets détectés.
 
 ## CHROME
 
@@ -31,6 +31,7 @@ CHROME (12) | CLI (1) | GH (1) | MACOS (16) | VS (2) | WEB (18) | WP (5) | OTHER
 ## GH
 
 - **GH_HomebrewCask** — Homebrew tap for PK apps. One-line install, updates with `brew upgrade`. (`../../GH_HomebrewCask`) ⚠️ no icon.png
+- **GH_homebrew-tap** — Homebrew tap for PK apps. One-line install, updates with `brew upgrade`. (`../../../PROJECTS/GH_homebrew-tap`) ⚠️ no icon.png
 
 ## MACOS
 
@@ -44,7 +45,7 @@ CHROME (12) | CLI (1) | GH (1) | MACOS (16) | VS (2) | WEB (18) | WP (5) | OTHER
 - **Macos_PKarchives** — └── shared/ # Shared archive script (`../../../PROJECTS/Macos_PKarchives`)
 - **Macos_PKbrain** — - reliable target-app restoration before injecting `Cmd+V` (`../../../PROJECTS/Macos_PKbrain`)
 - **Macos_PKmediadownloader** — alias pkmd='/Applications/PKMediaDownloader.app/Contents/MacOS/pkmd' (`../../../PROJECTS/Macos_PKmediadownloader`)
-- **Macos_PKmonitor** — - Real-time sparkline with dominant application icons (`../../../PROJECTS/Macos_PKmonitor`) ✳️ dirty
+- **Macos_PKmonitor** — - Real-time sparkline with dominant application icons (`../../../PROJECTS/Macos_PKmonitor`)
 - **Macos_PKmotion** — A local macOS application, CLI and skill for storyboards and motion design with (`../../../PROJECTS/Macos_PKmotion`) ⚠️ no remote
 - **Macos_PKpowerlines** — curl -L -o PKpowerlines.dmg https://github.com/mondary/Macos_PKpowerlines/releases/latest/download/PKpowerlines.dmg (`../../../PROJECTS/Macos_PKpowerlines`)
 - **Macos_PKScriptsUtilities** — ✨ macOS scripts for Raycast + Menu bar application. (`../../../PROJECTS/Macos_PKScriptsUtilities`) ✳️ dirty
